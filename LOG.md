@@ -11,6 +11,46 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-23 23:05 UTC  A2 end-to-end runs n=28 grid (bench/fixes)
+- **Goal:** Wall time and block passes of NoiseCirc runs (defaults, damping, 1000 shots) at n=28 on bench/fixes
+- **Task:** A2
+- **Method:** code/bench/gpurun a2_runs.py --circuits grid --qubits 28 --ps 0,0.0001,0.001,0.01 --shots 1000 --budget 420
+- **Outcome:** exit 124; outputs in data/20261023-225513-a2-end-to-end-runs-n-28-grid-bench-fixes
+- **Next:** none
+- **Refs:** data/20261023-225513-a2-end-to-end-runs-n-28-grid-bench-fixes, code/bench/a2_runs.py
+
+## 2026-10-23 22:55 UTC  A2 end-to-end runs n=28 brickwork (bench/fixes)
+- **Goal:** Wall time and block passes of NoiseCirc runs (defaults, damping, 1000 shots) at n=28 on bench/fixes
+- **Task:** A2
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --ps 0,0.0001,0.001,0.01 --shots 1000 --budget 420
+- **Outcome:** exit 0; outputs in data/20261023-224903-a2-end-to-end-runs-n-28-brickwork-bench-fixes
+- **Next:** none
+- **Refs:** data/20261023-224903-a2-end-to-end-runs-n-28-brickwork-bench-fixes, code/bench/a2_runs.py
+
+## 2026-10-23 22:49 UTC  A2 end-to-end runs n=28 ghz,qft,qaoa (bench/fixes)
+- **Goal:** Wall time and block passes of NoiseCirc runs (defaults, damping, 1000 shots) at n=28 on bench/fixes
+- **Task:** A2
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz,qft,qaoa --qubits 28 --ps 0,0.0001,0.001,0.01 --shots 1000 --budget 420
+- **Outcome:** exit 0; outputs in data/20261023-224113-a2-end-to-end-runs-n-28-ghz-qft-qaoa-bench-fixes
+- **Next:** none
+- **Refs:** data/20261023-224113-a2-end-to-end-runs-n-28-ghz-qft-qaoa-bench-fixes, code/bench/a2_runs.py
+
+## 2026-10-23 22:42 UTC  A3 dry-run sweep noise grid,qaoa
+- **Goal:** Complete the noise sweep (the full run timed out after ghz, brickwork, qft and most of random)
+- **Task:** A3
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a3_sweep.py noise grid,qaoa
+- **Outcome:** exit 0; outputs in data/20261023-223621-a3-dry-run-sweep-noise-grid-qaoa
+- **Next:** none
+- **Refs:** data/20261023-223621-a3-dry-run-sweep-noise-grid-qaoa, code/bench/a3_sweep.py
+
+## 2026-10-23 22:41 UTC  A2 end-to-end runs n=26 (bench/fixes)
+- **Goal:** Wall time and block passes of NoiseCirc runs (defaults, damping, 1000 shots) at n=26 on bench/fixes (main + parallel squared norms)
+- **Task:** A2
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz,qft,qaoa,brickwork,grid --qubits 26 --ps 0,0.0001,0.001,0.01 --shots 1000 --budget 480
+- **Outcome:** exit 0; outputs in data/20261023-223250-a2-end-to-end-runs-n-26-bench-fixes
+- **Next:** none
+- **Refs:** data/20261023-223250-a2-end-to-end-runs-n-26-bench-fixes, code/bench/a2_runs.py
+
 ## 2026-10-23 22:36 UTC  A3 pass-count model validated against GPU runs
 - **Goal:** Test the closed-form pass estimate and the dry run against measured block passes
 - **Task:** A3

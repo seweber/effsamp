@@ -38,6 +38,8 @@ DEVICE_BYTES = 0.9 * 79.0e9
 class _Counters:
     reads: int = 0
     writes: int = 0
+    # Passes of rows that leave some operation's dominant choice in the block: general-kernel passes.
+    general: int = 0
 
 
 @dataclass
@@ -155,6 +157,8 @@ class SurrogateStates:
             table = _factors(block)
             k = len(block.operations)
             block_codes = codes[row : row + k]
+            SurrogateStates.engine.counters.general += int(
+                np.count_nonzero(~np.all(block_codes == block.dominant_codes[:, None], axis=0)))
             with np.errstate(divide="ignore"):
                 log += np.log(table[np.arange(k)[:, None], block_codes]).sum(axis=0)
             row += k
@@ -231,7 +235,9 @@ def predict(circuit, maps, shots: int, seed: int = 0, compiled=None, surrogate: 
         )
     finally:
         sample_module.TrajectoryStates = original
-    return {**diagnostics, "blocks": len(compiled.blocks)}
+    general = SurrogateStates.engine.counters.general
+    return {**diagnostics, "blocks": len(compiled.blocks), "general_passes": general,
+            "dominant_passes": diagnostics["block_passes"] - general}
 
 
 if __name__ == "__main__":

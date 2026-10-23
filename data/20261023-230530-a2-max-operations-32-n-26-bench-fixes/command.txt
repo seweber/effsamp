@@ -1,0 +1,1 @@
+code/bench/gpurun a2_runs.py --circuits ghz,qft,qaoa,brickwork,grid --qubits 26 --ps 0.001,0.01 --shots 1000 --reps 2 --budget 500 --option max_operations=32
