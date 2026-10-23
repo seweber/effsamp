@@ -1,0 +1,13 @@
+/* secdev research vault: hide agent-facing items from the file explorer.
+   Search and the graph already skip memory/ and code/ (app.json
+   userIgnoreFilters). Figures embedded from data/ still render. Delete a
+   rule to show that item again, or disable the snippet in
+   Settings > Appearance > CSS snippets. */
+.nav-folder:has(> .nav-folder-title[data-path="memory"]),
+.nav-folder:has(> .nav-folder-title[data-path="code"]),
+.nav-folder:has(> .nav-folder-title[data-path="data"]),
+.nav-file:has(> .nav-file-title[data-path="AGENTS.md"]),
+.nav-file:has(> .nav-file-title[data-path="CONTRACT.md"]),
+.nav-file:has(> .nav-file-title[data-path="SECDEV.md"]) {
+  display: none;
+}

@@ -1,0 +1,75 @@
+\documentclass[
+  aps,
+  pra,
+  onecolumn,
+  superscriptaddress,
+  longbibliography
+]{revtex4-2}
+
+% --- Encoding / language ----------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{microtype}
+
+% --- Math -------------------------------------------------------------------
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+
+% --- Graphics / plots -------------------------------------------------------
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% --- Tables / floats --------------------------------------------------------
+\usepackage{booktabs}
+
+% --- Hyperlinks (load last) -------------------------------------------------
+\usepackage{xcolor}
+\definecolor{secdevLinkRed}{RGB}{190,30,45}
+\definecolor{secdevCiteBlue}{RGB}{0,85,190}
+\definecolor{secdevUrlGreen}{RGB}{0,135,80}
+\usepackage[
+  colorlinks=true,
+  linkcolor=secdevLinkRed,
+  citecolor=secdevCiteBlue,
+  urlcolor=secdevUrlGreen
+]{hyperref}
+
+\begin{document}
+\nocite{apsrev42Control}
+
+\title{Working Title}
+\author{Human Author}
+\affiliation{Institution}
+\date{\today}
+
+\begin{abstract}
+% Human-written prose only. Agents may add terse source-backed notes when
+% explicitly asked, but must not draft final paper paragraphs.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+% Human-written prose only.
+
+\section{Methods}
+% Human-written prose only. Agents may add equations, definitions, labels,
+% and concise provenance notes copied from wiki/ or verified outputs.
+
+\section{Results}
+% Human-written prose only. Agents may add paper-grade figures, captions as
+% terse factual notes, labels, and source pointers to wiki/, LOG.md, data/,
+% or code/ when explicitly requested.
+
+\section{Discussion}
+% Human-written prose only.
+
+\bibliographystyle{apsrev4-2}
+\bibliography{bibliography}
+
+\end{document}

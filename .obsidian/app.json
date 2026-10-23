@@ -1,0 +1,14 @@
+{
+  "useMarkdownLinks": true,
+  "newLinkFormat": "relative",
+  "alwaysUpdateLinks": true,
+  "attachmentFolderPath": "wiki/assets",
+  "userIgnoreFilters": [
+    "memory/",
+    "code/",
+    ".venv/",
+    ".secdev/",
+    ".claude/",
+    ".codex/"
+  ]
+}

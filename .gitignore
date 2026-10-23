@@ -1,0 +1,45 @@
+# Research scaffold .gitignore — installed by `scaffold`.
+
+# LaTeX build artifacts
+paper/*.aux
+paper/*.bbl
+paper/*.bcf
+paper/*.blg
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.log
+paper/*.out
+paper/*.run.xml
+paper/*.synctex.gz
+paper/*.toc
+
+# Data — typically large, regenerable from code/
+data/**/*.h5
+data/**/*.hdf5
+data/**/*.nc
+data/**/*.npz
+data/**/*.npy
+data/**/*.parquet
+data/**/*.csv
+data/**/*.dat
+
+# Python / uv
+code/**/.venv/
+code/**/__pycache__/
+code/**/*.egg-info/
+
+# secdev helper state; the scaffold manifest is committed
+.secdev/*
+!.secdev/scaffold.toml
+
+# Obsidian per-user workspace state
+.obsidian/workspace*.json
+.obsidian/cache
+
+# Agent tool state (built-in memory is disabled; persistent memory is memory/)
+.claude/
+.codex/
+
+# Editor / OS junk
+.DS_Store
+*.swp

@@ -1,0 +1,3 @@
+[submodule "code/noisecirc"]
+	path = code/noisecirc
+	url = git@github.com:seweber/noisecirc.git
