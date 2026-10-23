@@ -11,6 +11,134 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-23 22:36 UTC  A3 pass-count model validated against GPU runs
+- **Goal:** Test the closed-form pass estimate and the dry run against measured block passes
+- **Task:** A3
+- **Method:** code/bench/a3_validate.py on 30 noisy points of the A2 main-branch runs (n=24-28, damping 1e-4..1e-2, 1000 shots)
+- **Outcome:** Dry run within 0.89-1.12x of measured passes (rms 1.05x); closed form (with balls-into-bins dedup of error proposals) within 0.70-1.93x (rms 1.3x), worst GHZ p=1e-2 and QFT (qubits idle in |0>)
+- **Next:** Write A3 study page; noise sweep plot
+- **Refs:** data/a3-validation, code/bench/a3_model.py, code/bench/dryrun.py
+
+## 2026-10-23 22:35 UTC  A3 dry-run sweep noise (tracking surrogate)
+- **Goal:** Block and block-pass counts of six circuits at n=24 against one NoiseCirc parameter (noise), by dry run with the tracking surrogate (supersedes the killed mixed-surrogate sweeps of 21:31)
+- **Task:** A3
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a3_sweep.py noise
+- **Outcome:** blocked: timeout after 3000s; outputs in data/20261023-214521-a3-dry-run-sweep-noise-tracking-surrogate
+- **Next:** none
+- **Refs:** data/20261023-214521-a3-dry-run-sweep-noise-tracking-surrogate, code/bench/a3_sweep.py, code/bench/dryrun.py
+
+## 2026-10-23 22:33 UTC  A3 dry-run sweep oversampling (tracking surrogate)
+- **Goal:** Block and block-pass counts of six circuits at n=24 against one NoiseCirc parameter (oversampling), by dry run with the tracking surrogate (supersedes the killed mixed-surrogate sweeps of 21:31)
+- **Task:** A3
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a3_sweep.py oversampling
+- **Outcome:** exit 0; outputs in data/20261023-214521-a3-dry-run-sweep-oversampling-tracking-surrogate
+- **Next:** none
+- **Refs:** data/20261023-214521-a3-dry-run-sweep-oversampling-tracking-surrogate, code/bench/a3_sweep.py, code/bench/dryrun.py
+
+## 2026-10-23 22:32 UTC  A2 end-to-end runs n=24 (bench/fixes)
+- **Goal:** Wall time and block passes of NoiseCirc runs (defaults, damping, 1000 shots) at n=24 on bench/fixes (main + parallel squared norms)
+- **Task:** A2
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz,qft,qaoa,brickwork,grid --qubits 24 --ps 0,0.0001,0.001,0.01 --shots 1000 --budget 480
+- **Outcome:** exit 0; outputs in data/20261023-223052-a2-end-to-end-runs-n-24-bench-fixes
+- **Next:** none
+- **Refs:** data/20261023-223052-a2-end-to-end-runs-n-24-bench-fixes, code/bench/a2_runs.py
+
+## 2026-10-23 22:31 UTC  A6 runner tier-1 test
+- **Goal:** Check a6_runs.py runs all four competitor configurations
+- **Task:** A6
+- **Method:** gpurun a6_runs.py brickwork n=20 p=1e-3 100 shots, sims aer_branch/aer_batched/aer_plain/cudaq
+- **Outcome:** All run; Aer reports fusion method 'kraus' with max_fused_qubits 2 under noise; times 0.23/0.49/0.47/1.31 s (tier 1, not conclusions)
+- **Next:** Full A6 runs after A2/A5
+- **Refs:** code/bench/a6_runs.py
+
+## 2026-10-23 22:31 UTC  Fix: parallel squared norms (svpass)
+- **Goal:** Remove the per-call latency of svpass's squared_norms on long rows
+- **Task:** A2
+- **Method:** Two-stage fixed-order reduction (thread block per part of >=4096 chunk sums, warp per row over parts); branch fix/squared-norms-parallel a2d9fdd; merged with fix/elsman-doi into bench/fixes 619e018
+- **Outcome:** svpass 317 + noisecirc 178 tests pass on H100; brickwork n=28 p=1e-3 1000 shots 35.1 s -> 20.9 s (GPU passes 17.7 s)
+- **Next:** Use bench/fixes for all further runs; rerun A2 end-to-end
+- **Refs:** wiki/studies/noisecirc-issues.md, code/noisecirc
+
+## 2026-10-23 22:29 UTC  A2 profile n=28 with fix/squared-norms-parallel
+- **Goal:** Check that the two-stage squared-norm reduction removes the ~4 ms per call overhead at n=28
+- **Task:** A2
+- **Method:** code/bench/gpurun a2_profile.py --circuits brickwork --qubits 28 --ps 0.000001,0.0001,0.001
+- **Outcome:** exit 0; outputs in data/20261023-222839-a2-profile-n-28-with-fix-squared-norms-parallel
+- **Next:** none
+- **Refs:** data/20261023-222839-a2-profile-n-28-with-fix-squared-norms-parallel, code/bench/a2_profile.py
+
+## 2026-10-23 22:26 UTC  A2 profile n=28
+- **Goal:** Split NoiseCirc run time into GPU passes and host work (brickwork, damping 0/1e-4/1e-3, 1000 shots, n=28)
+- **Task:** A2
+- **Method:** code/bench/gpurun a2_profile.py --circuits brickwork --qubits 28 --ps 0.000001,0.0001,0.001
+- **Outcome:** exit 0; outputs in data/20261023-222447-a2-profile-n-28
+- **Next:** none
+- **Refs:** data/20261023-222447-a2-profile-n-28, code/bench/a2_profile.py
+
+## 2026-10-23 22:24 UTC  A2 profile n=24
+- **Goal:** Split NoiseCirc run time into GPU passes and host work (brickwork, damping 0/1e-4/1e-3, 1000 shots, n=24)
+- **Task:** A2
+- **Method:** code/bench/gpurun a2_profile.py --circuits brickwork --qubits 24 --ps 0.000001,0.0001,0.001
+- **Outcome:** exit 0; outputs in data/20261023-222439-a2-profile-n-24
+- **Next:** none
+- **Refs:** data/20261023-222439-a2-profile-n-24, code/bench/a2_profile.py
+
+## 2026-10-23 22:24 UTC  A2 end-to-end runs n=28 random
+- **Goal:** Wall time and block passes of NoiseCirc runs (defaults, damping, 1000 shots) at n=28
+- **Task:** A2
+- **Method:** code/bench/gpurun a2_runs.py --circuits random --qubits 28 --ps 0,0.0001,0.001,0.01 --shots 1000 --budget 450
+- **Outcome:** exit 124; outputs in data/20261023-221419-a2-end-to-end-runs-n-28-random
+- **Next:** none
+- **Refs:** data/20261023-221419-a2-end-to-end-runs-n-28-random, code/bench/a2_runs.py
+
+## 2026-10-23 22:22 UTC  A3 dry-run sweep segment (tracking, guarded)
+- **Goal:** Block passes against blocks_per_segment by dry run; points with a segment ceiling above e^6 skipped (the unguarded run 21:45 was OOM-killed at random/p=1e-3/inf)
+- **Task:** A3
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a3_sweep.py segment
+- **Outcome:** exit 0; outputs in data/20261023-220449-a3-dry-run-sweep-segment-tracking-guarded
+- **Next:** none
+- **Refs:** data/20261023-220449-a3-dry-run-sweep-segment-tracking-guarded, code/bench/a3_sweep.py
+
+## 2026-10-23 22:14 UTC  A2 end-to-end runs n=28 qaoa,grid
+- **Goal:** Wall time and block passes of NoiseCirc runs (defaults, damping, 1000 shots) at n=28
+- **Task:** A2
+- **Method:** code/bench/gpurun a2_runs.py --circuits qaoa,grid --qubits 28 --ps 0,0.0001,0.001,0.01 --shots 1000 --budget 450
+- **Outcome:** exit 124; outputs in data/20261023-220426-a2-end-to-end-runs-n-28-qaoa-grid
+- **Next:** none
+- **Refs:** data/20261023-220426-a2-end-to-end-runs-n-28-qaoa-grid, code/bench/a2_runs.py
+
+## 2026-10-23 22:04 UTC  A3 dry-run sweep segment (tracking surrogate)
+- **Goal:** Block and block-pass counts of six circuits at n=24 against one NoiseCirc parameter (segment), by dry run with the tracking surrogate (supersedes the killed mixed-surrogate sweeps of 21:31)
+- **Task:** A3
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a3_sweep.py segment
+- **Outcome:** exit -9; outputs in data/20261023-214521-a3-dry-run-sweep-segment-tracking-surrogate
+- **Next:** none
+- **Refs:** data/20261023-214521-a3-dry-run-sweep-segment-tracking-surrogate, code/bench/a3_sweep.py, code/bench/dryrun.py
+
+## 2026-10-23 22:04 UTC  A2 end-to-end runs n=28 ghz,brickwork,qft
+- **Goal:** Wall time and block passes of NoiseCirc runs (defaults, damping, 1000 shots) at n=28
+- **Task:** A2
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz,brickwork,qft --qubits 28 --ps 0,0.0001,0.001,0.01 --shots 1000 --budget 450
+- **Outcome:** blocked: timeout after 600s; outputs in data/20261023-215006-a2-end-to-end-runs-n-28-ghz-brickwork-qft
+- **Next:** none
+- **Refs:** data/20261023-215006-a2-end-to-end-runs-n-28-ghz-brickwork-qft, code/bench/a2_runs.py
+
+## 2026-10-23 21:50 UTC  A2 end-to-end runs n=26
+- **Goal:** Wall time and block passes of NoiseCirc runs (defaults, damping, 1000 shots) at n=26 to test T = passes x t_bw
+- **Task:** A2
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz,brickwork,qft,random,grid,qaoa --qubits 26 --ps 0,0.0001,0.001,0.01 --shots 1000 --budget 480
+- **Outcome:** exit 124; outputs in data/20261023-214014-a2-end-to-end-runs-n-26
+- **Next:** none
+- **Refs:** data/20261023-214014-a2-end-to-end-runs-n-26, code/bench/a2_runs.py
+
+## 2026-10-23 21:45 UTC  A3 dry-run sweep fusion (tracking surrogate)
+- **Goal:** Block and block-pass counts of six circuits at n=24 against one NoiseCirc parameter (fusion), by dry run with the tracking surrogate (supersedes the killed mixed-surrogate sweeps of 21:31)
+- **Task:** A3
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a3_sweep.py fusion
+- **Outcome:** exit 0; outputs in data/20261023-214521-a3-dry-run-sweep-fusion-tracking-surrogate
+- **Next:** none
+- **Refs:** data/20261023-214521-a3-dry-run-sweep-fusion-tracking-surrogate, code/bench/a3_sweep.py, code/bench/dryrun.py
+
 ## 2026-10-23 21:43 UTC  A3 dry-run sampler
 - **Goal:** Predict block passes without GPU
 - **Task:** A3

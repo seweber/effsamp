@@ -63,6 +63,14 @@ def main():
         elif sweep == "segment":
             for p in (1e-4, 1e-3, 1e-2):
                 for bps in (1, 2, 4, 8, math.inf):
+                    sim = Simulator(maps=noise.maps("damping", p), blocks_per_segment=bps)
+                    c, b, _ = dryrun.compile_like_simulator(qc, sim)
+                    logs = [blk.log_oversampling_ceiling for blk in c.blocks]
+                    worst = max(sum(logs[i : i + b]) for i in range(0, len(logs), b))
+                    if worst > 6.0:  # more than e^6 = 400 proposals per shot: hopeless, and memory-bound here
+                        emit(sweep=sweep, **meta, p=p, shots=1000, blocks_per_segment=str(bps), skipped=True,
+                             max_segment_log_ceiling=worst)
+                        continue
                     d = mean_predict(qc, noise.maps("damping", p), 1000, blocks_per_segment=bps)
                     emit(sweep=sweep, **meta, p=p, shots=1000, blocks_per_segment=str(bps), **d)
         elif sweep == "oversampling":

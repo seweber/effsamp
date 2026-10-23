@@ -3,7 +3,7 @@ title: Issues found in noisecirc
 summary: Bugs and issues found in noisecirc during benchmarking, with their fix branches
 type: study
 tasks: [A1]
-status: unverified
+status: verified
 updated: 2026-10-23
 ---
 # Issues found in noisecirc
@@ -18,7 +18,8 @@ Issues are recorded as they are found, during reading the code (task A1) and run
 
 ## Runs
 
-No runs: the issues so far were found by reading.
+- Profile of brickwork runs at 24 and 28 qubits on `main`, LOG.md entries "A2 profile n=24" and "A2 profile n=28" of 2026-10-23: `data/20261023-*-a2-profile-n-24`, `data/20261023-*-a2-profile-n-28`.
+- The same at 28 qubits with the fix, LOG.md entry "A2 profile n=28 with fix/squared-norms-parallel".
 
 ## Results
 
@@ -26,10 +27,16 @@ The issues found so far:
 
 1. **Wrong DOI in a reference** (documentation only, verified). `docs/snippets/kronfree.py` cites Elsman and Henriksen, "Gate Fusion Is Map Fusion" (ARRAY '25), with DOI `10.1145/3736112.3736142`. Crossref lists that DOI for Berthelot, Ioualalen and Martel's "Accelerating the Static Analysis of Neural Networks by Batch Representation of Abstract Values" from the same proceedings; the cited paper is `10.1145/3736112.3736143`. Fix: branch `fix/elsman-doi`, commit `59a79fe`. Found by the literature check of [Prior art](prior-art.md).
 
+2. **Squared norms of long rows take longer than the pass that wrote them** (performance, verified). svpass reduces each row's chunk sums with a single warp (`squared_norms.cu`). A row of $2^n$ amplitudes has $2^{n-8}$ chunk sums, so at 28 qubits one warp adds $2^{20}$ values one after another, about 4 ms on the H100, while the pass over the row takes 2.4 to 4 ms. At 28 qubits the device memory holds only about 33 rows, so batches hold one or two rows and every segment waits for this reduction. On a 28-qubit brickwork with damping $p = 10^{-3}$ and 1000 shots, the run took 35.1 s, of which the passes were 17.7 s. Fix: branch `fix/squared-norms-parallel`, commit `a2d9fdd`: rows of more than 4096 chunk sums are summed in parts by one thread block each and the parts by one warp per row, both in a fixed order, so the sums stay reproducible. The same run then takes 20.9 s (1.7 times faster), and an ideal run 0.073 s instead of 0.145 s. svpass's 317 tests (one new, on 22-qubit rows) and noisecirc's 178 tests pass on the H100.
+
+A related, smaller cost remains: measuring draws from a cumulative sum of the chunk sums that one thread block per row computes, about 2.6 ms per call at 28 qubits. It runs once per leaf pool, not per segment, and cost 1.0 s of the 20.9 s run above; it was not changed.
+
+All later measurements of this project use the branch `bench/fixes`, which is `main` with both fixes merged.
+
 ## Caveats
 
 The list covers what the benchmarking touched: the exact sampling mode, qubits, `complex64`, and GPU 0 of bux (an H100 PCIe). The average mode, qutrits and subspace twirling were not examined (PLAN.md).
 
 ## Verdict
 
-No issue so far affects simulation results.
+No issue so far affects simulation results. Issue 2 affects performance at large registers (from about 26 qubits, where batches are small) and inflated every 28-qubit timing taken on `main` by up to 1.7 times.

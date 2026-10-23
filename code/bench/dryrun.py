@@ -47,24 +47,76 @@ class FakeEngine:
     counters: _Counters = field(default_factory=_Counters)
 
 
+# The surrogate factor tables of the blocks of the circuit being predicted, by block identity.
 _FACTORS: dict[int, np.ndarray] = {}
 
 
 def _factors(block) -> np.ndarray:
-    """(n_operations, max_codes) surrogate acceptance factor of each operation's codes; nan for padding."""
-    key = id(block)
-    table = _FACTORS.get(key)
-    if table is None:
-        ops = [placed.operation for placed in block.operations]
-        width = max(op.choice_of_code.size for op in ops)
-        table = np.full((len(ops), width), np.nan)
-        for i, op in enumerate(ops):
-            dim = op.stack.shape[-1]
-            per_choice = np.einsum("kij,kij->k", op.stack.conj(), op.stack).real / dim
-            valid = op.choice_of_code >= 0
-            table[i, : op.choice_of_code.size][valid] = per_choice[op.choice_of_code[valid]]
-        _FACTORS[key] = table
+    return _FACTORS[id(block)]
+
+
+def _table(op, rho: np.ndarray | None) -> np.ndarray:
+    """Each code's factor tr(M^dagger M rho), rho the targets' state; maximally mixed for None."""
+    gram = np.einsum("kji,kjl->kil", op.stack.conj(), op.stack)
+    if rho is None:
+        per_choice = np.einsum("kii->k", gram).real / op.stack.shape[-1]
+    else:
+        per_choice = np.einsum("kil,li->k", gram, rho).real
+    table = np.full(op.choice_of_code.size, np.nan)
+    valid = op.choice_of_code >= 0
+    table[valid] = per_choice[op.choice_of_code[valid]]
     return table
+
+
+def prepare(compiled, surrogate: str = "track") -> None:
+    """Fill the factor tables of ``compiled``'s blocks.
+
+    ``"mixed"``: every gate's targets are maximally mixed. ``"track"``: each qubit's state is followed
+    as a pure single-qubit state, starting from |0>, under each gate's no-error operator, as long as
+    the gate leaves its targets unentangled (exact for diagonal gates on basis states, e.g. ``cp`` on
+    a qubit still in |0>); a qubit that a gate entangles is maximally mixed from then on.
+    """
+    _FACTORS.clear()
+    pure: dict[int, np.ndarray | None] = {q: np.array([1.0, 0.0], dtype=complex) for q in range(compiled.n)}
+    for block in compiled.blocks:
+        ops = block.operations
+        width = max(placed.operation.choice_of_code.size for placed in ops)
+        table = np.full((len(ops), width), np.nan)
+        for i, placed in enumerate(ops):
+            op, targets = placed.operation, placed.targets
+            states = [pure[q] if surrogate == "track" else None for q in targets]
+            if any(s is None for s in states):
+                rho = None
+                if any(s is not None for s in states):
+                    rho = np.array([[1.0]])
+                    for s in states:  # targets[0] is the least significant bit, so it goes last
+                        local = np.eye(2) / 2 if s is None else np.outer(s, s.conj())
+                        rho = np.kron(local, rho)
+            else:
+                psi = np.array([1.0 + 0j])
+                for s in states:
+                    psi = np.kron(s, psi)
+                rho = np.outer(psi, psi.conj())
+            table[i, : op.choice_of_code.size] = _table(op, rho)
+            if surrogate != "track":
+                continue
+            # Advance the tracked states by the no-error operator.
+            if any(s is None for s in states):
+                for q in targets:
+                    pure[q] = None
+                continue
+            m = op.stack[op.choice_of_code[op.dominant_code]]
+            out = m @ psi
+            out /= np.linalg.norm(out)
+            w = len(targets)
+            tensor = out.reshape([2] * w)  # axis 0 is the most significant bit, targets[w - 1]
+            for j, q in enumerate(targets):
+                axis = w - 1 - j
+                moved = np.moveaxis(tensor, axis, 0).reshape(2, -1)
+                reduced = moved @ moved.conj().T
+                vals, vecs = np.linalg.eigh(reduced)
+                pure[q] = vecs[:, -1] if vals[-1] > 1 - 1e-9 else None
+        _FACTORS[id(block)] = table
 
 
 class SurrogateStates:
@@ -103,7 +155,8 @@ class SurrogateStates:
             table = _factors(block)
             k = len(block.operations)
             block_codes = codes[row : row + k]
-            log += np.log(table[np.arange(k)[:, None], block_codes]).sum(axis=0)
+            with np.errstate(divide="ignore"):
+                log += np.log(table[np.arange(k)[:, None], block_codes]).sum(axis=0)
             row += k
         self.norms = start_norms * np.exp(log)
         self.branches = np.array(end_branches, dtype=np.int64)
@@ -161,13 +214,14 @@ def compile_like_simulator(circuit, simulator: Simulator) -> tuple[CompiledCircu
     return compiled, bps, batch
 
 
-def predict(circuit, maps, shots: int, seed: int = 0, compiled=None, **options) -> dict[str, float]:
-    """Run NoiseCirc's sampler with surrogate states; return its diagnostics plus the block count."""
+def predict(circuit, maps, shots: int, seed: int = 0, compiled=None, surrogate: str = "track", **options) -> dict[str, float]:
+    """Run NoiseCirc's sampler with surrogate states (see `prepare`); return its diagnostics plus the block count."""
     simulator = Simulator(maps=maps, **options)
     if compiled is None:
         compiled, bps, batch = compile_like_simulator(circuit, simulator)
     else:
         bps, batch = segmentation(compiled, simulator)
+    prepare(compiled, surrogate)
     original = sample_module.TrajectoryStates
     sample_module.TrajectoryStates = SurrogateStates
     SurrogateStates.engine = FakeEngine()
@@ -191,8 +245,9 @@ if __name__ == "__main__":
     for name in ("ghz", "brickwork", "qft"):
         for p in (1e-4, 1e-3, 1e-2):
             qc = circuits.make(name, 24)
-            start = time.perf_counter()
-            d = predict(qc, noise.maps("damping", p), 1000)
-            print(name, p, {k: d[k] for k in ("blocks", "block_passes", "proposals", "unique_simulations", "batches")},
-                  f"{time.perf_counter() - start:.2f}s")
+            row = [name, p]
+            for surrogate in ("mixed", "track"):
+                d = [predict(qc, noise.maps("damping", p), 1000, seed=s, surrogate=surrogate) for s in range(5)]
+                row += [surrogate, np.mean([x["block_passes"] for x in d]), np.mean([x["batches"] for x in d])]
+            print(*row)
     _ = Counter
