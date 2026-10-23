@@ -1,0 +1,1 @@
+code/bench/gpurun a2_blocks.py --circuits scramble --qubits 28 --noise damping --p 0.001

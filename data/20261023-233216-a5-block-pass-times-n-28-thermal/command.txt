@@ -1,0 +1,1 @@
+code/bench/gpurun a2_blocks.py --circuits ghz,brickwork,qft,grid,qaoa,scramble,random --qubits 28 --noise thermal --p 0.001

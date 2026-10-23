@@ -11,6 +11,46 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-23 23:37 UTC  A5 validation ghz damping
+- **Goal:** Measured time and passes of ghz at n=28, damping at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz --qubits 28 --noise damping --ps 0.00183486,0.0183486 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261023-233718-a5-validation-ghz-damping
+- **Next:** none
+- **Refs:** data/20261023-233718-a5-validation-ghz-damping, code/bench/a2_runs.py
+
+## 2026-10-23 23:36 UTC  A5 block pass times n=28 damping scramble
+- **Goal:** Kernel ratios of the scramble circuit with damping at n=28
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_blocks.py --circuits scramble --qubits 28 --noise damping --p 0.001
+- **Outcome:** exit 0; outputs in data/20261023-233639-a5-block-pass-times-n-28-damping-scramble
+- **Next:** none
+- **Refs:** data/20261023-233639-a5-block-pass-times-n-28-damping-scramble, code/bench/a2_blocks.py
+
+## 2026-10-23 23:36 UTC  A5 block pass times n=28 gad
+- **Goal:** Kernel ratios with generalized damping (p=1e-3) at n=28
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_blocks.py --circuits ghz,brickwork,qft,grid,qaoa,scramble,random --qubits 28 --noise gad --p 0.001
+- **Outcome:** exit 0; outputs in data/20261023-233416-a5-block-pass-times-n-28-gad
+- **Next:** none
+- **Refs:** data/20261023-233416-a5-block-pass-times-n-28-gad, code/bench/a2_blocks.py
+
+## 2026-10-23 23:35 UTC  A4 dry-run fusion width at fixed noise load
+- **Goal:** Predicted passes against max_fused_qudits 3..9 at M=0, 0.1, 1 (n=28, damping, 1000 shots)
+- **Task:** A4
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a4_fusion.py
+- **Outcome:** exit 0; outputs in data/20261023-233200-a4-dry-run-fusion-width-at-fixed-noise-load
+- **Next:** none
+- **Refs:** data/20261023-233200-a4-dry-run-fusion-width-at-fixed-noise-load, code/bench/a4_fusion.py
+
+## 2026-10-23 23:34 UTC  A5 block pass times n=28 thermal
+- **Goal:** Kernel ratios of the seven circuits with thermal noise (p=1e-3) at n=28, for A5 time predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_blocks.py --circuits ghz,brickwork,qft,grid,qaoa,scramble,random --qubits 28 --noise thermal --p 0.001
+- **Outcome:** exit 0; outputs in data/20261023-233216-a5-block-pass-times-n-28-thermal
+- **Next:** none
+- **Refs:** data/20261023-233216-a5-block-pass-times-n-28-thermal, code/bench/a2_blocks.py
+
 ## 2026-10-23 23:31 UTC  A2 max_operations at n=26 and A2 conclusion
 - **Goal:** Find a regime where T ~ passes x t_bw within ~1.5
 - **Task:** A2
