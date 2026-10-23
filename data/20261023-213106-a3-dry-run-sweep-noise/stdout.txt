@@ -1,0 +1,1 @@
+{"sweep": "noise", "circuit": "ghz", "n": 24, "gates": 70, "channels": 93, "p": 1e-05, "shots": 100, "block_passes": 3.0, "proposals": 300.0, "unique_simulations": 3.0, "batches": 3.0, "blocks": 3.0, "expected_oversampling": 1.0009304279298221, "checkpoints": 3.0, "cache_hits": 0.0, "block_passes_std": 0.0}

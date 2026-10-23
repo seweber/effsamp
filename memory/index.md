@@ -6,11 +6,16 @@ Agent working memory; not written for human readers.
 
 ## Tasks
 
-- none yet
+- [Task A1](tasks/A1.md) — Working state of PLAN.md task A1
+- [Task A2](tasks/A2.md) — Working state of PLAN.md task A2
+- [Task A3](tasks/A3.md) — Working state of PLAN.md task A3
+- [Task A4](tasks/A4.md) — Working state of PLAN.md task A4
+- [Task A5](tasks/A5.md) — Working state of PLAN.md task A5
+- [Task A6](tasks/A6.md) — Working state of PLAN.md task A6
 
 ## Topics
 
-- none yet
+- [GPU environment on bux](topics/gpu-environment.md) — How to run code on bux GPU 0 in the bench podman image · *active*
 
 ## Archive
 

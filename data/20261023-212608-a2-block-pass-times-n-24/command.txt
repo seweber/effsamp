@@ -1,0 +1,1 @@
+code/bench/gpurun a2_blocks.py --qubits 24

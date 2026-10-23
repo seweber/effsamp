@@ -1,0 +1,27 @@
+Traceback (most recent call last):
+  File "/itp3/home/sebastian/effsamp/code/bench/a3_sweep.py", line 78, in <module>
+    main()
+    ~~~~^^
+  File "/itp3/home/sebastian/effsamp/code/bench/a3_sweep.py", line 71, in main
+    d = mean_predict(qc, noise.maps("damping", p), 1000, max_oversampling=mo)
+  File "/itp3/home/sebastian/effsamp/code/bench/a3_sweep.py", line 34, in mean_predict
+    runs = [dryrun.predict(qc, maps, shots, seed=s, **options) for s in range(seeds)]
+            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/itp3/home/sebastian/effsamp/code/bench/dryrun.py", line 175, in predict
+    _, diagnostics = sample_module.sample(
+                     ~~~~~~~~~~~~~~~~~~~~^
+        compiled, shots, simulator.sampling_mode, batch, bps, seed, SurrogateStates.engine
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/itp3/home/sebastian/effsamp/code/noisecirc/src/noisecirc/sampling/sample.py", line 337, in sample
+    pool = next(stack[-1], None)
+  File "/itp3/home/sebastian/effsamp/code/noisecirc/src/noisecirc/sampling/sample.py", line 507, in _expand
+    child = _propagate(ctx, stats, children, start, stop, batch, scales)
+  File "/itp3/home/sebastian/effsamp/code/noisecirc/src/noisecirc/sampling/sample.py", line 383, in _propagate
+    children.propagate(ctx.circuit.blocks[start:stop], proposals.codes, proposals.branches, scales)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/itp3/home/sebastian/effsamp/code/bench/dryrun.py", line 106, in propagate
+    log += np.log(table[np.arange(k)[:, None], block_codes]).sum(axis=0)
+                  ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IndexError: index 12 is out of bounds for axis 0 with size 12

@@ -6,12 +6,27 @@ Start with the [Overview](overview.md). Abbreviations and notation are in the [G
 
 ## Concepts
 
-- none yet
+- [Block-pass cost model](concepts/block-pass-cost-model.md) — Runtime of a simulation as block passes times the time to read and write a state vector
+- [NoiseCirc's sampling algorithm](concepts/noisecirc-algorithm.md) — How noisecirc samples trajectories of non-mixed-unitary Kraus channels, and what its work is counted in
 
 ## Studies
 
-- none yet
+- [Issues found in noisecirc](studies/noisecirc-issues.md) — Bugs and issues found in noisecirc during benchmarking, with their fix branches · *unverified*
+- [Prior art of noisecirc's algorithm](studies/prior-art.md) — Systematic literature check: which of noisecirc's sampling and fusion ideas are anticipated · *partially verified*
 
 ## Literature
 
-- none yet
+- [cuQuantum SDK: A High-Performance Library for Accelerating Quantum Science](literature/notes/bayraktar2023cuquantum.md) — cuQuantum SDK: cuStateVec and cuTensorNet libraries and their performance. · `bayraktar2023cuquantum`
+- [TUSQ: Tracking, Uncomputation, and Sampling for Noisy Quantum Simulation](literature/notes/dangwal2026tusq.md) — TUSQ: pre-sampled Pauli error realizations traversed depth-first on GPU with uncomputation and a checkpoint cache. · `dangwal2026tusq`
+- [Efficient techniques to GPU Accelerations of Multi-Shot Quantum Computing Simulations](literature/notes/doi2023shots.md) — Qiskit Aer's GPU multi-shot techniques: batched shots and shot branching. · `doi2023shots`
+- [Analog simulation of noisy quantum circuits](literature/notes/granet2025analog.md) — Analog simulation of noisy circuits: non-unitary trajectory operators with norm weights. · `granet2025analog`
+- [Stochastic Quantum Circuit Simulation Using Decision Diagrams](literature/notes/grurl2021stoch.md) — Stochastic noisy circuit simulation with decision diagrams. · `grurl2021stoch`
+- [Simulations of Quantum Circuits with Approximate Noise using qsim and Cirq](literature/notes/isakov2021qsim.md) — qsim/Cirq noisy trajectories with the delayed inner-product algorithm based on state-independent lower bounds. · `isakov2021qsim`
+- [SANQ: A Simulation Framework for Architecting Noisy Intermediate-Scale Quantum Computing System](literature/notes/li2019sanq.md) — SANQ: noisy simulation that pre-generates Pauli error traces and executes them recursively, storing states only along the recursion. · `li2019sanq`
+- [Incoherent approximation of leakage in quantum error correction](literature/notes/marshall2025leakage.md) — Subspace twirling: incoherent approximation of leakage for efficient simulation. · `marshall2025leakage`
+- [Augmenting Simulated Noisy Quantum Data Collection by Orders of Magnitude Using Pre-Trajectory Sampling with Batched Execution](literature/notes/patti2025ptsbe.md) — CUDA-Q pre-trajectory sampling with batched execution (PTSBE): Kraus selections drawn before simulation, deduplicated, each simulated once. · `patti2025ptsbe`
+- [Trajectree - A quantum trajectory-based quantum circuit simulator](literature/notes/singal2026trajectree.md) — Trajectree: CPU/MPS trajectory simulator caching branch probabilities and states in a tree. · `singal2026trajectree`
+- [Accelerating Simulation of Quantum Circuits under Noise via Computational Reuse](literature/notes/wang2025tqsim.md) — TQSim: noisy simulation that reuses intermediate states of a trajectory tree, approximately. · `wang2025tqsim`
+- [Quantum trajectories and quantum measurement theory](literature/notes/wiseman1996.md) — Quantum trajectories and measurement theory, including unravelings with state-independent ostensible probabilities. · `wiseman1996`
+- [Atlas: Hierarchical Partitioning for Quantum Circuit Simulation on GPUs](literature/notes/xu2024atlas.md) — Atlas: hierarchical circuit partitioning for multi-GPU state-vector simulation with shared-memory kernels. · `xu2024atlas`
+- [Variance-Reduced Trajectory Unravelings for GPU Noisy Quantum-Circuit Simulation: Characterization and a Qiskit-Aer Integration Gap](literature/notes/you2026varred.md) — Variance-reduced trajectory unravelings for GPU noisy simulation, characterized against Qiskit Aer. · `you2026varred`
