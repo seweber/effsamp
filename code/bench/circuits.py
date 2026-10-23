@@ -111,6 +111,23 @@ def qaoa(n: int, p: int) -> QuantumCircuit:
     return circuit
 
 
+def scramble(n: int, layers: int) -> QuantumCircuit:
+    """Random ``r`` on every qubit, then ``cp`` on a random perfect matching of all qubits, per layer.
+
+    The pairs are long-ranged and change every layer, so a block of a few qubits holds few gates: the
+    least fusable of the circuits here.
+    """
+    rng = np.random.default_rng(3000 + n)
+    circuit = QuantumCircuit(n)
+    for _ in range(layers):
+        for q in range(n):
+            circuit.r(rng.uniform(0, np.pi), rng.uniform(0, 2 * np.pi), q)
+        order = rng.permutation(n)
+        for a, b in zip(order[0::2], order[1::2]):
+            circuit.cp(rng.uniform(0, np.pi), int(min(a, b)), int(max(a, b)))
+    return circuit
+
+
 def channels(circuit: QuantumCircuit) -> int:
     """Gate-qubit pairs, i.e. noise channels when every gate is followed by noise on its targets."""
     return sum(len(instruction.qubits) for instruction in circuit.data)
@@ -132,4 +149,6 @@ def make(name: str, n: int) -> QuantumCircuit:
         return grid(n, n)
     if name == "qaoa":
         return qaoa(n, 2)
+    if name == "scramble":
+        return scramble(n, n // 2 + 1)
     raise ValueError(name)

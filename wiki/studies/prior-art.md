@@ -62,6 +62,14 @@ The kernel structure has prior art:
 
 Not found: kernels specialised for the no-error path of noisy blocks, and a fusion limit set by the oversampling ceiling. One lead remains open: CUDA-Q tracks up to 16 "branches" of trajectories in its gate fusion (`CUDAQ_BATCHED_SIM_MAX_BRANCHES`), which should be checked when CUDA-Q is benchmarked (task A6).
 
+### Further related work
+
+Three more papers were read and found not to bear on the three ideas:
+
+- stochastic simulation with decision diagrams, which samples every Kraus operator from the state ([grurl2021stoch](../literature/notes/grurl2021stoch.md));
+- variance-reduced unravelings on GPUs, which report that Qiskit Aer rewrites Kraus channels before applying them ([you2026varred](../literature/notes/you2026varred.md));
+- the subspace twirling of leakage that noisecirc implements for qutrits, outside this project's qubit scope ([marshall2025leakage](../literature/notes/marshall2025leakage.md)).
+
 ## Caveats
 
 - A literature search can show prior art but cannot prove its absence: "not found" means not in the sources searched (arXiv, publisher pages, library documentation, Aer's source) on 2026-10-23.

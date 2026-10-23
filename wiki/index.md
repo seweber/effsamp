@@ -11,7 +11,7 @@ Start with the [Overview](overview.md). Abbreviations and notation are in the [G
 
 ## Studies
 
-- [Block-pass time on the H100](studies/block-pass-time.md) — How well block passes times the state-vector bandwidth time predicts noisecirc's runtime on the H100 (A2) · *unverified*
+- [Block-pass time on the H100](studies/block-pass-time.md) — How well block passes times the state-vector bandwidth time predicts noisecirc's runtime on the H100 (A2) · *verified*
 - [Issues found in noisecirc](studies/noisecirc-issues.md) — Bugs and issues found in noisecirc during benchmarking, with their fix branches · *verified*
 - [Block passes against noisecirc's parameters](studies/pass-count.md) — How circuit, noise, shots and noisecirc's parameters set the number of blocks and block passes (A3) · *verified*
 - [Prior art of noisecirc's algorithm](studies/prior-art.md) — Systematic literature check: which of noisecirc's sampling and fusion ideas are anticipated · *partially verified*

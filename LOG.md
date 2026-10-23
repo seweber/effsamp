@@ -11,6 +11,86 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-23 23:31 UTC  A2 max_operations at n=26 and A2 conclusion
+- **Goal:** Find a regime where T ~ passes x t_bw within ~1.5
+- **Task:** A2
+- **Method:** a2_runs.py --option max_operations=32/48/64/128, five circuits, damping 1e-3/1e-2, n=26, bench/fixes; a2_timemodel.py over all bench/fixes runs
+- **Outcome:** Defaults: T/(P t_bw) 1.24-2.58 (geomean 1.81); kernel-ratio model 0.95-1.37. max_operations=32: 1.29-1.84, wall time -6..-17% at p=1e-2, up to +25% at 1e-3
+- **Next:** A4 study page from dry-run predictions; A5 validation runs
+- **Refs:** wiki/studies/block-pass-time.md, data/a2-figures, data/a2-timemodel
+
+## 2026-10-23 23:29 UTC  A2 max_operations=128 n=26 (bench/fixes)
+- **Goal:** Effect of max_operations=128 on wall time, block passes and T/(P t_bw) at n=26 (one variable vs default 128)
+- **Task:** A2
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz,qft,qaoa,brickwork,grid --qubits 26 --ps 0.001,0.01 --shots 1000 --reps 2 --budget 500 --option max_operations=128
+- **Outcome:** exit 0; outputs in data/20261023-232306-a2-max-operations-128-n-26-bench-fixes
+- **Next:** none
+- **Refs:** data/20261023-232306-a2-max-operations-128-n-26-bench-fixes, code/bench/a2_runs.py
+
+## 2026-10-23 23:23 UTC  A2 max_operations=64 n=26 (bench/fixes)
+- **Goal:** Effect of max_operations=64 on wall time, block passes and T/(P t_bw) at n=26 (one variable vs default 128)
+- **Task:** A2
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz,qft,qaoa,brickwork,grid --qubits 26 --ps 0.001,0.01 --shots 1000 --reps 2 --budget 500 --option max_operations=64
+- **Outcome:** exit 0; outputs in data/20261023-231659-a2-max-operations-64-n-26-bench-fixes
+- **Next:** none
+- **Refs:** data/20261023-231659-a2-max-operations-64-n-26-bench-fixes, code/bench/a2_runs.py
+
+## 2026-10-23 23:22 UTC  A4 dry-run predictions damping
+- **Goal:** Predicted block passes of 7 circuit categories at n=28, noise damping at loads M=0.01..10, 1000 shots
+- **Task:** A4
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a4_predict.py damping
+- **Outcome:** exit 0; outputs in data/20261023-231143-a4-dry-run-predictions-damping
+- **Next:** none
+- **Refs:** data/20261023-231143-a4-dry-run-predictions-damping, code/bench/a4_predict.py
+
+## 2026-10-23 23:20 UTC  A4 dry-run predictions thermal
+- **Goal:** Predicted block passes of 7 circuit categories at n=28, noise thermal at loads M=0.01..10, 1000 shots
+- **Task:** A4
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a4_predict.py thermal
+- **Outcome:** exit 0; outputs in data/20261023-231143-a4-dry-run-predictions-thermal
+- **Next:** none
+- **Refs:** data/20261023-231143-a4-dry-run-predictions-thermal, code/bench/a4_predict.py
+
+## 2026-10-23 23:20 UTC  A4 dry-run predictions gad
+- **Goal:** Predicted block passes of 7 circuit categories at n=28, noise gad at loads M=0.01..10, 1000 shots
+- **Task:** A4
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a4_predict.py gad
+- **Outcome:** exit 0; outputs in data/20261023-231143-a4-dry-run-predictions-gad
+- **Next:** none
+- **Refs:** data/20261023-231143-a4-dry-run-predictions-gad, code/bench/a4_predict.py
+
+## 2026-10-23 23:18 UTC  A4 dry-run predictions depolarizing
+- **Goal:** Predicted block passes of 7 circuit categories at n=28, noise depolarizing at loads M=0.01..10, 1000 shots
+- **Task:** A4
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a4_predict.py depolarizing
+- **Outcome:** exit 0; outputs in data/20261023-231143-a4-dry-run-predictions-depolarizing
+- **Next:** none
+- **Refs:** data/20261023-231143-a4-dry-run-predictions-depolarizing, code/bench/a4_predict.py
+
+## 2026-10-23 23:17 UTC  A4 dry-run predictions dephasing
+- **Goal:** Predicted block passes of 7 circuit categories at n=28, noise dephasing at loads M=0.01..10, 1000 shots
+- **Task:** A4
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a4_predict.py dephasing
+- **Outcome:** exit 0; outputs in data/20261023-231143-a4-dry-run-predictions-dephasing
+- **Next:** none
+- **Refs:** data/20261023-231143-a4-dry-run-predictions-dephasing, code/bench/a4_predict.py
+
+## 2026-10-23 23:16 UTC  A2 max_operations=48 n=26 (bench/fixes)
+- **Goal:** Effect of max_operations=48 on wall time, block passes and T/(P t_bw) at n=26 (one variable vs default 128)
+- **Task:** A2
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz,qft,qaoa,brickwork,grid --qubits 26 --ps 0.001,0.01 --shots 1000 --reps 2 --budget 500 --option max_operations=48
+- **Outcome:** exit 0; outputs in data/20261023-231110-a2-max-operations-48-n-26-bench-fixes
+- **Next:** none
+- **Refs:** data/20261023-231110-a2-max-operations-48-n-26-bench-fixes, code/bench/a2_runs.py
+
+## 2026-10-23 23:11 UTC  A2 max_operations=32 n=26 (bench/fixes)
+- **Goal:** Effect of max_operations=32 on wall time, block passes and T/(P t_bw) at n=26 (one variable vs default 128)
+- **Task:** A2
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz,qft,qaoa,brickwork,grid --qubits 26 --ps 0.001,0.01 --shots 1000 --reps 2 --budget 500 --option max_operations=32
+- **Outcome:** exit 0; outputs in data/20261023-230530-a2-max-operations-32-n-26-bench-fixes
+- **Next:** none
+- **Refs:** data/20261023-230530-a2-max-operations-32-n-26-bench-fixes, code/bench/a2_runs.py
+
 ## 2026-10-23 23:05 UTC  A2 end-to-end runs n=28 grid (bench/fixes)
 - **Goal:** Wall time and block passes of NoiseCirc runs (defaults, damping, 1000 shots) at n=28 on bench/fixes
 - **Task:** A2
