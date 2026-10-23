@@ -11,6 +11,14 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-23 23:40 UTC  A5 validation brickwork damping
+- **Goal:** Measured time and passes of brickwork at n=28, damping at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise damping --ps 0.000242131,0.00242131 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261023-233749-a5-validation-brickwork-damping
+- **Next:** none
+- **Refs:** data/20261023-233749-a5-validation-brickwork-damping, code/bench/a2_runs.py
+
 ## 2026-10-23 23:39 UTC  A4 benchmark categories and predictions
 - **Goal:** Choose benchmark circuits/categories and predict noisecirc's work without running them
 - **Task:** A4

@@ -47,14 +47,21 @@ class Aer:
         measured.measure_all()
         self.circuit = transpile(measured, self.sim, optimization_level=0)
         self.metadata = {}
+        trial = self.sim.run(self.circuit, shots=1, seed_simulator=0, fusion_verbose=True).result()
+        fusion = trial.results[0].metadata.get("fusion", {})
+        ops = [o for o in fusion.get("output_ops", []) if o.get("name") != "measure"]
+        self.fused = {"ops": len(ops), "kraus_ops": sum(o.get("name") == "kraus" for o in ops),
+                      "kraus_matrices": sum(len(o.get("mats", [])) for o in ops if o.get("name") == "kraus"),
+                      "max_qubits": max((len(o.get("qubits", [])) for o in ops), default=0)}
 
     def run(self, shots: int, seed: int) -> None:
         result = self.sim.run(self.circuit, shots=shots, seed_simulator=seed).result()
         if not result.success:
             raise RuntimeError(str(result.status))
         meta = result.results[0].metadata
-        self.metadata = {k: meta.get(k) for k in ("fusion", "batched_shots_optimization", "shot_branching_enabled",
-                                                   "runtime_parameter_bind", "num_bind_params", "cuStateVec_enable")}
+        self.metadata = {k: meta.get(k) for k in ("batched_shots_optimization", "shot_branching_enabled",
+                                                   "cuStateVec_enable", "max_memory_mb", "gpu_parallel_shots_")}
+        self.metadata["fused"] = self.fused
         result.get_counts()
 
 
@@ -110,20 +117,30 @@ def main() -> None:
     parser.add_argument("--circuit", default="brickwork")
     parser.add_argument("--qubits", type=int, default=24)
     parser.add_argument("--noise", default="damping")
-    parser.add_argument("--p", type=float, default=1e-3)
+    parser.add_argument("--ps", default="0.001")
     parser.add_argument("--shots", type=int, default=1000)
     parser.add_argument("--reps", type=int, default=2)
+    parser.add_argument("--budget", type=float, default=450.0, help="seconds after which no new point starts")
     args = parser.parse_args()
     kind = None if args.noise == "none" else args.noise
     qc = circuits.make(args.circuit, args.qubits)
-    meta = {"sim": args.sim, "circuit": args.circuit, "n": args.qubits, "noise": args.noise, "p": args.p,
+    begin = time.perf_counter()
+    for p in [float(x) for x in args.ps.split(",")]:
+        if time.perf_counter() - begin > args.budget:
+            print(json.dumps({"kind": "skipped", "sim": args.sim, "circuit": args.circuit, "n": args.qubits, "p": p}))
+            continue
+        run_point(args, qc, kind, p)
+
+
+def run_point(args, qc, kind, p) -> None:
+    meta = {"sim": args.sim, "circuit": args.circuit, "n": args.qubits, "noise": args.noise, "p": p,
             "shots": args.shots, "gates": len(qc.data), "channels": circuits.channels(qc)}
     try:
-        sim = make(args.sim, qc, kind, args.p)
+        sim = make(args.sim, qc, kind, p)
         start = time.perf_counter()
         sim.run(args.shots, 0)
         t_first = time.perf_counter() - start
-        reps = args.reps if t_first < 100 else 0
+        reps = args.reps if t_first < 60 else 0
         if reps == 0:
             print(json.dumps({"kind": "run", **meta, "seed": 0, "time": t_first, "t_first": t_first,
                               "first_only": True, "metadata": sim.metadata}, default=str), flush=True)
