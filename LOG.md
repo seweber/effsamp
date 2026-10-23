@@ -11,6 +11,14 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-23 23:39 UTC  A4 benchmark categories and predictions
+- **Goal:** Choose benchmark circuits/categories and predict noisecirc's work without running them
+- **Task:** A4
+- **Method:** Dry-run predictions (a4_predict.py) for 7 circuits x 5 noise types x M=0.01..10 at n=28, 1000 shots; fusion width 3..9 at M=0/0.1/1 (a4_fusion.py); times via kernel ratios (a4_times.py)
+- **Outcome:** Three fusion categories (chain, width-limited, gate-count-limited); at equal M passes per block and shot nearly universal across circuits and non-mixed-unitary noise types; fusion gain shrinks with M for few-block circuits; predicted times committed before A5
+- **Next:** A5 validation runs (running)
+- **Refs:** wiki/studies/benchmark-suite.md, data/a4-figures
+
 ## 2026-10-23 23:37 UTC  A5 validation ghz damping
 - **Goal:** Measured time and passes of ghz at n=28, damping at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
 - **Task:** A5

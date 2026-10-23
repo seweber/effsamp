@@ -24,7 +24,7 @@ On the H100, a run takes the passes times the bandwidth time of one state times 
 
 ## Open threads
 
-- Task A4: choice of benchmark circuits and predictions of their work (dry-run predictions for 7 circuit categories and 5 noise types computed).
+- Task A4: benchmark categories and predictions are in [Benchmark circuits and predicted work](studies/benchmark-suite.md); their check on the GPU (A5) is running.
 - Task A5: validation runs of the most interesting circuits.
 - Task A6: Qiskit Aer (shot branching, batched, plain) and CUDA-Q on the same circuits, translated into passes.
 - Improvement opportunities for noisecirc: a block size chosen by the noise strength; a cheaper general kernel; the cumulative sums of the measurement at large registers.
