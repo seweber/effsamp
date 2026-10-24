@@ -1,5 +1,5 @@
 #!/bin/bash
-# Sync code/noisecirc and code/bench to bux, then run a Python script of code/bench on GPU 0
+# Sync code/noisecirc-bench (worktree of branch bench/fixes) and code/bench to bux, then run a Python script of code/bench on GPU 0
 # inside the bench podman image, with a hard timeout (PLAN.md: at most 10 minutes).
 # Usage: gpurun [-t SECONDS] script.py [args...]   (stdout: the script's output)
 set -euo pipefail
@@ -7,7 +7,7 @@ timeout=590
 if [[ ${1:-} == -t ]]; then timeout=$2; shift 2; fi
 here=$(cd "$(dirname "$0")" && pwd)
 rsync -rlt --delete --exclude .venv --exclude .benchmarks --exclude __pycache__ \
-  "$here/../noisecirc/" ~/remote/bench/noisecirc/
+  "$here/../noisecirc-bench/" ~/remote/bench/noisecirc/
 rsync -rlt --delete --exclude __pycache__ --exclude gpurun "$here/" ~/remote/bench/bench/
 script=$1; shift
 args=""; (($#)) && args=$(printf '%q ' "$@")

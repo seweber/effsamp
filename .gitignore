@@ -43,3 +43,6 @@ code/**/*.egg-info/
 # Editor / OS junk
 .DS_Store
 *.swp
+
+# Worktree of noisecirc branch bench/fixes that code/bench/gpurun runs (see memory/topics/gpu-environment.md)
+code/noisecirc-bench/

@@ -1,0 +1,1 @@
+code/bench/gpurun a6_runs.py --sim aer_plain --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 100 --reps 2

@@ -95,4 +95,4 @@ For benchmarking noisecirc's algorithm against other simulators (task A6), the f
 
 ## Verdict
 
-Benchmark circuits should be classified by their block count (fusion), the noise by its load $M$ and only secondarily by its type. noisecirc's work is, to a good approximation, the blocks times the shots times a universal function of $M$, plus error proposals that grow with $M$ alone; fusion therefore helps most at weak and intermediate noise, and the choice of non-mixed-unitary channel changes the work by less than 40% at equal load. The predictions are checked in task A5.
+Benchmark circuits should be classified by their block count (fusion), the noise by its load $M$ and only secondarily by its type. noisecirc's work is, to a good approximation, the blocks times the shots times a universal function of $M$, plus error proposals that grow with $M$ alone; fusion therefore helps most at weak and intermediate noise, and the choice of non-mixed-unitary channel changes the work by less than 40% at equal load. GPU runs of all seven circuits confirm the predicted passes within 14% and the predicted times within 33% ([Validation of the predicted work](validation.md)).

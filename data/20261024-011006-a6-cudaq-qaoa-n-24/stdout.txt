@@ -1,0 +1,6 @@
+{"kind": "run", "sim": "cudaq", "circuit": "qaoa", "n": 24, "noise": "damping", "p": 5.55556e-05, "shots": 100, "gates": 288, "channels": 360, "seed": 1, "time": 4.126166068948805, "t_first": 4.2181018041446805, "metadata": {}}
+{"kind": "run", "sim": "cudaq", "circuit": "qaoa", "n": 24, "noise": "damping", "p": 5.55556e-05, "shots": 100, "gates": 288, "channels": 360, "seed": 2, "time": 4.126692377962172, "t_first": 4.2181018041446805, "metadata": {}}
+{"kind": "run", "sim": "cudaq", "circuit": "qaoa", "n": 24, "noise": "damping", "p": 0.000555556, "shots": 100, "gates": 288, "channels": 360, "seed": 1, "time": 4.130804638378322, "t_first": 4.220058668404818, "metadata": {}}
+{"kind": "run", "sim": "cudaq", "circuit": "qaoa", "n": 24, "noise": "damping", "p": 0.000555556, "shots": 100, "gates": 288, "channels": 360, "seed": 2, "time": 4.13202198036015, "t_first": 4.220058668404818, "metadata": {}}
+{"kind": "run", "sim": "cudaq", "circuit": "qaoa", "n": 24, "noise": "damping", "p": 0.00555556, "shots": 100, "gates": 288, "channels": 360, "seed": 1, "time": 4.1894325613975525, "t_first": 4.264835991896689, "metadata": {}}
+{"kind": "run", "sim": "cudaq", "circuit": "qaoa", "n": 24, "noise": "damping", "p": 0.00555556, "shots": 100, "gates": 288, "channels": 360, "seed": 2, "time": 4.178009552881122, "t_first": 4.264835991896689, "metadata": {}}

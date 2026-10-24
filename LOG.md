@@ -11,6 +11,110 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-24 01:10 UTC  A6 cudaq qaoa n=24
+- **Goal:** cudaq on qaoa, damping M=0.01/0.1/1, 100 shots, n=24
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim cudaq --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 100 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-011006-a6-cudaq-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-011006-a6-cudaq-qaoa-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 01:10 UTC  A6 aer_plain qaoa n=24
+- **Goal:** aer_plain on qaoa, damping M=0.01/0.1/1, 100 shots, n=24
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_plain --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 100 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-010922-a6-aer-plain-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-010922-a6-aer-plain-qaoa-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 01:09 UTC  A6 aer_batched qaoa n=24
+- **Goal:** aer_batched on qaoa, damping M=0.01/0.1/1, 1000 shots, n=24
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_batched --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-010319-a6-aer-batched-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-010319-a6-aer-batched-qaoa-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 01:03 UTC  A6 aer_branch qaoa n=24
+- **Goal:** aer_branch on qaoa, damping M=0.01/0.1/1, 1000 shots, n=24
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-010235-a6-aer-branch-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-010235-a6-aer-branch-qaoa-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 01:02 UTC  A6 noisecirc qaoa n=24
+- **Goal:** noisecirc reference at the A6 points: qaoa, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a2_runs.py --circuits qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-010224-a6-noisecirc-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-010224-a6-noisecirc-qaoa-n-24, code/bench/a2_runs.py
+
+## 2026-10-24 01:02 UTC  A6 cudaq qft n=24
+- **Goal:** cudaq on qft, damping M=0.01/0.1/1, 100 shots, n=24
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim cudaq --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 100 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-010108-a6-cudaq-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-010108-a6-cudaq-qft-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 01:01 UTC  A6 aer_plain qft n=24
+- **Goal:** aer_plain on qft, damping M=0.01/0.1/1, 100 shots, n=24
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_plain --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 100 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-005858-a6-aer-plain-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-005858-a6-aer-plain-qft-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 00:58 UTC  A6 aer_batched qft n=24
+- **Goal:** aer_batched on qft, damping M=0.01/0.1/1, 1000 shots, n=24
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_batched --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-005205-a6-aer-batched-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-005205-a6-aer-batched-qft-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 00:52 UTC  A6 aer_branch qft n=24
+- **Goal:** aer_branch on qft, damping M=0.01/0.1/1, 1000 shots, n=24
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-005038-a6-aer-branch-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-005038-a6-aer-branch-qft-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 00:50 UTC  A6 noisecirc qft n=24
+- **Goal:** noisecirc reference at the A6 points: qft, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-005025-a6-noisecirc-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-005025-a6-noisecirc-qft-n-24, code/bench/a2_runs.py
+
+## 2026-10-24 00:50 UTC  A6 cudaq brickwork n=24
+- **Goal:** cudaq on brickwork, damping M=0.01/0.1/1, 100 shots, n=24
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim cudaq --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 100 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-004930-a6-cudaq-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-004930-a6-cudaq-brickwork-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 00:49 UTC  A6 aer_plain brickwork n=24
+- **Goal:** aer_plain on brickwork, damping M=0.01/0.1/1, 100 shots, n=24
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_plain --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 100 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-004733-a6-aer-plain-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-004733-a6-aer-plain-brickwork-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 00:47 UTC  A6 aer_batched brickwork n=24
+- **Goal:** aer_batched on brickwork, damping M=0.01/0.1/1, 1000 shots, n=24
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_batched --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-004452-a6-aer-batched-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-004452-a6-aer-batched-brickwork-n-24, code/bench/a6_runs.py
+
 ## 2026-10-24 00:45 UTC  Fix: optimize_kraus spreads the no-error operator
 - **Goal:** Explain why optimize_kraus made QFT/brickwork depolarizing runs slower (A5)
 - **Task:** A5

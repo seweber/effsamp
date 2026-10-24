@@ -47,7 +47,16 @@ class Aer:
         measured.measure_all()
         self.circuit = transpile(measured, self.sim, optimization_level=0)
         self.metadata = {}
+        # Aer's fusion of Kraus operators fails on some noisy circuits in an eigendecomposition
+        # ("heevx", a known Aer bug, see noisecirc's benchmarks/_aer_worker.py); those run without it.
+        from qiskit_aer.backends import aer_compiler
+
+        aer_compiler.BACKEND_RUN_ARG_TYPES.setdefault("fusion_allow_kraus", (bool, np.bool_))
+        self.options = {}
         trial = self.sim.run(self.circuit, shots=1, seed_simulator=0, fusion_verbose=True).result()
+        if not trial.success and "heevx" in str(trial.status):
+            self.options = {"fusion_allow_kraus": False}
+            trial = self.sim.run(self.circuit, shots=1, seed_simulator=0, fusion_verbose=True, **self.options).result()
         fusion = trial.results[0].metadata.get("fusion", {})
         ops = [o for o in fusion.get("output_ops", []) if o.get("name") != "measure"]
         self.fused = {"ops": len(ops), "kraus_ops": sum(o.get("name") == "kraus" for o in ops),
@@ -55,13 +64,17 @@ class Aer:
                       "max_qubits": max((len(o.get("qubits", [])) for o in ops), default=0)}
 
     def run(self, shots: int, seed: int) -> None:
-        result = self.sim.run(self.circuit, shots=shots, seed_simulator=seed).result()
+        result = self.sim.run(self.circuit, shots=shots, seed_simulator=seed, **self.options).result()
+        if not result.success and "heevx" in str(result.status) and not self.options:
+            self.options = {"fusion_allow_kraus": False}
+            result = self.sim.run(self.circuit, shots=shots, seed_simulator=seed, **self.options).result()
         if not result.success:
             raise RuntimeError(str(result.status))
         meta = result.results[0].metadata
         self.metadata = {k: meta.get(k) for k in ("batched_shots_optimization", "shot_branching_enabled",
                                                    "cuStateVec_enable", "max_memory_mb", "gpu_parallel_shots_")}
         self.metadata["fused"] = self.fused
+        self.metadata["fusion_allow_kraus"] = not self.options
         result.get_counts()
 
 
