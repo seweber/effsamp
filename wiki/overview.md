@@ -28,6 +28,6 @@ On the H100, a run takes the passes times the bandwidth time of one state times 
 
 ## Open threads
 
-- More register sizes, shot counts and noise types for the comparison with Aer and CUDA-Q (only amplitude damping at 24 and 28 qubits and 1000 shots so far).
-- Task A5: validation runs of the most interesting circuits.
-- Improvement opportunities for noisecirc: a block size chosen by the noise strength; a cheaper general kernel; the cumulative sums of the measurement at large registers.
+- Proposals in TASKS.md, awaiting the human's decision: T001 noise-aware block sizes and cheaper error kernels; T002 a direct comparison with cuStateVec Ex's delayed lower-bound sampling; T003 fewer rejected proposals at strong noise.
+- noisecirc branches to review (local, not pushed): `fix/elsman-doi`, `fix/squared-norms-parallel`, `fix/optimize-kraus-dominant`, and `bench/fixes`, which merges all three and ran every measurement after 2026-10-23 22:30 UTC; see [Issues found in noisecirc](studies/noisecirc-issues.md).
+- Not covered: other GPUs than the H100, double precision, more than 28 qubits, qsim's GPU build, and noise types other than amplitude damping and thermal relaxation in the comparison with Aer and CUDA-Q.
