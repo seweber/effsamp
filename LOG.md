@@ -11,6 +11,62 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-24 02:41 UTC  optimize_kraus fix v4 verified on GPU
+- **Goal:** Check that keeping the dominant Kraus operator restores sparse kernels
+- **Task:** A5
+- **Method:** bench/fixes db41e9b: GPU tests; a2_blocks qft depolarizing --optimize-kraus; a2_runs brickwork/qft depolarizing optimize_kraus M=0.1/1 at n=28
+- **Outcome:** 317+179 tests pass; QFT kernels 1.14/1.79 x t_bw (as default); optimize_kraus now 20-30% faster than default at M=1 (QFT 25-26 vs 32.6 s; brickwork 32.8 vs 47.0 s), equal at M=0.1; compile 22-67 s vs main 72-144 s
+- **Next:** A6 page
+- **Refs:** wiki/studies/noisecirc-issues.md
+
+## 2026-10-24 02:35 UTC  A5 validation qft depolarizing optimized M=1 (fix v4)
+- **Goal:** Depolarizing with optimize_kraus on qft, n=28, M=1, bench/fixes db41e9b
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise depolarizing --ps 0.00123153 --shots 1000 --reps 2 --budget 430 --option optimize_kraus=1
+- **Outcome:** exit 0; outputs in data/20261024-023351-a5-validation-qft-depolarizing-optimized-m-1-fix-v4
+- **Next:** none
+- **Refs:** data/20261024-023351-a5-validation-qft-depolarizing-optimized-m-1-fix-v4, code/bench/a2_runs.py
+
+## 2026-10-24 02:33 UTC  A5 validation qft depolarizing optimized M=0.1 (fix v4)
+- **Goal:** Depolarizing with optimize_kraus on qft, n=28, M=0.1, bench/fixes db41e9b
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise depolarizing --ps 0.000123153 --shots 1000 --reps 2 --budget 430 --option optimize_kraus=1
+- **Outcome:** exit 0; outputs in data/20261024-023316-a5-validation-qft-depolarizing-optimized-m-0-1-fix-v4
+- **Next:** none
+- **Refs:** data/20261024-023316-a5-validation-qft-depolarizing-optimized-m-0-1-fix-v4, code/bench/a2_runs.py
+
+## 2026-10-24 02:33 UTC  A5 validation brickwork depolarizing optimized M=1 (fix v4)
+- **Goal:** Depolarizing with optimize_kraus on brickwork, n=28, M=1, bench/fixes db41e9b
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise depolarizing --ps 0.00121065 --shots 1000 --reps 2 --budget 430 --option optimize_kraus=1
+- **Outcome:** exit 0; outputs in data/20261024-023133-a5-validation-brickwork-depolarizing-optimized-m-1-fix-v4
+- **Next:** none
+- **Refs:** data/20261024-023133-a5-validation-brickwork-depolarizing-optimized-m-1-fix-v4, code/bench/a2_runs.py
+
+## 2026-10-24 02:31 UTC  A5 validation brickwork depolarizing optimized M=0.1 (fix v4)
+- **Goal:** Depolarizing with optimize_kraus on brickwork, n=28, M=0.1, bench/fixes db41e9b
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise depolarizing --ps 0.000121065 --shots 1000 --reps 2 --budget 430 --option optimize_kraus=1
+- **Outcome:** exit 0; outputs in data/20261024-023045-a5-validation-brickwork-depolarizing-optimized-m-0-1-fix-v4
+- **Next:** none
+- **Refs:** data/20261024-023045-a5-validation-brickwork-depolarizing-optimized-m-0-1-fix-v4, code/bench/a2_runs.py
+
+## 2026-10-24 02:30 UTC  A5 block pass times qft depolarizing n=28 optimize-kraus v4
+- **Goal:** Kernel times of QFT blocks with optimize_kraus after keeping the dominant operator
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_blocks.py --circuits qft --qubits 28 --noise depolarizing --p 0.000123 --optimize-kraus
+- **Outcome:** exit 0; outputs in data/20261024-023021-a5-block-pass-times-qft-depolarizing-n-28-optimize-kraus-v4
+- **Next:** none
+- **Refs:** data/20261024-023021-a5-block-pass-times-qft-depolarizing-n-28-optimize-kraus-v4, code/bench/a2_blocks.py
+
+## 2026-10-24 02:30 UTC  GPU tests of bench/fixes db41e9b
+- **Goal:** Tests on the H100 after keeping the dominant Kraus operator
+- **Task:** A5
+- **Method:** code/bench/gpurun run_tests.py
+- **Outcome:** exit 0; outputs in data/20261024-022958-gpu-tests-of-bench-fixes-db41e9b
+- **Next:** none
+- **Refs:** data/20261024-022958-gpu-tests-of-bench-fixes-db41e9b, code/bench/run_tests.py
+
 ## 2026-10-24 02:30 UTC  A6 competitor runs and noisecirc variants
 - **Goal:** Time Aer (branching, batched, plain), CUDA-Q and noisecirc variants on ghz/brickwork/qft/qaoa at n=24, damping M=0.01/0.1/1, 1000 shots
 - **Task:** A6

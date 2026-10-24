@@ -43,7 +43,7 @@ At equal load the three non-mixed-unitary channels make the same passes within t
 
 ### `optimize_kraus` slowed the depolarizing runs (verified, fixed)
 
-With `optimize_kraus=True`, depolarizing noise took more passes and time than without, the opposite of its purpose: the QFT at $M = 0.1$ made 6478 block passes instead of 980 to 1286 and took 40 s instead of 4 s; brickwork took 11.1 s instead of 6.4 s. The cause is a noisecirc issue, the optimizer spreading the no-error operator over several Kraus operators; it is described and fixed in [Issues found in noisecirc](noisecirc-issues.md), item 3. These four points are excluded from the figure.
+With `optimize_kraus=True`, depolarizing noise took more passes and time than without, the opposite of its purpose: the QFT at $M = 0.1$ made 6478 block passes instead of 980 to 1286 and took 40 s instead of 4 s; brickwork took 11.1 s instead of 6.4 s. The cause is a noisecirc issue: the optimizer spread the no-error operator over several Kraus operators and filled the zero entries the kernels skip. It is described and fixed in [Issues found in noisecirc](noisecirc-issues.md), item 3; with the fix, the option saves 20 to 30% at $M = 1$. These four points are excluded from the figure.
 
 ## Caveats
 
