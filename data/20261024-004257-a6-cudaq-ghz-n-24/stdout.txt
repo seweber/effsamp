@@ -1,0 +1,6 @@
+{"kind": "run", "sim": "cudaq", "circuit": "ghz", "n": 24, "noise": "damping", "p": 0.000215054, "shots": 100, "gates": 70, "channels": 93, "seed": 1, "time": 1.2639063308015466, "t_first": 1.3298800978809595, "metadata": {}}
+{"kind": "run", "sim": "cudaq", "circuit": "ghz", "n": 24, "noise": "damping", "p": 0.000215054, "shots": 100, "gates": 70, "channels": 93, "seed": 2, "time": 1.2654198352247477, "t_first": 1.3298800978809595, "metadata": {}}
+{"kind": "run", "sim": "cudaq", "circuit": "ghz", "n": 24, "noise": "damping", "p": 0.00215054, "shots": 100, "gates": 70, "channels": 93, "seed": 1, "time": 1.270910969004035, "t_first": 1.320502009242773, "metadata": {}}
+{"kind": "run", "sim": "cudaq", "circuit": "ghz", "n": 24, "noise": "damping", "p": 0.00215054, "shots": 100, "gates": 70, "channels": 93, "seed": 2, "time": 1.2711236039176583, "t_first": 1.320502009242773, "metadata": {}}
+{"kind": "run", "sim": "cudaq", "circuit": "ghz", "n": 24, "noise": "damping", "p": 0.0215054, "shots": 100, "gates": 70, "channels": 93, "seed": 1, "time": 1.3025006903335452, "t_first": 1.3550169887021184, "metadata": {}}
+{"kind": "run", "sim": "cudaq", "circuit": "ghz", "n": 24, "noise": "damping", "p": 0.0215054, "shots": 100, "gates": 70, "channels": 93, "seed": 2, "time": 1.3039298448711634, "t_first": 1.3550169887021184, "metadata": {}}

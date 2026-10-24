@@ -1,0 +1,1 @@
+code/bench/gpurun a2_runs.py --circuits random --qubits 28 --noise gad --ps 1.22865e-05 --shots 1000 --reps 2 --budget 430

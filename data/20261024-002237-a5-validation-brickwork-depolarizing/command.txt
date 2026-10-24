@@ -1,0 +1,1 @@
+code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise depolarizing --ps 0.000121065,0.00121065 --shots 1000 --reps 2 --budget 430

@@ -11,6 +11,286 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-24 00:45 UTC  Fix: optimize_kraus spreads the no-error operator
+- **Goal:** Explain why optimize_kraus made QFT/brickwork depolarizing runs slower (A5)
+- **Task:** A5
+- **Method:** Per-gate non-dominant proposal probability: cp(0.012) optimized set 0.022 vs minimal 5e-4 (degenerate optimal family of mixed-unitary sets); fix: second stage lowering the non-dominant bounds under an oversampling penalty; branch fix/optimize-kraus-dominant 4dca134 (+ regression test failing on main), merged into bench/fixes e00cabd
+- **Outcome:** Optimized sets now have lower Z and fewer non-dominant proposals than minimal sets for depolarizing, GAD, thermal; damping unchanged; 163 CPU tests + 27 STA tests pass; GPU tests and rerun of the A5 optimize points pending
+- **Next:** GPU tests and A5 reruns after the A6 batch
+- **Refs:** wiki/studies/noisecirc-issues.md, code/noisecirc
+
+## 2026-10-24 00:45 UTC  Invalid run: A6 noisecirc brickwork n=24 on wrong branch
+- **Goal:** Record a run made with the wrong noisecirc code
+- **Task:** A6
+- **Method:** gpurun syncs code/noisecirc's working tree; it was switched to fix/optimize-kraus-dominant (main-based, without the squared-norms fix) 00:42-00:45 UTC while the A6 batch ran
+- **Outcome:** data/20261024-004312-a6-noisecirc-brickwork-n-24 ran without fix/squared-norms-parallel; excluded, to be rerun. Aer/CUDA-Q runs unaffected
+- **Next:** Rerun after the batch; make gpurun sync a dedicated worktree
+- **Refs:** data/20261024-004312-a6-noisecirc-brickwork-n-24
+
+## 2026-10-24 00:44 UTC  A6 aer_branch brickwork n=24
+- **Goal:** aer_branch on brickwork, damping M=0.01/0.1/1, 1000 shots, n=24
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-004330-a6-aer-branch-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-004330-a6-aer-branch-brickwork-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 00:43 UTC  A6 noisecirc brickwork n=24
+- **Goal:** noisecirc reference at the A6 points: brickwork, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-004312-a6-noisecirc-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-004312-a6-noisecirc-brickwork-n-24, code/bench/a2_runs.py
+
+## 2026-10-24 00:43 UTC  A6 cudaq ghz n=24
+- **Goal:** cudaq on ghz, damping M=0.01/0.1/1, 100 shots, n=24
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim cudaq --circuit ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 100 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-004257-a6-cudaq-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-004257-a6-cudaq-ghz-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 00:42 UTC  A6 aer_plain ghz n=24
+- **Goal:** aer_plain on ghz, damping M=0.01/0.1/1, 100 shots, n=24
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_plain --circuit ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 100 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-004234-a6-aer-plain-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-004234-a6-aer-plain-ghz-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 00:42 UTC  A6 aer_batched ghz n=24
+- **Goal:** aer_batched on ghz, damping M=0.01/0.1/1, 1000 shots, n=24
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_batched --circuit ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-003956-a6-aer-batched-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-003956-a6-aer-batched-ghz-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 00:39 UTC  A6 aer_branch ghz n=24
+- **Goal:** aer_branch on ghz, damping M=0.01/0.1/1, 1000 shots, n=24
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-003938-a6-aer-branch-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-003938-a6-aer-branch-ghz-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 00:39 UTC  A6 noisecirc ghz n=24
+- **Goal:** noisecirc reference at the A6 points: ghz, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-003929-a6-noisecirc-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-003929-a6-noisecirc-ghz-n-24, code/bench/a2_runs.py
+
+## 2026-10-24 00:39 UTC  A5 validation qft depolarizing optimized
+- **Goal:** Mixed-unitary depolarizing at M=0.1,1 on qft, n=28 --option optimize_kraus=1
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise depolarizing --ps 0.000123153,0.00123153 --shots 1000 --reps 2 --budget 430 --option optimize_kraus=1
+- **Outcome:** exit 0; outputs in data/20261024-003516-a5-validation-qft-depolarizing-optimized
+- **Next:** none
+- **Refs:** data/20261024-003516-a5-validation-qft-depolarizing-optimized, code/bench/a2_runs.py
+
+## 2026-10-24 00:35 UTC  A5 validation qft depolarizing
+- **Goal:** Mixed-unitary depolarizing at M=0.1,1 on qft, n=28
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise depolarizing --ps 0.000123153,0.00123153 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261024-003303-a5-validation-qft-depolarizing
+- **Next:** none
+- **Refs:** data/20261024-003303-a5-validation-qft-depolarizing, code/bench/a2_runs.py
+
+## 2026-10-24 00:33 UTC  A5 validation qft dephasing
+- **Goal:** Mixed-unitary dephasing at M=0.1,1 on qft, n=28
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise dephasing --ps 0.000492611,0.00492611 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261024-003116-a5-validation-qft-dephasing
+- **Next:** none
+- **Refs:** data/20261024-003116-a5-validation-qft-dephasing, code/bench/a2_runs.py
+
+## 2026-10-24 00:31 UTC  A5 validation brickwork depolarizing optimized
+- **Goal:** Mixed-unitary depolarizing at M=0.1,1 on brickwork, n=28 --option optimize_kraus=1
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise depolarizing --ps 0.000121065,0.00121065 --shots 1000 --reps 2 --budget 430 --option optimize_kraus=1
+- **Outcome:** exit 0; outputs in data/20261024-002544-a5-validation-brickwork-depolarizing-optimized
+- **Next:** none
+- **Refs:** data/20261024-002544-a5-validation-brickwork-depolarizing-optimized, code/bench/a2_runs.py
+
+## 2026-10-24 00:25 UTC  A5 validation brickwork depolarizing
+- **Goal:** Mixed-unitary depolarizing at M=0.1,1 on brickwork, n=28
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise depolarizing --ps 0.000121065,0.00121065 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261024-002237-a5-validation-brickwork-depolarizing
+- **Next:** none
+- **Refs:** data/20261024-002237-a5-validation-brickwork-depolarizing, code/bench/a2_runs.py
+
+## 2026-10-24 00:22 UTC  A5 validation brickwork dephasing
+- **Goal:** Mixed-unitary dephasing at M=0.1,1 on brickwork, n=28
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise dephasing --ps 0.000484262,0.00484262 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261024-002032-a5-validation-brickwork-dephasing
+- **Next:** none
+- **Refs:** data/20261024-002032-a5-validation-brickwork-dephasing, code/bench/a2_runs.py
+
+## 2026-10-24 00:20 UTC  A5 validation random gad
+- **Goal:** Measured time and passes of random at n=28, gad at loads M=[0.1], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits random --qubits 28 --noise gad --ps 1.22865e-05 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261024-001831-a5-validation-random-gad
+- **Next:** none
+- **Refs:** data/20261024-001831-a5-validation-random-gad, code/bench/a2_runs.py
+
+## 2026-10-24 00:18 UTC  A5 validation scramble gad
+- **Goal:** Measured time and passes of scramble at n=28, gad at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits scramble --qubits 28 --noise gad --ps 0.000238095,0.00238095 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261024-001543-a5-validation-scramble-gad
+- **Next:** none
+- **Refs:** data/20261024-001543-a5-validation-scramble-gad, code/bench/a2_runs.py
+
+## 2026-10-24 00:15 UTC  A5 validation qaoa gad
+- **Goal:** Measured time and passes of qaoa at n=28, gad at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits qaoa --qubits 28 --noise gad --ps 0.00047619,0.0047619 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261024-001418-a5-validation-qaoa-gad
+- **Next:** none
+- **Refs:** data/20261024-001418-a5-validation-qaoa-gad, code/bench/a2_runs.py
+
+## 2026-10-24 00:14 UTC  A5 validation qft gad
+- **Goal:** Measured time and passes of qft at n=28, gad at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise gad --ps 0.000246305,0.00246305 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261024-001214-a5-validation-qft-gad
+- **Next:** none
+- **Refs:** data/20261024-001214-a5-validation-qft-gad, code/bench/a2_runs.py
+
+## 2026-10-24 00:12 UTC  A5 validation grid gad
+- **Goal:** Measured time and passes of grid at n=28, gad at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits grid --qubits 28 --noise gad --ps 0.000141443,0.00141443 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261024-000923-a5-validation-grid-gad
+- **Next:** none
+- **Refs:** data/20261024-000923-a5-validation-grid-gad, code/bench/a2_runs.py
+
+## 2026-10-24 00:09 UTC  A5 validation brickwork gad
+- **Goal:** Measured time and passes of brickwork at n=28, gad at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise gad --ps 0.000242131,0.00242131 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261024-000616-a5-validation-brickwork-gad
+- **Next:** none
+- **Refs:** data/20261024-000616-a5-validation-brickwork-gad, code/bench/a2_runs.py
+
+## 2026-10-24 00:06 UTC  A5 validation ghz gad
+- **Goal:** Measured time and passes of ghz at n=28, gad at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz --qubits 28 --noise gad --ps 0.00183486,0.0183486 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261024-000541-a5-validation-ghz-gad
+- **Next:** none
+- **Refs:** data/20261024-000541-a5-validation-ghz-gad, code/bench/a2_runs.py
+
+## 2026-10-24 00:05 UTC  A5 validation random thermal
+- **Goal:** Measured time and passes of random at n=28, thermal at loads M=[0.1], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits random --qubits 28 --noise thermal --ps 8.19101e-06 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261024-000349-a5-validation-random-thermal
+- **Next:** none
+- **Refs:** data/20261024-000349-a5-validation-random-thermal, code/bench/a2_runs.py
+
+## 2026-10-24 00:03 UTC  A5 validation scramble thermal
+- **Goal:** Measured time and passes of scramble at n=28, thermal at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits scramble --qubits 28 --noise thermal --ps 0.00015873,0.0015873 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261024-000109-a5-validation-scramble-thermal
+- **Next:** none
+- **Refs:** data/20261024-000109-a5-validation-scramble-thermal, code/bench/a2_runs.py
+
+## 2026-10-24 00:01 UTC  A5 validation qaoa thermal
+- **Goal:** Measured time and passes of qaoa at n=28, thermal at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits qaoa --qubits 28 --noise thermal --ps 0.00031746,0.0031746 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261023-235952-a5-validation-qaoa-thermal
+- **Next:** none
+- **Refs:** data/20261023-235952-a5-validation-qaoa-thermal, code/bench/a2_runs.py
+
+## 2026-10-23 23:59 UTC  A5 validation qft thermal
+- **Goal:** Measured time and passes of qft at n=28, thermal at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise thermal --ps 0.000164204,0.00164204 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261023-235754-a5-validation-qft-thermal
+- **Next:** none
+- **Refs:** data/20261023-235754-a5-validation-qft-thermal, code/bench/a2_runs.py
+
+## 2026-10-23 23:57 UTC  A5 validation grid thermal
+- **Goal:** Measured time and passes of grid at n=28, thermal at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits grid --qubits 28 --noise thermal --ps 9.42951e-05,0.000942951 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261023-235506-a5-validation-grid-thermal
+- **Next:** none
+- **Refs:** data/20261023-235506-a5-validation-grid-thermal, code/bench/a2_runs.py
+
+## 2026-10-23 23:55 UTC  A5 validation brickwork thermal
+- **Goal:** Measured time and passes of brickwork at n=28, thermal at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise thermal --ps 0.000161421,0.00161421 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261023-235219-a5-validation-brickwork-thermal
+- **Next:** none
+- **Refs:** data/20261023-235219-a5-validation-brickwork-thermal, code/bench/a2_runs.py
+
+## 2026-10-23 23:52 UTC  A5 validation ghz thermal
+- **Goal:** Measured time and passes of ghz at n=28, thermal at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz --qubits 28 --noise thermal --ps 0.00122324,0.0122324 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261023-235148-a5-validation-ghz-thermal
+- **Next:** none
+- **Refs:** data/20261023-235148-a5-validation-ghz-thermal, code/bench/a2_runs.py
+
+## 2026-10-23 23:51 UTC  A5 validation random damping
+- **Goal:** Measured time and passes of random at n=28, damping at loads M=[0.1], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits random --qubits 28 --noise damping --ps 1.22865e-05 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261023-234924-a5-validation-random-damping
+- **Next:** none
+- **Refs:** data/20261023-234924-a5-validation-random-damping, code/bench/a2_runs.py
+
+## 2026-10-23 23:49 UTC  A5 validation scramble damping
+- **Goal:** Measured time and passes of scramble at n=28, damping at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits scramble --qubits 28 --noise damping --ps 0.000238095,0.00238095 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261023-234638-a5-validation-scramble-damping
+- **Next:** none
+- **Refs:** data/20261023-234638-a5-validation-scramble-damping, code/bench/a2_runs.py
+
+## 2026-10-23 23:46 UTC  A5 validation qaoa damping
+- **Goal:** Measured time and passes of qaoa at n=28, damping at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits qaoa --qubits 28 --noise damping --ps 0.00047619,0.0047619 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261023-234519-a5-validation-qaoa-damping
+- **Next:** none
+- **Refs:** data/20261023-234519-a5-validation-qaoa-damping, code/bench/a2_runs.py
+
+## 2026-10-23 23:45 UTC  A5 validation qft damping
+- **Goal:** Measured time and passes of qft at n=28, damping at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise damping --ps 0.000246305,0.00246305 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261023-234333-a5-validation-qft-damping
+- **Next:** none
+- **Refs:** data/20261023-234333-a5-validation-qft-damping, code/bench/a2_runs.py
+
+## 2026-10-23 23:44 UTC  A4 dry-run predictions depolarizing optimize_kraus
+- **Goal:** Predicted passes for depolarizing with optimize_kraus (brickwork, qft; M=0.1, 1), before the A5 runs of these points
+- **Task:** A4
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a4_predict.py depolarizing --optimize-kraus --circuits brickwork,qft --loads 0.1,1
+- **Outcome:** exit 0; outputs in data/20261023-234140-a4-dry-run-predictions-depolarizing-optimize-kraus
+- **Next:** none
+- **Refs:** data/20261023-234140-a4-dry-run-predictions-depolarizing-optimize-kraus, code/bench/a4_predict.py
+
+## 2026-10-23 23:43 UTC  A5 validation grid damping
+- **Goal:** Measured time and passes of grid at n=28, damping at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits grid --qubits 28 --noise damping --ps 0.000141443,0.00141443 --shots 1000 --reps 2 --budget 430
+- **Outcome:** exit 0; outputs in data/20261023-234042-a5-validation-grid-damping
+- **Next:** none
+- **Refs:** data/20261023-234042-a5-validation-grid-damping, code/bench/a2_runs.py
+
 ## 2026-10-23 23:40 UTC  A5 validation brickwork damping
 - **Goal:** Measured time and passes of brickwork at n=28, damping at loads M=[0.1, 1.0], 1000 shots, against A4 predictions
 - **Task:** A5

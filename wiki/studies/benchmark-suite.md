@@ -3,7 +3,7 @@ title: Benchmark circuits and predicted work
 summary: Categories of benchmark circuits and noise, and noisecirc's predicted block passes and times for them (A4)
 type: study
 tasks: [A4]
-status: partially verified
+status: verified
 updated: 2026-10-23
 ---
 # Benchmark circuits and predicted work

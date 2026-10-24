@@ -11,11 +11,12 @@ Start with the [Overview](overview.md). Abbreviations and notation are in the [G
 
 ## Studies
 
-- [Benchmark circuits and predicted work](studies/benchmark-suite.md) — Categories of benchmark circuits and noise, and noisecirc's predicted block passes and times for them (A4) · *partially verified*
+- [Benchmark circuits and predicted work](studies/benchmark-suite.md) — Categories of benchmark circuits and noise, and noisecirc's predicted block passes and times for them (A4) · *verified*
 - [Block-pass time on the H100](studies/block-pass-time.md) — How well block passes times the state-vector bandwidth time predicts noisecirc's runtime on the H100 (A2) · *verified*
 - [Issues found in noisecirc](studies/noisecirc-issues.md) — Bugs and issues found in noisecirc during benchmarking, with their fix branches · *verified*
 - [Block passes against noisecirc's parameters](studies/pass-count.md) — How circuit, noise, shots and noisecirc's parameters set the number of blocks and block passes (A3) · *verified*
 - [Prior art of noisecirc's algorithm](studies/prior-art.md) — Systematic literature check: which of noisecirc's sampling and fusion ideas are anticipated · *partially verified*
+- [Validation of the predicted work](studies/validation.md) — GPU runs of the benchmark circuits against the predicted block passes and times (A5) · *verified*
 
 ## Literature
 

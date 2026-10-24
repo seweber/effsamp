@@ -1,0 +1,1 @@
+code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise depolarizing --ps 0.000123153,0.00123153 --shots 1000 --reps 2 --budget 430 --option optimize_kraus=1

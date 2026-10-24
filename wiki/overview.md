@@ -12,7 +12,7 @@ noisecirc samples quantum trajectories by rejection: it proposes Kraus operators
 
 Its work is counted in block passes: launches of a fused block's kernel on one state vector. The passes follow a universal law in the expected errors per shot $M$, $P \approx BN[1/N + f(M)] + 2MN$ for amplitude damping, and noisecirc's own sampler, run on surrogate states without a GPU, predicts them to about 10% ([Block passes against noisecirc's parameters](studies/pass-count.md), [Block-pass cost model](concepts/block-pass-cost-model.md)).
 
-On the H100, a run takes the passes times the bandwidth time of one state times 1.2 to 2.6 at noisecirc's defaults, and 1.3 to 1.8 with blocks of at most 32 gates; large blocks and the general (error) kernels are slower than the bandwidth on this GPU ([Block-pass time on the H100](studies/block-pass-time.md)). A bug in noisecirc's norm reduction slowed 28-qubit runs by up to 1.7 times and is fixed on a branch ([Issues found in noisecirc](studies/noisecirc-issues.md)).
+On the H100, a run takes the passes times the bandwidth time of one state times 1.2 to 2.6 at noisecirc's defaults, and 1.3 to 1.8 with blocks of at most 32 gates; large blocks and the general (error) kernels are slower than the bandwidth on this GPU ([Block-pass time on the H100](studies/block-pass-time.md)). Without running a circuit, its passes are predicted within 14% and its time within 33% (kernel-ratio model), as GPU runs of seven circuits and five channels confirm ([Benchmark circuits and predicted work](studies/benchmark-suite.md), [Validation of the predicted work](studies/validation.md)). Two performance issues of noisecirc were found and fixed on branches ([Issues found in noisecirc](studies/noisecirc-issues.md)).
 
 ## Key results
 
@@ -20,11 +20,13 @@ On the H100, a run takes the passes times the bandwidth time of one state times 
 - Block passes are predicted by a dry run of noisecirc's sampler within 0.89 to 1.12 times (30 GPU runs), by a closed form within 0.70 to 1.93 times. Verified. [Block passes](studies/pass-count.md)
 - At equal expected errors per shot, the passes per block and shot are the same function for all six circuits and, within about ±40%, for five noise types. Verified on dry runs. [Block passes](studies/pass-count.md)
 - Time over passes times $t_{bw}$: 1.24 to 2.58 (geometric mean 1.81) at defaults, 1.29 to 1.84 with `max_operations` = 32, which costs no time overall. Verified, H100, damping, 24 to 28 qubits. [Block-pass time](studies/block-pass-time.md)
+- Benchmark circuits fall into three fusion categories (chain, width-limited, gate-count-limited); at equal error load the passes hardly depend on the circuit or the non-mixed-unitary channel. Verified on dry runs and GPU runs. [Benchmark circuits](studies/benchmark-suite.md)
+- GPU runs of 7 circuits × 5 channels at 28 qubits confirm the predictions: passes within 0.86 to 1.13 times, times within 1.00 to 1.33 times (kernel-ratio model). Verified. [Validation](studies/validation.md)
 - svpass's single-warp norm reduction made 28-qubit runs up to 1.7 times slower; fixed on `fix/squared-norms-parallel`. Verified. [Issues](studies/noisecirc-issues.md)
+- `optimize_kraus` could spread the no-error Kraus operator and make depolarizing runs up to 10 times slower; fixed on `fix/optimize-kraus-dominant`. Verified on CPU, GPU check pending. [Issues](studies/noisecirc-issues.md)
 
 ## Open threads
 
-- Task A4: benchmark categories and predictions are in [Benchmark circuits and predicted work](studies/benchmark-suite.md); their check on the GPU (A5) is running.
+- Task A6: Qiskit Aer and CUDA-Q runs on the benchmark circuits are running.
 - Task A5: validation runs of the most interesting circuits.
-- Task A6: Qiskit Aer (shot branching, batched, plain) and CUDA-Q on the same circuits, translated into passes.
 - Improvement opportunities for noisecirc: a block size chosen by the noise strength; a cheaper general kernel; the cumulative sums of the measurement at large registers.

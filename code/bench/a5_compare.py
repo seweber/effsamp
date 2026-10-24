@@ -56,7 +56,8 @@ def main():
     panels = (("pred_passes", "block_passes", "block passes"), ("pred_T_bw", "time", "time: passes × $t_{bw}$ (s)"),
               ("pred_T_kern", "time", "time: kernel-ratio model (s)"))
     for ax, (pk, mk, title), text in zip(axes, panels, "abc"):
-        pairs = [(r[pk], r[mk], r) for r in rows if r[pk]]
+        # The runs with optimize_kraus show noisecirc issue 3 rather than the predictor; plotted without them.
+        pairs = [(r[pk], r[mk], r) for r in rows if r[pk] and not r["optimize_kraus"]]
         for x, y, r in pairs:
             ax.scatter(x, y / x, color=COLORS[r["circuit"]], marker=MARKERS[r["noise"]], s=20, linewidths=0)
         ax.axhline(1, color="k", lw=0.8)

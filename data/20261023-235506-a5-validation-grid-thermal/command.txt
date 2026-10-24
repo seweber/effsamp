@@ -1,0 +1,1 @@
+code/bench/gpurun a2_runs.py --circuits grid --qubits 28 --noise thermal --ps 9.42951e-05,0.000942951 --shots 1000 --reps 2 --budget 430

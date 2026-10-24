@@ -31,7 +31,9 @@ The issues found so far:
 
 A related, smaller cost remains: measuring draws from a cumulative sum of the chunk sums that one thread block per row computes, about 2.6 ms per call at 28 qubits. It runs once per leaf pool, not per segment, and cost 1.0 s of the 20.9 s run above; it was not changed.
 
-All later measurements of this project use the branch `bench/fixes`, which is `main` with both fixes merged.
+3. **`optimize_kraus=True` can multiply the distinct trajectories** (performance, verified). For a mixed-unitary channel the Kraus sets that reach the oversampling's lower bound are not unique: rotating the no-error operator $U$ into a Pauli error $P U$ that commutes with it, $\cos a\, U + i \sin a\, P U$, keeps every operator a scaled unitary. The optimizer (`twirling/kraus_optimization.py`) stops anywhere on this family, and so can spread the no-error weight over several operators. Every proposal of a non-dominant operator is propagated by the general kernel and starts a trajectory of its own. With depolarizing noise after the QFT's controlled phase of angle 0.012, the optimized set proposed a non-dominant operator with probability 0.022 per gate, 44 times as often as the minimal set; on a 28-qubit QFT at 0.1 expected errors per shot, `optimize_kraus=True` made 6478 block passes instead of 980 to 1286, and the run took 40 s instead of 4 s (A5 runs, LOG.md "A5 validation qft depolarizing optimized"). Generalized amplitude damping showed the same effect in the operation tables (2.4 times more accepted errors). Fix: branch `fix/optimize-kraus-dominant`, commit `4dca134`: a second stage lowers the bounds of all operators but the largest, with a penalty that keeps the oversampling within the tolerance of the first stage's result. Optimized sets then have a lower oversampling and fewer non-dominant proposals than the minimal sets for depolarizing, generalized damping and thermal noise (at the angle above: 2.5e-4 against 4.8e-4 for the minimal set), and amplitude damping is unchanged. A new test fails on `main` and passes with the fix; noisecirc's tests pass on the NumPy backend (the GPU run of the tests and of the affected A5 points follows).
+
+All later measurements of this project use the branch `bench/fixes`, which is `main` with the fixes merged.
 
 ## Caveats
 
@@ -39,4 +41,4 @@ The list covers what the benchmarking touched: the exact sampling mode, qubits, 
 
 ## Verdict
 
-No issue so far affects simulation results. Issue 2 affects performance at large registers (from about 26 qubits, where batches are small) and inflated every 28-qubit timing taken on `main` by up to 1.7 times.
+No issue so far affects simulation results. Issue 2 affects performance at large registers (from about 26 qubits, where batches are small) and inflated every 28-qubit timing taken on `main` by up to 1.7 times. Issue 3 makes the opt-in `optimize_kraus` counterproductive for mixed-unitary noise on near-identity gates.
