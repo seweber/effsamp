@@ -1,0 +1,1 @@
+code/bench/gpurun a6_runs.py --sim aer_branch --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 2 --aer-option fusion_cost_factor=1.2

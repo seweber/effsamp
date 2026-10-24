@@ -21,7 +21,7 @@ The competitors are the GPU state-vector simulators with trajectory sampling of 
 - **Qiskit Aer 0.17.2** (`qiskit-aer-gpu-cu11`), in three modes: shot branching, which shares one state among shots until their Kraus choices differ ([doi2023shots](../literature/notes/doi2023shots.md)); batched shots, which runs many shots in one kernel; and one trajectory per shot.
 - **CUDA-Q 0.15.1**, target `nvidia` (cuStateVec), `fp32`, its trajectory simulation of noisy circuits, one trajectory per shot. Its documentation describes the state-dependent probabilities for general channels and, through cuStateVec Ex, qsim's delayed sampling with lower bounds ([isakov2021qsim](../literature/notes/isakov2021qsim.md)); trajectories are batched only up to 20 qubits.
 
-cuStateVec Ex, which implements qsim's delayed lower-bound sampling, was compared later, in [noisecirc against delayed lower-bound sampling](lower-bound-sampling.md). qsim's GPU build was not included: it needs a CUDA toolkit to build and would add another per-shot simulator of the same algorithmic class as CUDA-Q.
+cuStateVec Ex, which implements qsim's delayed lower-bound sampling, was compared later, in [noisecirc against delayed lower-bound sampling](lower-bound-sampling.md). Aer ran here with its default options; [Tuning Qiskit Aer's shot branching](aer-tuning.md) tunes them and repeats the comparison against tuned noisecirc, with the same range of speedups. qsim's GPU build was not included: it needs a CUDA toolkit to build and would add another per-shot simulator of the same algorithmic class as CUDA-Q.
 
 ### Workloads
 

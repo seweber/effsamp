@@ -11,6 +11,622 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-24 15:40 UTC  A11 Aer tuning: analysis and conclusion
+- **Goal:** Tune Qiskit Aer's shot branching options and compare tuned Aer with tuned noisecirc
+- **Task:** A11
+- **Method:** Aer 0.17.2 source read for options; code/bench/a6_runs.py --aer-option (10 settings x 4 circuits, n=24, A6 points); noisecirc bench/fixes dd4b8c8 default and autotune (5 reps, medians); 5 points at n=28; code/bench/a11_analyze.py
+- **Outcome:** Only fusion width helps Aer: width 3 (default 2 with noise) saves 8% geomean, 0-28% per point; cost factor neutral, no fusion 1.8x and no branching sampling 6.2x slower. noisecirc autotune 4%. Speedup defaults 6.2-61x, tuned 6.3-67x (6.3-48 without brickwork M=0.1, where Aer's heevx bug disables its fusion); n=28 tuned 10-30x. 2-rep noisecirc runs had outliers, superseded by 5-rep runs
+- **Next:** none
+- **Refs:** wiki/studies/aer-tuning.md, data/a11-analysis, code/bench/a11_analyze.py
+
+## 2026-10-24 15:37 UTC  A11 noisecirc autotune qaoa n=24 5 reps
+- **Goal:** noisecirc bench/fixes dd4b8c8 (autotune) at the A6 points: qaoa, damping M=0.01/0.1/1, 1000 shots, 5 timed reps (the 2-rep runs had outliers at 10-30 ms)
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000 --reps 5 --option autotune=1
+- **Outcome:** exit 0; outputs in data/20261024-153652-a11-noisecirc-autotune-qaoa-n-24-5-reps
+- **Next:** none
+- **Refs:** data/20261024-153652-a11-noisecirc-autotune-qaoa-n-24-5-reps, code/bench/a2_runs.py
+
+## 2026-10-24 15:36 UTC  A11 noisecirc autotune qft n=24 5 reps
+- **Goal:** noisecirc bench/fixes dd4b8c8 (autotune) at the A6 points: qft, damping M=0.01/0.1/1, 1000 shots, 5 timed reps (the 2-rep runs had outliers at 10-30 ms)
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 5 --option autotune=1
+- **Outcome:** exit 0; outputs in data/20261024-153640-a11-noisecirc-autotune-qft-n-24-5-reps
+- **Next:** none
+- **Refs:** data/20261024-153640-a11-noisecirc-autotune-qft-n-24-5-reps, code/bench/a2_runs.py
+
+## 2026-10-24 15:36 UTC  A11 noisecirc autotune brickwork n=24 5 reps
+- **Goal:** noisecirc bench/fixes dd4b8c8 (autotune) at the A6 points: brickwork, damping M=0.01/0.1/1, 1000 shots, 5 timed reps (the 2-rep runs had outliers at 10-30 ms)
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 5 --option autotune=1
+- **Outcome:** exit 0; outputs in data/20261024-153622-a11-noisecirc-autotune-brickwork-n-24-5-reps
+- **Next:** none
+- **Refs:** data/20261024-153622-a11-noisecirc-autotune-brickwork-n-24-5-reps, code/bench/a2_runs.py
+
+## 2026-10-24 15:36 UTC  A11 noisecirc autotune ghz n=24 5 reps
+- **Goal:** noisecirc bench/fixes dd4b8c8 (autotune) at the A6 points: ghz, damping M=0.01/0.1/1, 1000 shots, 5 timed reps (the 2-rep runs had outliers at 10-30 ms)
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000 --reps 5 --option autotune=1
+- **Outcome:** exit 0; outputs in data/20261024-153615-a11-noisecirc-autotune-ghz-n-24-5-reps
+- **Next:** none
+- **Refs:** data/20261024-153615-a11-noisecirc-autotune-ghz-n-24-5-reps, code/bench/a2_runs.py
+
+## 2026-10-24 15:36 UTC  A11 noisecirc default qaoa n=24 5 reps
+- **Goal:** noisecirc bench/fixes dd4b8c8 (default) at the A6 points: qaoa, damping M=0.01/0.1/1, 1000 shots, 5 timed reps (the 2-rep runs had outliers at 10-30 ms)
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000 --reps 5
+- **Outcome:** exit 0; outputs in data/20261024-153603-a11-noisecirc-default-qaoa-n-24-5-reps
+- **Next:** none
+- **Refs:** data/20261024-153603-a11-noisecirc-default-qaoa-n-24-5-reps, code/bench/a2_runs.py
+
+## 2026-10-24 15:36 UTC  A11 noisecirc default qft n=24 5 reps
+- **Goal:** noisecirc bench/fixes dd4b8c8 (default) at the A6 points: qft, damping M=0.01/0.1/1, 1000 shots, 5 timed reps (the 2-rep runs had outliers at 10-30 ms)
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 5
+- **Outcome:** exit 0; outputs in data/20261024-153551-a11-noisecirc-default-qft-n-24-5-reps
+- **Next:** none
+- **Refs:** data/20261024-153551-a11-noisecirc-default-qft-n-24-5-reps, code/bench/a2_runs.py
+
+## 2026-10-24 15:35 UTC  A11 noisecirc default brickwork n=24 5 reps
+- **Goal:** noisecirc bench/fixes dd4b8c8 (default) at the A6 points: brickwork, damping M=0.01/0.1/1, 1000 shots, 5 timed reps (the 2-rep runs had outliers at 10-30 ms)
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 5
+- **Outcome:** exit 0; outputs in data/20261024-153535-a11-noisecirc-default-brickwork-n-24-5-reps
+- **Next:** none
+- **Refs:** data/20261024-153535-a11-noisecirc-default-brickwork-n-24-5-reps, code/bench/a2_runs.py
+
+## 2026-10-24 15:35 UTC  A11 noisecirc default ghz n=24 5 reps
+- **Goal:** noisecirc bench/fixes dd4b8c8 (default) at the A6 points: ghz, damping M=0.01/0.1/1, 1000 shots, 5 timed reps (the 2-rep runs had outliers at 10-30 ms)
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000 --reps 5
+- **Outcome:** exit 0; outputs in data/20261024-153527-a11-noisecirc-default-ghz-n-24-5-reps
+- **Next:** none
+- **Refs:** data/20261024-153527-a11-noisecirc-default-ghz-n-24-5-reps, code/bench/a2_runs.py
+
+## 2026-10-24 15:34 UTC  A11 noisecirc autotune brickwork n=28
+- **Goal:** noisecirc bench/fixes dd4b8c8 (autotune) at the A6 28-qubit points: brickwork, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise damping --ps 2.42131e-05 --shots 1000 --reps 2 --option autotune=1
+- **Outcome:** exit 0; outputs in data/20261024-153426-a11-noisecirc-autotune-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-153426-a11-noisecirc-autotune-brickwork-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 15:34 UTC  A11 noisecirc autotune qft n=28
+- **Goal:** noisecirc bench/fixes dd4b8c8 (autotune) at the A6 28-qubit points: qft, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise damping --ps 2.46305e-05,0.000246305 --shots 1000 --reps 2 --option autotune=1
+- **Outcome:** exit 0; outputs in data/20261024-153404-a11-noisecirc-autotune-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-153404-a11-noisecirc-autotune-qft-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 15:34 UTC  A11 noisecirc autotune qaoa n=28
+- **Goal:** noisecirc bench/fixes dd4b8c8 (autotune) at the A6 28-qubit points: qaoa, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits qaoa --qubits 28 --noise damping --ps 4.7619e-05 --shots 1000 --reps 2 --option autotune=1
+- **Outcome:** exit 0; outputs in data/20261024-153355-a11-noisecirc-autotune-qaoa-n-28
+- **Next:** none
+- **Refs:** data/20261024-153355-a11-noisecirc-autotune-qaoa-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 15:33 UTC  A11 noisecirc autotune ghz n=28
+- **Goal:** noisecirc bench/fixes dd4b8c8 (autotune) at the A6 28-qubit points: ghz, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz --qubits 28 --noise damping --ps 0.000183486 --shots 1000 --reps 2 --option autotune=1
+- **Outcome:** exit 0; outputs in data/20261024-153350-a11-noisecirc-autotune-ghz-n-28
+- **Next:** none
+- **Refs:** data/20261024-153350-a11-noisecirc-autotune-ghz-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 15:33 UTC  A11 noisecirc default brickwork n=28
+- **Goal:** noisecirc bench/fixes dd4b8c8 (default) at the A6 28-qubit points: brickwork, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise damping --ps 2.42131e-05 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-153342-a11-noisecirc-default-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-153342-a11-noisecirc-default-brickwork-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 15:33 UTC  A11 noisecirc default qft n=28
+- **Goal:** noisecirc bench/fixes dd4b8c8 (default) at the A6 28-qubit points: qft, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise damping --ps 2.46305e-05,0.000246305 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-153324-a11-noisecirc-default-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-153324-a11-noisecirc-default-qft-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 15:33 UTC  A11 noisecirc default qaoa n=28
+- **Goal:** noisecirc bench/fixes dd4b8c8 (default) at the A6 28-qubit points: qaoa, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits qaoa --qubits 28 --noise damping --ps 4.7619e-05 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-153318-a11-noisecirc-default-qaoa-n-28
+- **Next:** none
+- **Refs:** data/20261024-153318-a11-noisecirc-default-qaoa-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 15:33 UTC  A11 noisecirc default ghz n=28
+- **Goal:** noisecirc bench/fixes dd4b8c8 (default) at the A6 28-qubit points: ghz, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz --qubits 28 --noise damping --ps 0.000183486 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-153313-a11-noisecirc-default-ghz-n-28
+- **Next:** none
+- **Refs:** data/20261024-153313-a11-noisecirc-default-ghz-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 15:33 UTC  A11 aer_branch mq3 brickwork n=28
+- **Goal:** Aer shot branching (mq3) at the A6 28-qubit points that ran: brickwork, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit brickwork --qubits 28 --noise damping --ps 2.42131e-05 --shots 1000 --reps 1 --budget 400 --aer-option fusion_max_qubit=3
+- **Outcome:** exit 0; outputs in data/20261024-153248-a11-aer-branch-mq3-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-153248-a11-aer-branch-mq3-brickwork-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 15:32 UTC  A11 aer_branch mq3 qft n=28
+- **Goal:** Aer shot branching (mq3) at the A6 28-qubit points that ran: qft, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 28 --noise damping --ps 2.46305e-05,0.000246305 --shots 1000 --reps 1 --budget 400 --aer-option fusion_max_qubit=3
+- **Outcome:** exit 0; outputs in data/20261024-153050-a11-aer-branch-mq3-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-153050-a11-aer-branch-mq3-qft-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 15:30 UTC  A11 aer_branch mq3 qaoa n=28
+- **Goal:** Aer shot branching (mq3) at the A6 28-qubit points that ran: qaoa, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qaoa --qubits 28 --noise damping --ps 4.7619e-05 --shots 1000 --reps 1 --budget 400 --aer-option fusion_max_qubit=3
+- **Outcome:** exit 0; outputs in data/20261024-153035-a11-aer-branch-mq3-qaoa-n-28
+- **Next:** none
+- **Refs:** data/20261024-153035-a11-aer-branch-mq3-qaoa-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 15:30 UTC  A11 aer_branch mq3 ghz n=28
+- **Goal:** Aer shot branching (mq3) at the A6 28-qubit points that ran: ghz, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit ghz --qubits 28 --noise damping --ps 0.000183486 --shots 1000 --reps 1 --budget 400 --aer-option fusion_max_qubit=3
+- **Outcome:** exit 0; outputs in data/20261024-153026-a11-aer-branch-mq3-ghz-n-28
+- **Next:** none
+- **Refs:** data/20261024-153026-a11-aer-branch-mq3-ghz-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 15:30 UTC  A11 aer_branch default brickwork n=28
+- **Goal:** Aer shot branching (default) at the A6 28-qubit points that ran: brickwork, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit brickwork --qubits 28 --noise damping --ps 2.42131e-05 --shots 1000 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-153001-a11-aer-branch-default-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-153001-a11-aer-branch-default-brickwork-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 15:30 UTC  A11 aer_branch default qft n=28
+- **Goal:** Aer shot branching (default) at the A6 28-qubit points that ran: qft, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 28 --noise damping --ps 2.46305e-05 --shots 1000 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-152936-a11-aer-branch-default-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-152936-a11-aer-branch-default-qft-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 15:29 UTC  A11 aer_branch default qaoa n=28
+- **Goal:** Aer shot branching (default) at the A6 28-qubit points that ran: qaoa, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qaoa --qubits 28 --noise damping --ps 4.7619e-05 --shots 1000 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-152922-a11-aer-branch-default-qaoa-n-28
+- **Next:** none
+- **Refs:** data/20261024-152922-a11-aer-branch-default-qaoa-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 15:29 UTC  A11 aer_branch default ghz n=28
+- **Goal:** Aer shot branching (default) at the A6 28-qubit points that ran: ghz, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit ghz --qubits 28 --noise damping --ps 0.000183486 --shots 1000 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-152912-a11-aer-branch-default-ghz-n-28
+- **Next:** none
+- **Refs:** data/20261024-152912-a11-aer-branch-default-ghz-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 15:29 UTC  A11 noisecirc autotune qaoa n=24
+- **Goal:** noisecirc bench/fixes dd4b8c8 (autotune) at the A6 points: qaoa, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000 --reps 2 --option autotune=1
+- **Outcome:** exit 0; outputs in data/20261024-152857-a11-noisecirc-autotune-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-152857-a11-noisecirc-autotune-qaoa-n-24, code/bench/a2_runs.py
+
+## 2026-10-24 15:28 UTC  A11 noisecirc autotune qft n=24
+- **Goal:** noisecirc bench/fixes dd4b8c8 (autotune) at the A6 points: qft, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 2 --option autotune=1
+- **Outcome:** exit 0; outputs in data/20261024-152838-a11-noisecirc-autotune-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-152838-a11-noisecirc-autotune-qft-n-24, code/bench/a2_runs.py
+
+## 2026-10-24 15:28 UTC  A11 noisecirc autotune brickwork n=24
+- **Goal:** noisecirc bench/fixes dd4b8c8 (autotune) at the A6 points: brickwork, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 2 --option autotune=1
+- **Outcome:** exit 0; outputs in data/20261024-152805-a11-noisecirc-autotune-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-152805-a11-noisecirc-autotune-brickwork-n-24, code/bench/a2_runs.py
+
+## 2026-10-24 15:28 UTC  A11 noisecirc autotune ghz n=24
+- **Goal:** noisecirc bench/fixes dd4b8c8 (autotune) at the A6 points: ghz, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000 --reps 2 --option autotune=1
+- **Outcome:** exit 0; outputs in data/20261024-152758-a11-noisecirc-autotune-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-152758-a11-noisecirc-autotune-ghz-n-24, code/bench/a2_runs.py
+
+## 2026-10-24 15:27 UTC  A11 noisecirc default qaoa n=24
+- **Goal:** noisecirc bench/fixes dd4b8c8 (default) at the A6 points: qaoa, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-152747-a11-noisecirc-default-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-152747-a11-noisecirc-default-qaoa-n-24, code/bench/a2_runs.py
+
+## 2026-10-24 15:27 UTC  A11 noisecirc default qft n=24
+- **Goal:** noisecirc bench/fixes dd4b8c8 (default) at the A6 points: qft, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-152733-a11-noisecirc-default-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-152733-a11-noisecirc-default-qft-n-24, code/bench/a2_runs.py
+
+## 2026-10-24 15:27 UTC  A11 noisecirc default brickwork n=24
+- **Goal:** noisecirc bench/fixes dd4b8c8 (default) at the A6 points: brickwork, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-152715-a11-noisecirc-default-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-152715-a11-noisecirc-default-brickwork-n-24, code/bench/a2_runs.py
+
+## 2026-10-24 15:27 UTC  A11 noisecirc default ghz n=24
+- **Goal:** noisecirc bench/fixes dd4b8c8 (default) at the A6 points: ghz, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-152708-a11-noisecirc-default-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-152708-a11-noisecirc-default-ghz-n-24, code/bench/a2_runs.py
+
+## 2026-10-24 15:27 UTC  A11 aer_branch mq4-cf3 qaoa n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=4 fusion_cost_factor=3.0 on qaoa, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000 --reps 2 --aer-option fusion_max_qubit=4 --aer-option fusion_cost_factor=3.0
+- **Outcome:** exit 0; outputs in data/20261024-152624-a11-aer-branch-mq4-cf3-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-152624-a11-aer-branch-mq4-cf3-qaoa-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 15:26 UTC  A11 aer_branch mq4-cf3 qft n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=4 fusion_cost_factor=3.0 on qft, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 2 --aer-option fusion_max_qubit=4 --aer-option fusion_cost_factor=3.0
+- **Outcome:** exit 0; outputs in data/20261024-152458-a11-aer-branch-mq4-cf3-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-152458-a11-aer-branch-mq4-cf3-qft-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 15:24 UTC  A11 aer_branch mq4-cf3 brickwork n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=4 fusion_cost_factor=3.0 on brickwork, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 2 --aer-option fusion_max_qubit=4 --aer-option fusion_cost_factor=3.0
+- **Outcome:** exit 0; outputs in data/20261024-152302-a11-aer-branch-mq4-cf3-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-152302-a11-aer-branch-mq4-cf3-brickwork-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 15:23 UTC  A11 aer_branch mq4-cf3 ghz n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=4 fusion_cost_factor=3.0 on ghz, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000 --reps 2 --aer-option fusion_max_qubit=4 --aer-option fusion_cost_factor=3.0
+- **Outcome:** exit 0; outputs in data/20261024-152244-a11-aer-branch-mq4-cf3-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-152244-a11-aer-branch-mq4-cf3-ghz-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 15:22 UTC  A11 aer_branch mq3-cf3 qaoa n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=3 fusion_cost_factor=3.0 on qaoa, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000 --reps 2 --aer-option fusion_max_qubit=3 --aer-option fusion_cost_factor=3.0
+- **Outcome:** exit 0; outputs in data/20261024-152200-a11-aer-branch-mq3-cf3-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-152200-a11-aer-branch-mq3-cf3-qaoa-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 15:22 UTC  A11 aer_branch mq3-cf3 qft n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=3 fusion_cost_factor=3.0 on qft, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 2 --aer-option fusion_max_qubit=3 --aer-option fusion_cost_factor=3.0
+- **Outcome:** exit 0; outputs in data/20261024-152034-a11-aer-branch-mq3-cf3-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-152034-a11-aer-branch-mq3-cf3-qft-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 15:20 UTC  A11 aer_branch mq3-cf3 brickwork n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=3 fusion_cost_factor=3.0 on brickwork, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 2 --aer-option fusion_max_qubit=3 --aer-option fusion_cost_factor=3.0
+- **Outcome:** exit 0; outputs in data/20261024-151839-a11-aer-branch-mq3-cf3-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-151839-a11-aer-branch-mq3-cf3-brickwork-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 15:18 UTC  A11 aer_branch mq3-cf3 ghz n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=3 fusion_cost_factor=3.0 on ghz, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000 --reps 2 --aer-option fusion_max_qubit=3 --aer-option fusion_cost_factor=3.0
+- **Outcome:** exit 0; outputs in data/20261024-151821-a11-aer-branch-mq3-cf3-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-151821-a11-aer-branch-mq3-cf3-ghz-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 15:17 UTC  A11 aer_branch cf3 qaoa n=24
+- **Goal:** Aer shot branching with fusion_cost_factor=3.0 on qaoa, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000 --reps 2 --aer-option fusion_cost_factor=3.0
+- **Outcome:** exit 0; outputs in data/20261024-151639-a11-aer-branch-cf3-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-151639-a11-aer-branch-cf3-qaoa-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 15:16 UTC  A11 aer_branch cf3 qft n=24
+- **Goal:** Aer shot branching with fusion_cost_factor=3.0 on qft, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 2 --aer-option fusion_cost_factor=3.0
+- **Outcome:** exit 0; outputs in data/20261024-151512-a11-aer-branch-cf3-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-151512-a11-aer-branch-cf3-qft-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 15:15 UTC  A11 aer_branch cf3 brickwork n=24
+- **Goal:** Aer shot branching with fusion_cost_factor=3.0 on brickwork, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 2 --aer-option fusion_cost_factor=3.0
+- **Outcome:** exit 0; outputs in data/20261024-151316-a11-aer-branch-cf3-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-151316-a11-aer-branch-cf3-brickwork-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 15:13 UTC  A11 aer_branch cf3 ghz n=24
+- **Goal:** Aer shot branching with fusion_cost_factor=3.0 on ghz, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000 --reps 2 --aer-option fusion_cost_factor=3.0
+- **Outcome:** exit 0; outputs in data/20261024-151259-a11-aer-branch-cf3-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-151259-a11-aer-branch-cf3-ghz-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 15:12 UTC  A11 aer_branch cf1.2 qaoa n=24
+- **Goal:** Aer shot branching with fusion_cost_factor=1.2 on qaoa, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000 --reps 2 --aer-option fusion_cost_factor=1.2
+- **Outcome:** exit 0; outputs in data/20261024-151215-a11-aer-branch-cf1-2-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-151215-a11-aer-branch-cf1-2-qaoa-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 15:12 UTC  A11 aer_branch cf1.2 qft n=24
+- **Goal:** Aer shot branching with fusion_cost_factor=1.2 on qft, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 2 --aer-option fusion_cost_factor=1.2
+- **Outcome:** exit 0; outputs in data/20261024-151049-a11-aer-branch-cf1-2-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-151049-a11-aer-branch-cf1-2-qft-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 15:10 UTC  A11 aer_branch cf1.2 brickwork n=24
+- **Goal:** Aer shot branching with fusion_cost_factor=1.2 on brickwork, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 2 --aer-option fusion_cost_factor=1.2
+- **Outcome:** exit 0; outputs in data/20261024-150856-a11-aer-branch-cf1-2-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-150856-a11-aer-branch-cf1-2-brickwork-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 15:08 UTC  A11 aer_branch cf1.2 ghz n=24
+- **Goal:** Aer shot branching with fusion_cost_factor=1.2 on ghz, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000 --reps 2 --aer-option fusion_cost_factor=1.2
+- **Outcome:** exit 0; outputs in data/20261024-150838-a11-aer-branch-cf1-2-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-150838-a11-aer-branch-cf1-2-ghz-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 15:08 UTC  A11 aer_branch nosampling qaoa n=24
+- **Goal:** Aer shot branching with shot_branching_sampling_enable=False on qaoa, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000 --reps 2 --aer-option shot_branching_sampling_enable=False
+- **Outcome:** exit 0; outputs in data/20261024-150544-a11-aer-branch-nosampling-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-150544-a11-aer-branch-nosampling-qaoa-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 15:05 UTC  A11 aer_branch nosampling qft n=24
+- **Goal:** Aer shot branching with shot_branching_sampling_enable=False on qft, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 2 --aer-option shot_branching_sampling_enable=False
+- **Outcome:** exit 0; outputs in data/20261024-150215-a11-aer-branch-nosampling-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-150215-a11-aer-branch-nosampling-qft-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 15:02 UTC  A11 aer_branch nosampling brickwork n=24
+- **Goal:** Aer shot branching with shot_branching_sampling_enable=False on brickwork, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 2 --aer-option shot_branching_sampling_enable=False
+- **Outcome:** exit 0; outputs in data/20261024-145723-a11-aer-branch-nosampling-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-145723-a11-aer-branch-nosampling-brickwork-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:57 UTC  A11 aer_branch nosampling ghz n=24
+- **Goal:** Aer shot branching with shot_branching_sampling_enable=False on ghz, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000 --reps 2 --aer-option shot_branching_sampling_enable=False
+- **Outcome:** exit 0; outputs in data/20261024-145657-a11-aer-branch-nosampling-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-145657-a11-aer-branch-nosampling-ghz-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:56 UTC  A11 aer_branch nofusion qaoa n=24
+- **Goal:** Aer shot branching with fusion_enable=False on qaoa, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000 --reps 2 --aer-option fusion_enable=False
+- **Outcome:** exit 0; outputs in data/20261024-145445-a11-aer-branch-nofusion-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-145445-a11-aer-branch-nofusion-qaoa-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:54 UTC  A11 aer_branch nofusion qft n=24
+- **Goal:** Aer shot branching with fusion_enable=False on qft, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 2 --aer-option fusion_enable=False
+- **Outcome:** exit 0; outputs in data/20261024-145256-a11-aer-branch-nofusion-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-145256-a11-aer-branch-nofusion-qft-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:52 UTC  A11 aer_branch nofusion brickwork n=24
+- **Goal:** Aer shot branching with fusion_enable=False on brickwork, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 2 --aer-option fusion_enable=False
+- **Outcome:** exit 0; outputs in data/20261024-145101-a11-aer-branch-nofusion-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-145101-a11-aer-branch-nofusion-brickwork-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:51 UTC  A11 aer_branch nofusion ghz n=24
+- **Goal:** Aer shot branching with fusion_enable=False on ghz, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000 --reps 2 --aer-option fusion_enable=False
+- **Outcome:** exit 0; outputs in data/20261024-145031-a11-aer-branch-nofusion-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-145031-a11-aer-branch-nofusion-ghz-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:50 UTC  A11 aer_branch mq5 qaoa n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=5 on qaoa, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000 --reps 2 --aer-option fusion_max_qubit=5
+- **Outcome:** exit 0; outputs in data/20261024-144951-a11-aer-branch-mq5-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-144951-a11-aer-branch-mq5-qaoa-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:49 UTC  A11 aer_branch mq5 qft n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=5 on qft, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 2 --aer-option fusion_max_qubit=5
+- **Outcome:** exit 0; outputs in data/20261024-144807-a11-aer-branch-mq5-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-144807-a11-aer-branch-mq5-qft-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:48 UTC  A11 aer_branch mq5 brickwork n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=5 on brickwork, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 2 --aer-option fusion_max_qubit=5
+- **Outcome:** exit 0; outputs in data/20261024-144621-a11-aer-branch-mq5-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-144621-a11-aer-branch-mq5-brickwork-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:46 UTC  A11 aer_branch mq5 ghz n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=5 on ghz, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000 --reps 2 --aer-option fusion_max_qubit=5
+- **Outcome:** exit 0; outputs in data/20261024-144604-a11-aer-branch-mq5-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-144604-a11-aer-branch-mq5-ghz-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:46 UTC  A11 aer_branch mq4 qaoa n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=4 on qaoa, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000 --reps 2 --aer-option fusion_max_qubit=4
+- **Outcome:** exit 0; outputs in data/20261024-144524-a11-aer-branch-mq4-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-144524-a11-aer-branch-mq4-qaoa-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:45 UTC  A11 aer_branch mq4 qft n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=4 on qft, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 2 --aer-option fusion_max_qubit=4
+- **Outcome:** exit 0; outputs in data/20261024-144414-a11-aer-branch-mq4-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-144414-a11-aer-branch-mq4-qft-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:44 UTC  A11 aer_branch mq4 brickwork n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=4 on brickwork, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 2 --aer-option fusion_max_qubit=4
+- **Outcome:** exit 0; outputs in data/20261024-144228-a11-aer-branch-mq4-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-144228-a11-aer-branch-mq4-brickwork-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:42 UTC  A11 aer_branch mq4 ghz n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=4 on ghz, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000 --reps 2 --aer-option fusion_max_qubit=4
+- **Outcome:** exit 0; outputs in data/20261024-144211-a11-aer-branch-mq4-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-144211-a11-aer-branch-mq4-ghz-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:42 UTC  A11 aer_branch mq3 qaoa n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=3 on qaoa, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000 --reps 2 --aer-option fusion_max_qubit=3
+- **Outcome:** exit 0; outputs in data/20261024-144131-a11-aer-branch-mq3-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-144131-a11-aer-branch-mq3-qaoa-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:41 UTC  A11 aer_branch mq3 qft n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=3 on qft, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 2 --aer-option fusion_max_qubit=3
+- **Outcome:** exit 0; outputs in data/20261024-144022-a11-aer-branch-mq3-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-144022-a11-aer-branch-mq3-qft-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:40 UTC  A11 aer_branch mq3 brickwork n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=3 on brickwork, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 2 --aer-option fusion_max_qubit=3
+- **Outcome:** exit 0; outputs in data/20261024-143838-a11-aer-branch-mq3-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-143838-a11-aer-branch-mq3-brickwork-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:38 UTC  A11 aer_branch mq3 ghz n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=3 on ghz, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000 --reps 2 --aer-option fusion_max_qubit=3
+- **Outcome:** exit 0; outputs in data/20261024-143820-a11-aer-branch-mq3-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-143820-a11-aer-branch-mq3-ghz-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:38 UTC  A11 aer_branch mq1 qaoa n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=1 on qaoa, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000 --reps 2 --aer-option fusion_max_qubit=1
+- **Outcome:** exit 0; outputs in data/20261024-143651-a11-aer-branch-mq1-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-143651-a11-aer-branch-mq1-qaoa-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:36 UTC  A11 aer_branch mq1 qft n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=1 on qft, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 2 --aer-option fusion_max_qubit=1
+- **Outcome:** exit 0; outputs in data/20261024-143511-a11-aer-branch-mq1-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-143511-a11-aer-branch-mq1-qft-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:35 UTC  A11 aer_branch mq1 brickwork n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=1 on brickwork, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 2 --aer-option fusion_max_qubit=1
+- **Outcome:** exit 0; outputs in data/20261024-143149-a11-aer-branch-mq1-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-143149-a11-aer-branch-mq1-brickwork-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:31 UTC  A11 aer_branch mq1 ghz n=24
+- **Goal:** Aer shot branching with fusion_max_qubit=1 on ghz, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000 --reps 2 --aer-option fusion_max_qubit=1
+- **Outcome:** exit 0; outputs in data/20261024-143122-a11-aer-branch-mq1-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-143122-a11-aer-branch-mq1-ghz-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:31 UTC  A11 aer_branch default qaoa n=24
+- **Goal:** Aer shot branching with defaults on qaoa, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-143040-a11-aer-branch-default-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-143040-a11-aer-branch-default-qaoa-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:30 UTC  A11 aer_branch default qft n=24
+- **Goal:** Aer shot branching with defaults on qft, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-142913-a11-aer-branch-default-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-142913-a11-aer-branch-default-qft-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:29 UTC  A11 aer_branch default brickwork n=24
+- **Goal:** Aer shot branching with defaults on brickwork, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-142716-a11-aer-branch-default-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-142716-a11-aer-branch-default-brickwork-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 14:27 UTC  A11 aer_branch default ghz n=24
+- **Goal:** Aer shot branching with defaults on ghz, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A11
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-142659-a11-aer-branch-default-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-142659-a11-aer-branch-default-ghz-n-24, code/bench/a6_runs.py
+
 ## 2026-10-24 10:41 UTC  A8 figure
 - **Goal:** Record the A8 analysis figure
 - **Task:** A8

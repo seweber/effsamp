@@ -40,13 +40,14 @@ deleted; IDs (T001, T002, ...) are stable, never reused, and independent of
 - **Outcome:** accepted into PLAN.md as A10 (2026-10-24)
 
 ## T004 — Device dependence of noisecirc's cost model and settings
-- **State:** OPEN
+- **State:** CLOSED
 - **Proposed:** 2026-10-24 by Claude
 - **Purpose:** Every conclusion about pass times and best settings so far rests on one GPU, the H100, which has 2.9 times fewer floating-point operations per byte of bandwidth than the RTX 4060 Ti noisecirc was tuned on (PROBLEMS.md P001). On the H100, large blocks and error kernels are not bound by the bandwidth (wiki/studies/block-pass-time.md), masked kernels gained 4 to 13% and autotuning 0 to 14% (wiki/studies/error-kernels.md). The pass counts are device-independent (wiki/studies/pass-count.md), but how passes translate into time, and so which settings and improvements pay, may not be.
 - **Proposal:** Repeat the kernel-ratio measurements and the end-to-end comparison of masked kernels and autotuning on a second GPU with a different arithmetic-to-bandwidth ratio (e.g. the RTX 4060 Ti or an A100), with the existing tools (code/bench/a7_blocks.py, a2_runs.py). Expected outcome: whether the cost model needs device-specific kernel ratios only, or different defaults per device. Cost: about a day of GPU time; risk: access to a second GPU with the same software stack.
 - **Discussion:**
   - 2026-10-24 AI: Proposed from A2, A7 and A8; it needs hardware outside GPU 0 of bux, so the human decides.
-- **Outcome:** pending
+  - 2026-10-24 Human: not interested.
+- **Outcome:** rejected (2026-10-24)
 
 <!-- Add proposals above this line, oldest first. Template:
 

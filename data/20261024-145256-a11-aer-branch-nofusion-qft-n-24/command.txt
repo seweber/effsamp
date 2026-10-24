@@ -1,0 +1,1 @@
+code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000 --reps 2 --aer-option fusion_enable=False

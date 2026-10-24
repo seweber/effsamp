@@ -11,6 +11,7 @@ Start with the [Overview](overview.md). Abbreviations and notation are in the [G
 
 ## Studies
 
+- [Tuning Qiskit Aer's shot branching](studies/aer-tuning.md) — Which of Aer's options make its shot branching faster, and noisecirc's speedup when both simulators are tuned (A11) · *verified*
 - [Benchmark circuits and predicted work](studies/benchmark-suite.md) — Categories of benchmark circuits and noise, and noisecirc's predicted block passes and times for them (A4) · *verified*
 - [Block-pass time on the H100](studies/block-pass-time.md) — How well block passes times the state-vector bandwidth time predicts noisecirc's runtime on the H100 (A2) · *verified*
 - [noisecirc against Qiskit Aer and CUDA-Q](studies/competitors.md) — Run times of Aer (shot branching, batched, per shot) and CUDA-Q against noisecirc, translated into passes, and the speedup split into algorithm and implementation (A6) · *verified*

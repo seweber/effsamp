@@ -1,0 +1,1 @@
+code/bench/gpurun a6_runs.py --sim aer_branch --circuit ghz --qubits 28 --noise damping --ps 0.000183486 --shots 1000 --reps 1 --budget 400

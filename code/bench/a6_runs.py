@@ -28,7 +28,7 @@ import noise  # noqa: E402
 
 
 class Aer:
-    def __init__(self, qc: QuantumCircuit, kind: str | None, p: float, mode: str) -> None:
+    def __init__(self, qc: QuantumCircuit, kind: str | None, p: float, mode: str, extra: dict | None = None) -> None:
         from qiskit_aer import AerSimulator
         from qiskit_aer.noise import NoiseModel, kraus_error
 
@@ -52,22 +52,29 @@ class Aer:
         from qiskit_aer.backends import aer_compiler
 
         aer_compiler.BACKEND_RUN_ARG_TYPES.setdefault("fusion_allow_kraus", (bool, np.bool_))
+        # A11: further Aer options go in as run options (not all are constructor options, e.g. the
+        # fusion cost factor); they are registered with Aer's run-argument types like the one above.
+        for key, value in (extra or {}).items():
+            aer_compiler.BACKEND_RUN_ARG_TYPES.setdefault(key, (type(value),))
+        self.extra = dict(extra or {})
         self.options = {}
-        trial = self.sim.run(self.circuit, shots=1, seed_simulator=0, fusion_verbose=True).result()
+        trial = self.sim.run(self.circuit, shots=1, seed_simulator=0, fusion_verbose=True, **self.extra).result()
         if not trial.success and "heevx" in str(trial.status):
             self.options = {"fusion_allow_kraus": False}
-            trial = self.sim.run(self.circuit, shots=1, seed_simulator=0, fusion_verbose=True, **self.options).result()
+            trial = self.sim.run(self.circuit, shots=1, seed_simulator=0, fusion_verbose=True, **self.extra,
+                                 **self.options).result()
         fusion = trial.results[0].metadata.get("fusion", {})
         ops = [o for o in fusion.get("output_ops", []) if o.get("name") != "measure"]
-        self.fused = {"ops": len(ops), "kraus_ops": sum(o.get("name") == "kraus" for o in ops),
+        self.fused = {"method": fusion.get("method"), "max_fused_qubits": fusion.get("max_fused_qubits"),
+                      "cost_factor": fusion.get("cost_factor"), "ops": len(ops), "kraus_ops": sum(o.get("name") == "kraus" for o in ops),
                       "kraus_matrices": sum(len(o.get("mats", [])) for o in ops if o.get("name") == "kraus"),
                       "max_qubits": max((len(o.get("qubits", [])) for o in ops), default=0)}
 
     def run(self, shots: int, seed: int) -> None:
-        result = self.sim.run(self.circuit, shots=shots, seed_simulator=seed, **self.options).result()
+        result = self.sim.run(self.circuit, shots=shots, seed_simulator=seed, **self.extra, **self.options).result()
         if not result.success and "heevx" in str(result.status) and not self.options:
             self.options = {"fusion_allow_kraus": False}
-            result = self.sim.run(self.circuit, shots=shots, seed_simulator=seed, **self.options).result()
+            result = self.sim.run(self.circuit, shots=shots, seed_simulator=seed, **self.extra, **self.options).result()
         if not result.success:
             raise RuntimeError(str(result.status))
         meta = result.results[0].metadata
@@ -116,9 +123,9 @@ class Cudaq:
             self.cudaq.sample(self.kernel, shots_count=shots, noise_model=self.model)
 
 
-def make(sim: str, qc, kind, p):
+def make(sim: str, qc, kind, p, extra=None):
     if sim.startswith("aer_"):
-        return Aer(qc, kind, p, sim.removeprefix("aer_"))
+        return Aer(qc, kind, p, sim.removeprefix("aer_"), extra)
     if sim == "cudaq":
         return Cudaq(qc, kind, p)
     raise ValueError(sim)
@@ -133,6 +140,8 @@ def main() -> None:
     parser.add_argument("--ps", default="0.001")
     parser.add_argument("--shots", type=int, default=1000)
     parser.add_argument("--reps", type=int, default=2)
+    parser.add_argument("--aer-option", action="append", default=[],
+                        help="key=value passed to AerSimulator (A11), e.g. fusion_max_qubit=3; repeatable")
     parser.add_argument("--budget", type=float, default=450.0, help="seconds after which no new point starts")
     args = parser.parse_args()
     kind = None if args.noise == "none" else args.noise
@@ -145,11 +154,26 @@ def main() -> None:
         run_point(args, qc, kind, p)
 
 
+def _value(text: str):
+    """An option value from the command line: bool, int, float or string."""
+    if text in ("True", "False"):
+        return text == "True"
+    for cast in (int, float):
+        try:
+            return cast(text)
+        except ValueError:
+            pass
+    return text
+
+
 def run_point(args, qc, kind, p) -> None:
     meta = {"sim": args.sim, "circuit": args.circuit, "n": args.qubits, "noise": args.noise, "p": p,
             "shots": args.shots, "gates": len(qc.data), "channels": circuits.channels(qc)}
+    extra = {k: _value(v) for k, v in (o.split("=", 1) for o in args.aer_option)}
+    if extra:
+        meta["aer_options"] = extra
     try:
-        sim = make(args.sim, qc, kind, p)
+        sim = make(args.sim, qc, kind, p, extra)
         start = time.perf_counter()
         sim.run(args.shots, 0)
         t_first = time.perf_counter() - start

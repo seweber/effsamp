@@ -41,3 +41,4 @@
 - **stage** — a run of a block's operations on at most `stage_qubits` qubits that a kernel applies together from registers
 - **dominant / general / masked kernel** — a block's kernel for trajectories without error (each gate's most likely Kraus choice), for any choices (switching on each gate's choice in every stage), and for trajectories with errors that runs the dominant code in every stage but those its stage mask flags
 - **autotuning** — noisecirc's choice of `max_operations` and `stage_qubits` per circuit by timing one trajectory under each candidate (branch `feature/autotune`)
+- **fusion width** — the most qubits of one fused operation: Aer's `fusion_max_qubit` (2 by default for circuits with Kraus noise), noisecirc's `max_fused_qudits` plus its pinned qubits
