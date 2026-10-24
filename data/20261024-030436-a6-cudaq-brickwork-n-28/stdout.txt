@@ -1,0 +1,1 @@
+{"kind": "run", "sim": "cudaq", "circuit": "brickwork", "n": 28, "noise": "damping", "p": 0.000242131, "shots": 20, "gates": 623, "channels": 826, "seed": 1, "time": 19.889243339188397, "t_first": 20.11858406662941, "metadata": {}}

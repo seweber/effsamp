@@ -1,0 +1,1 @@
+code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise damping --ps 2.46305e-05 --shots 1000 --reps 2

@@ -1,0 +1,1 @@
+code/bench/gpurun a6_runs.py --sim cudaq --circuit brickwork --qubits 28 --noise damping --ps 0.000242131 --shots 20 --reps 1 --budget 400

@@ -1,0 +1,1 @@
+{"kind": "run", "sim": "cudaq", "circuit": "qaoa", "n": 28, "noise": "damping", "p": 0.00047619, "shots": 20, "gates": 336, "channels": 420, "seed": 1, "time": 13.42632896732539, "t_first": 13.486722205765545, "metadata": {}}

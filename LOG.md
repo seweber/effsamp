@@ -11,6 +11,142 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-24 03:07 UTC  A6 analysis and competitors page
+- **Goal:** Quantify noisecirc's speedup over Aer and CUDA-Q and split it into algorithm and implementation
+- **Task:** A6
+- **Method:** a6_analyze.py over data/*a6-* (n=24) incl. noisecirc variants; aer_dryrun pass counts; n=28 Aer branching / per-shot (20 shots) and noisecirc M=0.01 runs
+- **Outcome:** Over Aer shot branching 6-52x (passes 2.7-30x where Aer fuses; time per pass 1.0-2.1x at M=1); over Aer per-shot/batched and CUDA-Q 27-7700x; at equal algorithm (noisecirc pershot_k2) 0.70-1.74x of the per-shot competitors (correcting the 0.7-1.4 of the earlier entry); gains: fusion 4-25x, sharing 2-270x, no norm passes 1.5x. n=28: Aer branching segfaults from M=0.1 (branches exceed GPU memory); where it ran noisecirc 8-41x faster
+- **Next:** Final overview check; optional extra studies
+- **Refs:** wiki/studies/competitors.md, data/a6-analysis, memory/tasks/A6.md
+
+## 2026-10-24 03:05 UTC  A6 noisecirc brickwork n=28 M=0.01
+- **Goal:** noisecirc at the A6 n=28 point M=0.01 (damping), 1000 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise damping --ps 2.42131e-05 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-030543-a6-noisecirc-brickwork-n-28-m-0-01
+- **Next:** none
+- **Refs:** data/20261024-030543-a6-noisecirc-brickwork-n-28-m-0-01, code/bench/a2_runs.py
+
+## 2026-10-24 03:05 UTC  A6 noisecirc qft n=28 M=0.01
+- **Goal:** noisecirc at the A6 n=28 point M=0.01 (damping), 1000 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise damping --ps 2.46305e-05 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-030536-a6-noisecirc-qft-n-28-m-0-01
+- **Next:** none
+- **Refs:** data/20261024-030536-a6-noisecirc-qft-n-28-m-0-01, code/bench/a2_runs.py
+
+## 2026-10-24 03:05 UTC  A6 noisecirc qaoa n=28 M=0.01
+- **Goal:** noisecirc at the A6 n=28 point M=0.01 (damping), 1000 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a2_runs.py --circuits qaoa --qubits 28 --noise damping --ps 4.7619e-05 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-030530-a6-noisecirc-qaoa-n-28-m-0-01
+- **Next:** none
+- **Refs:** data/20261024-030530-a6-noisecirc-qaoa-n-28-m-0-01, code/bench/a2_runs.py
+
+## 2026-10-24 03:05 UTC  A6 noisecirc ghz n=28 M=0.01
+- **Goal:** noisecirc at the A6 n=28 point M=0.01 (damping), 1000 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz --qubits 28 --noise damping --ps 0.000183486 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-030525-a6-noisecirc-ghz-n-28-m-0-01
+- **Next:** none
+- **Refs:** data/20261024-030525-a6-noisecirc-ghz-n-28-m-0-01, code/bench/a2_runs.py
+
+## 2026-10-24 03:05 UTC  A6 cudaq brickwork n=28
+- **Goal:** cudaq on brickwork at n=28, damping M=0.1, 20 shots (per-shot time)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim cudaq --circuit brickwork --qubits 28 --noise damping --ps 0.000242131 --shots 20 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-030436-a6-cudaq-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-030436-a6-cudaq-brickwork-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 03:04 UTC  A6 aer_plain brickwork n=28
+- **Goal:** aer_plain on brickwork at n=28, damping M=0.1, 20 shots (per-shot time)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_plain --circuit brickwork --qubits 28 --noise damping --ps 0.000242131 --shots 20 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-030314-a6-aer-plain-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-030314-a6-aer-plain-brickwork-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 03:03 UTC  A6 aer_branch brickwork n=28
+- **Goal:** Aer shot branching on brickwork at n=28 (GPU memory holds ~35 states), damping M=0.01/0.1/1, 1000 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit brickwork --qubits 28 --noise damping --ps 2.42131e-05,0.000242131,0.00242131 --shots 1000 --reps 1 --budget 400
+- **Outcome:** exit 139; outputs in data/20261024-030204-a6-aer-branch-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-030204-a6-aer-branch-brickwork-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 03:02 UTC  A6 cudaq qft n=28
+- **Goal:** cudaq on qft at n=28, damping M=0.1, 20 shots (per-shot time)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim cudaq --circuit qft --qubits 28 --noise damping --ps 0.000246305 --shots 20 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-030103-a6-cudaq-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-030103-a6-cudaq-qft-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 03:01 UTC  A6 aer_plain qft n=28
+- **Goal:** aer_plain on qft at n=28, damping M=0.1, 20 shots (per-shot time)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_plain --circuit qft --qubits 28 --noise damping --ps 0.000246305 --shots 20 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-025855-a6-aer-plain-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-025855-a6-aer-plain-qft-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 02:58 UTC  A6 aer_branch qft n=28
+- **Goal:** Aer shot branching on qft at n=28 (GPU memory holds ~35 states), damping M=0.01/0.1/1, 1000 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 28 --noise damping --ps 2.46305e-05,0.000246305,0.00246305 --shots 1000 --reps 1 --budget 400
+- **Outcome:** exit 139; outputs in data/20261024-025454-a6-aer-branch-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-025454-a6-aer-branch-qft-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 02:54 UTC  A6 cudaq qaoa n=28
+- **Goal:** cudaq on qaoa at n=28, damping M=0.1, 20 shots (per-shot time)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim cudaq --circuit qaoa --qubits 28 --noise damping --ps 0.00047619 --shots 20 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-025423-a6-cudaq-qaoa-n-28
+- **Next:** none
+- **Refs:** data/20261024-025423-a6-cudaq-qaoa-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 02:54 UTC  A6 aer_plain qaoa n=28
+- **Goal:** aer_plain on qaoa at n=28, damping M=0.1, 20 shots (per-shot time)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_plain --circuit qaoa --qubits 28 --noise damping --ps 0.00047619 --shots 20 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-025346-a6-aer-plain-qaoa-n-28
+- **Next:** none
+- **Refs:** data/20261024-025346-a6-aer-plain-qaoa-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 02:53 UTC  A6 aer_branch qaoa n=28
+- **Goal:** Aer shot branching on qaoa at n=28 (GPU memory holds ~35 states), damping M=0.01/0.1/1, 1000 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qaoa --qubits 28 --noise damping --ps 4.7619e-05,0.00047619,0.0047619 --shots 1000 --reps 1 --budget 400
+- **Outcome:** exit 139; outputs in data/20261024-025312-a6-aer-branch-qaoa-n-28
+- **Next:** none
+- **Refs:** data/20261024-025312-a6-aer-branch-qaoa-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 02:53 UTC  A6 cudaq ghz n=28
+- **Goal:** cudaq on ghz at n=28, damping M=0.1, 20 shots (per-shot time)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim cudaq --circuit ghz --qubits 28 --noise damping --ps 0.00183486 --shots 20 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-025300-a6-cudaq-ghz-n-28
+- **Next:** none
+- **Refs:** data/20261024-025300-a6-cudaq-ghz-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 02:53 UTC  A6 aer_plain ghz n=28
+- **Goal:** aer_plain on ghz at n=28, damping M=0.1, 20 shots (per-shot time)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_plain --circuit ghz --qubits 28 --noise damping --ps 0.00183486 --shots 20 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-025240-a6-aer-plain-ghz-n-28
+- **Next:** none
+- **Refs:** data/20261024-025240-a6-aer-plain-ghz-n-28, code/bench/a6_runs.py
+
+## 2026-10-24 02:52 UTC  A6 aer_branch ghz n=28
+- **Goal:** Aer shot branching on ghz at n=28 (GPU memory holds ~35 states), damping M=0.01/0.1/1, 1000 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit ghz --qubits 28 --noise damping --ps 0.000183486,0.00183486,0.0183486 --shots 1000 --reps 1 --budget 400
+- **Outcome:** exit 139; outputs in data/20261024-025208-a6-aer-branch-ghz-n-28
+- **Next:** none
+- **Refs:** data/20261024-025208-a6-aer-branch-ghz-n-28, code/bench/a6_runs.py
+
 ## 2026-10-24 02:41 UTC  optimize_kraus fix v4 verified on GPU
 - **Goal:** Check that keeping the dominant Kraus operator restores sparse kernels
 - **Task:** A5

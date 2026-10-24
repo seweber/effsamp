@@ -1,0 +1,1 @@
+code/bench/gpurun a6_runs.py --sim cudaq --circuit qft --qubits 28 --noise damping --ps 0.000246305 --shots 20 --reps 1 --budget 400
