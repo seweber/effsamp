@@ -87,7 +87,7 @@ Aer's shot branching keeps every branch's state on the device. At 28 qubits, a s
 
 Two checks repeat parts of the comparison with one parameter changed (LOG.md entries "A6 shots …" and "A6 thermal …"):
 
-- **Shots.** On the QFT and QAOA, Aer's shot branching took 10 to 30 times noisecirc's time at 100 shots, 21 to 46 times at 1000 and 11 to 55 times at 10000. Both simulators share trajectories, so neither gains more than the other from more shots; at 10000 shots and $M = 0.1$ Aer ran on 24 qubits without crashing.
+- **Shots.** On the QFT and QAOA, Aer's shot branching took 10 to 21 times noisecirc's time at 100 shots (QFT at $M = 0.01$: 3 to 30 times, as noisecirc's two runs took 0.009 and 0.10 s), 21 to 46 times at 1000 and 11 to 55 times at 10000. Both simulators share trajectories, so neither gains more than the other from more shots; at 10000 shots and $M = 0.1$ Aer ran on 24 qubits without crashing.
 - **Thermal relaxation** (damping and dephasing, three Kraus operators) at $M = 0.1$: noisecirc took 0.14 s on the QFT and 0.24 s on brickwork, against 5.0 and 4.5 s for Aer's shot branching (36 and 19 times), 145 and 77 s for Aer per shot (1000 and 330 times) and 80 and 56 s for CUDA-Q (570 and 240 times), close to the factors with amplitude damping.
 
 ## Caveats
