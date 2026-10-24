@@ -73,7 +73,16 @@ def main():
         if not any(k.startswith("T_aer") for k in row):
             continue
         for mode in ("plain", "branch"):
-            counted = aer_dryrun.count(qc, "damping", p, SHOTS, mode)
+            # Count with the fusion the GPU run used; Aer falls back to no Kraus fusion after heevx.
+            allow = row.get(f"kraus_fusion_aer_{mode}", True) is not False
+            try:
+                counted = aer_dryrun.count(qc, "damping", p, SHOTS, mode, allow_kraus=allow)
+            except RuntimeError:
+                # The local Aer cannot fuse this point; counted unfused, and the row says so.
+                print(f"local Kraus fusion failed: {c} p={p} {mode}", file=sys.stderr)
+                allow = False
+                counted = aer_dryrun.count(qc, "damping", p, SHOTS, mode, allow_kraus=False)
+            row[f"aer_kraus_fusion_{mode}"] = allow
             row[f"P_aer_{mode}"] = counted["passes"]
             row[f"aer_ops_{mode}"] = counted["ops"]
         for sim in ("noisecirc", "aer_plain", "aer_branch", "nc_k2", "nc_pershot", "nc_pershot_k2"):

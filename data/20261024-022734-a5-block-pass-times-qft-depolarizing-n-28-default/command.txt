@@ -1,0 +1,1 @@
+code/bench/gpurun a2_blocks.py --circuits qft --qubits 28 --noise depolarizing --p 0.000123

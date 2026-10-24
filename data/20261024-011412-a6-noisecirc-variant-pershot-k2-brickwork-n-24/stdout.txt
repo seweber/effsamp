@@ -1,0 +1,3 @@
+{"kind": "variant", "variant": "pershot_k2", "circuit": "brickwork", "n": 24, "noise": "damping", "p": 3.26797e-05, "shots": 1000, "time": 78.54781467467546, "block_passes": 150010.0, "blocks": 150, "gates": 462, "channels": 612}
+{"kind": "variant", "variant": "pershot_k2", "circuit": "brickwork", "n": 24, "noise": "damping", "p": 0.000326797, "shots": 1000, "time": 76.03048846125603, "block_passes": 150180.0, "blocks": 150, "gates": 462, "channels": 612}
+{"kind": "variant", "variant": "pershot_k2", "circuit": "brickwork", "n": 24, "noise": "damping", "p": 0.00326797, "shots": 1000, "time": 78.34670743905008, "block_passes": 152100.0, "blocks": 150, "gates": 462, "channels": 612}

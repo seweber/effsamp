@@ -1,0 +1,3 @@
+{"kind": "variant", "variant": "pershot_k2", "circuit": "qft", "n": 24, "noise": "damping", "p": 3.33333e-05, "shots": 1000, "time": 137.10949052125216, "block_passes": 276020.0, "blocks": 276, "gates": 324, "channels": 600}
+{"kind": "variant", "variant": "pershot_k2", "circuit": "qft", "n": 24, "noise": "damping", "p": 0.000333333, "shots": 1000, "time": 137.54522655159235, "block_passes": 276180.0, "blocks": 276, "gates": 324, "channels": 600}
+{"kind": "variant", "variant": "pershot_k2", "circuit": "qft", "n": 24, "noise": "damping", "p": 0.00333333, "shots": 1000, "time": 136.68463022448123, "block_passes": 278060.0, "blocks": 276, "gates": 324, "channels": 600}

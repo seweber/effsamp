@@ -1,0 +1,32 @@
+pytest -q -x packages/svpass/tests -> 0
+........................................................................ [ 22%]
+........................................................................ [ 45%]
+........................................................................ [ 68%]
+........................................................................ [ 90%]
+.............................                                            [100%]
+317 passed in 8.60s
+ 
+pytest -q -x tests -> 1
+94, 0.03, 0.02, 0.01], seed=1), id="unitary-mixture-2q"),
+        ],
+    )
+    def test_optimized_kraus_operators_of_a_unitary_mixture_need_no_oversampling(channel: qt.Qobj) -> None:
+        """A mixture of unitaries has a Kraus set of scaled unitaries, whose oversampling is exactly 1.
+    
+        That is the lower bound of every trace-preserving block, so the optimization must get within
+        its tolerance of it, from the minimal set that `sta_sectors` returns otherwise.
+        """
+        sectors = sta_sectors(channel, branches=QUBIT_BRANCHES, optimize=True)
+        (optimized,) = sectors.values()
+    
+>       assert _oversampling(optimized) <= 1 + tunables.KRAUS_OPTIMIZATION_TOLERANCE
+E       assert np.float64(1.0001764089631473) <= (1 + 0.0001)
+E        +  where np.float64(1.0001764089631473) = _oversampling([array([[-9.30605764e-01+3.22401810e-01j, -3.15670163e-05+2.98841318e-05j,\n         1.10235978e-04-7.51457665e-05j,  2...   [ 0.03538904+0.00224915j, -0.00375989+0.00783233j,\n        -0.00749375-0.01054213j, -0.02203198-0.00379259j]]), ...])
+E        +  and   0.0001 = tunables.KRAUS_OPTIMIZATION_TOLERANCE
+
+tests/test_sta.py:226: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_sta.py::test_optimized_kraus_operators_of_a_unitary_mixture_need_no_oversampling[depolarizing-2q]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 167 passed, 2 deselected in 22.64s
+ 

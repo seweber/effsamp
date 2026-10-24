@@ -1,0 +1,3 @@
+{"kind": "variant", "variant": "k2", "circuit": "ghz", "n": 24, "noise": "damping", "p": 0.000215054, "shots": 1000, "time": 0.037838333286345005, "block_passes": 120.0, "blocks": 23, "gates": 70, "channels": 93}
+{"kind": "variant", "variant": "k2", "circuit": "ghz", "n": 24, "noise": "damping", "p": 0.00215054, "shots": 1000, "time": 0.22952653840184212, "block_passes": 1017.0, "blocks": 23, "gates": 70, "channels": 93}
+{"kind": "variant", "variant": "k2", "circuit": "ghz", "n": 24, "noise": "damping", "p": 0.0215054, "shots": 1000, "time": 1.5229428932070732, "block_passes": 7356.0, "blocks": 23, "gates": 70, "channels": 93}

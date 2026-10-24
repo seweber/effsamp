@@ -1,0 +1,3 @@
+{"kind": "variant", "variant": "k2", "circuit": "qaoa", "n": 24, "noise": "damping", "p": 5.55556e-05, "shots": 1000, "time": 0.2834398401901126, "block_passes": 872.0, "blocks": 74, "gates": 288, "channels": 360}
+{"kind": "variant", "variant": "k2", "circuit": "qaoa", "n": 24, "noise": "damping", "p": 0.000555556, "shots": 1000, "time": 1.7041320316493511, "block_passes": 5281.0, "blocks": 74, "gates": 288, "channels": 360}
+{"kind": "variant", "variant": "k2", "circuit": "qaoa", "n": 24, "noise": "damping", "p": 0.00555556, "shots": 1000, "time": 10.56925065163523, "block_passes": 34733.0, "blocks": 74, "gates": 288, "channels": 360}

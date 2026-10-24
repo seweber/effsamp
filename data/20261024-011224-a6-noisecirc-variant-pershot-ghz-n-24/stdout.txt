@@ -1,0 +1,3 @@
+{"kind": "variant", "variant": "pershot", "circuit": "ghz", "n": 24, "noise": "damping", "p": 0.000215054, "shots": 1000, "time": 2.903155079111457, "block_passes": 3010.0, "blocks": 3, "gates": 70, "channels": 93}
+{"kind": "variant", "variant": "pershot", "circuit": "ghz", "n": 24, "noise": "damping", "p": 0.00215054, "shots": 1000, "time": 3.2065180130302906, "block_passes": 3210.0, "blocks": 3, "gates": 70, "channels": 93}
+{"kind": "variant", "variant": "pershot", "circuit": "ghz", "n": 24, "noise": "damping", "p": 0.0215054, "shots": 1000, "time": 4.714909233152866, "block_passes": 5930.0, "blocks": 3, "gates": 70, "channels": 93}

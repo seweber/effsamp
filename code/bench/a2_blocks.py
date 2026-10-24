@@ -63,6 +63,7 @@ def main() -> None:
     parser.add_argument("--reps", type=int, default=5)
     parser.add_argument("--max-operations", type=int, default=None)
     parser.add_argument("--max-fused", type=int, default=None)
+    parser.add_argument("--optimize-kraus", action="store_true")
     args = parser.parse_args()
 
     maps = noise.maps(None if args.noise == "none" else args.noise, args.p)
@@ -71,6 +72,8 @@ def main() -> None:
         options["max_operations"] = args.max_operations
     if args.max_fused is not None:
         options["max_fused_qudits"] = args.max_fused
+    if args.optimize_kraus:
+        options["optimize_kraus"] = True
     sim = Simulator(maps=maps, **options)
     for n in [int(q) for q in args.qubits.split(",")]:
         t_cupy = bandwidth_time(n)

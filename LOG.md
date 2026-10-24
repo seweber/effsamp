@@ -11,6 +11,262 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-24 02:30 UTC  A6 competitor runs and noisecirc variants
+- **Goal:** Time Aer (branching, batched, plain), CUDA-Q and noisecirc variants on ghz/brickwork/qft/qaoa at n=24, damping M=0.01/0.1/1, 1000 shots
+- **Task:** A6
+- **Method:** a6_runs.py, a2_runs.py, a6_variants.py (k2, pershot, pershot_k2); aer_dryrun.py counts Aer's passes from its own fused ops; heevx failures retried without Kraus fusion
+- **Outcome:** noisecirc 5-45x faster than Aer shot branching, 40-7000x than Aer plain/batched and CUDA-Q; Aer branching needs 3-54x more passes; noisecirc pershot_k2 (Aer-like algorithm) matches the per-shot competitors' times within 0.7-1.4x
+- **Next:** Final A6 analysis and wiki page
+- **Refs:** data/a6-analysis, code/bench/aer_dryrun.py, code/bench/a6_variants.py
+
+## 2026-10-24 02:30 UTC  A5 validation complete; optimize_kraus fix iterations
+- **Goal:** Validate A4 predictions on GPU; resolve the optimize_kraus anomaly
+- **Task:** A5
+- **Method:** 27 a5-validation runs (n=28, 1000 shots) vs committed predictions (a5_compare.py); optimize_kraus fix v1 (second stage) -> v2 (oversampling limit, GPU test failure 1.76e-4 > tol) -> v3 (guard + 150 iterations, compile cost) -> v4 (first keep the dominant operator fixed: sparse kernels); block times qft depolarizing default vs optimize
+- **Outcome:** Passes 0.86-1.13x, kernel-ratio times 1.00-1.33x, bandwidth model 1.28-2.42x (47/39 points). optimize_kraus v3: passes <= default but kernels 1.9x (dom) / 1.7x (gen) slower from lost sparsity (verified by block timing); v4 keeps the dominant operator diagonal and compiles 30x faster; GPU check running
+- **Next:** Evaluate v4 on GPU; update issues/validation pages
+- **Refs:** data/a5-comparison, wiki/studies/validation.md, wiki/studies/noisecirc-issues.md
+
+## 2026-10-24 02:28 UTC  A5 block pass times qft depolarizing n=28 --optimize-kraus
+- **Goal:** Kernel times of QFT blocks with depolarizing p=1.23e-4, with and without optimize_kraus (sparsity hypothesis)
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_blocks.py --circuits qft --qubits 28 --noise depolarizing --p 0.000123 --optimize-kraus
+- **Outcome:** exit 0; outputs in data/20261024-022752-a5-block-pass-times-qft-depolarizing-n-28-optimize-kraus
+- **Next:** none
+- **Refs:** data/20261024-022752-a5-block-pass-times-qft-depolarizing-n-28-optimize-kraus, code/bench/a2_blocks.py
+
+## 2026-10-24 02:27 UTC  A5 block pass times qft depolarizing n=28 default
+- **Goal:** Kernel times of QFT blocks with depolarizing p=1.23e-4, with and without optimize_kraus (sparsity hypothesis)
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_blocks.py --circuits qft --qubits 28 --noise depolarizing --p 0.000123
+- **Outcome:** exit 0; outputs in data/20261024-022734-a5-block-pass-times-qft-depolarizing-n-28-default
+- **Next:** none
+- **Refs:** data/20261024-022734-a5-block-pass-times-qft-depolarizing-n-28-default, code/bench/a2_blocks.py
+
+## 2026-10-24 02:22 UTC  A5 validation qft depolarizing optimized M=1 (fix v3)
+- **Goal:** Depolarizing with optimize_kraus on qft, n=28, M=1, bench/fixes 594dcd7
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise depolarizing --ps 0.00123153 --shots 1000 --reps 2 --budget 430 --option optimize_kraus=1
+- **Outcome:** exit 0; outputs in data/20261024-021947-a5-validation-qft-depolarizing-optimized-m-1-fix-v3
+- **Next:** none
+- **Refs:** data/20261024-021947-a5-validation-qft-depolarizing-optimized-m-1-fix-v3, code/bench/a2_runs.py
+
+## 2026-10-24 02:19 UTC  A5 validation qft depolarizing optimized M=0.1 (fix v3)
+- **Goal:** Depolarizing with optimize_kraus on qft, n=28, M=0.1, bench/fixes 594dcd7
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise depolarizing --ps 0.000123153 --shots 1000 --reps 2 --budget 430 --option optimize_kraus=1
+- **Outcome:** exit 0; outputs in data/20261024-021848-a5-validation-qft-depolarizing-optimized-m-0-1-fix-v3
+- **Next:** none
+- **Refs:** data/20261024-021848-a5-validation-qft-depolarizing-optimized-m-0-1-fix-v3, code/bench/a2_runs.py
+
+## 2026-10-24 02:18 UTC  A5 validation brickwork depolarizing optimized M=1 (fix v3)
+- **Goal:** Depolarizing with optimize_kraus on brickwork, n=28, M=1, bench/fixes 594dcd7
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise depolarizing --ps 0.00121065 --shots 1000 --reps 2 --budget 430 --option optimize_kraus=1
+- **Outcome:** exit 0; outputs in data/20261024-021532-a5-validation-brickwork-depolarizing-optimized-m-1-fix-v3
+- **Next:** none
+- **Refs:** data/20261024-021532-a5-validation-brickwork-depolarizing-optimized-m-1-fix-v3, code/bench/a2_runs.py
+
+## 2026-10-24 02:15 UTC  A5 validation brickwork depolarizing optimized M=0.1 (fix v3)
+- **Goal:** Depolarizing with optimize_kraus on brickwork, n=28, M=0.1, bench/fixes 594dcd7
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise depolarizing --ps 0.000121065 --shots 1000 --reps 2 --budget 430 --option optimize_kraus=1
+- **Outcome:** exit 0; outputs in data/20261024-021306-a5-validation-brickwork-depolarizing-optimized-m-0-1-fix-v3
+- **Next:** none
+- **Refs:** data/20261024-021306-a5-validation-brickwork-depolarizing-optimized-m-0-1-fix-v3, code/bench/a2_runs.py
+
+## 2026-10-24 02:13 UTC  GPU tests of bench/fixes 594dcd7
+- **Goal:** svpass and noisecirc tests on the H100 after the guarded second stage
+- **Task:** A5
+- **Method:** code/bench/gpurun run_tests.py
+- **Outcome:** exit 0; outputs in data/20261024-021243-gpu-tests-of-bench-fixes-594dcd7
+- **Next:** none
+- **Refs:** data/20261024-021243-gpu-tests-of-bench-fixes-594dcd7, code/bench/run_tests.py
+
+## 2026-10-24 02:11 UTC  A5 validation qft depolarizing optimized M=1 (fix v2)
+- **Goal:** Depolarizing with optimize_kraus on qft, n=28, M=1, bench/fixes da5420c
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise depolarizing --ps 0.00123153 --shots 1000 --reps 2 --budget 430 --option optimize_kraus=1
+- **Outcome:** exit 0; outputs in data/20261024-020652-a5-validation-qft-depolarizing-optimized-m-1-fix-v2
+- **Next:** none
+- **Refs:** data/20261024-020652-a5-validation-qft-depolarizing-optimized-m-1-fix-v2, code/bench/a2_runs.py
+
+## 2026-10-24 02:06 UTC  A5 validation qft depolarizing optimized M=0.1 (fix v2)
+- **Goal:** Depolarizing with optimize_kraus on qft, n=28, M=0.1, bench/fixes da5420c
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise depolarizing --ps 0.000123153 --shots 1000 --reps 2 --budget 430 --option optimize_kraus=1
+- **Outcome:** exit 0; outputs in data/20261024-020335-a5-validation-qft-depolarizing-optimized-m-0-1-fix-v2
+- **Next:** none
+- **Refs:** data/20261024-020335-a5-validation-qft-depolarizing-optimized-m-0-1-fix-v2, code/bench/a2_runs.py
+
+## 2026-10-24 02:03 UTC  A5 validation brickwork depolarizing optimized M=1 (fix v2)
+- **Goal:** Depolarizing with optimize_kraus on brickwork, n=28, M=1, bench/fixes da5420c
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise depolarizing --ps 0.00121065 --shots 1000 --reps 2 --budget 430 --option optimize_kraus=1
+- **Outcome:** exit 124; outputs in data/20261024-015344-a5-validation-brickwork-depolarizing-optimized-m-1-fix-v2
+- **Next:** none
+- **Refs:** data/20261024-015344-a5-validation-brickwork-depolarizing-optimized-m-1-fix-v2, code/bench/a2_runs.py
+
+## 2026-10-24 01:53 UTC  A5 validation brickwork depolarizing optimized M=0.1 (fix v2)
+- **Goal:** Depolarizing with optimize_kraus on brickwork, n=28, M=0.1, bench/fixes da5420c
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise depolarizing --ps 0.000121065 --shots 1000 --reps 2 --budget 430 --option optimize_kraus=1
+- **Outcome:** exit 124; outputs in data/20261024-014353-a5-validation-brickwork-depolarizing-optimized-m-0-1-fix-v2
+- **Next:** none
+- **Refs:** data/20261024-014353-a5-validation-brickwork-depolarizing-optimized-m-0-1-fix-v2, code/bench/a2_runs.py
+
+## 2026-10-24 01:43 UTC  GPU tests of bench/fixes (optimize_kraus fix, second commit)
+- **Goal:** svpass and noisecirc test suites on the H100 after tightening the second stage
+- **Task:** A5
+- **Method:** code/bench/gpurun run_tests.py
+- **Outcome:** exit 0; outputs in data/20261024-014259-gpu-tests-of-bench-fixes-optimize-kraus-fix-second-commit
+- **Next:** none
+- **Refs:** data/20261024-014259-gpu-tests-of-bench-fixes-optimize-kraus-fix-second-commit, code/bench/run_tests.py
+
+## 2026-10-24 01:40 UTC  A6 aer_batched brickwork n=24 M=0.1 (rerun with heevx fallback)
+- **Goal:** Rerun of the point that failed with heevx in Aer Kraus fusion
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_batched --circuit brickwork --qubits 24 --noise damping --ps 0.000326797 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-013714-a6-aer-batched-brickwork-n-24-m-0-1-rerun-with-heevx-fallback
+- **Next:** none
+- **Refs:** data/20261024-013714-a6-aer-batched-brickwork-n-24-m-0-1-rerun-with-heevx-fallback, code/bench/a6_runs.py
+
+## 2026-10-24 01:37 UTC  A6 aer_branch brickwork n=24 M=0.1 (rerun with heevx fallback)
+- **Goal:** Rerun of the point that failed with heevx in Aer Kraus fusion
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit brickwork --qubits 24 --noise damping --ps 0.000326797 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-013632-a6-aer-branch-brickwork-n-24-m-0-1-rerun-with-heevx-fallback
+- **Next:** none
+- **Refs:** data/20261024-013632-a6-aer-branch-brickwork-n-24-m-0-1-rerun-with-heevx-fallback, code/bench/a6_runs.py
+
+## 2026-10-24 01:36 UTC  A5 validation qft depolarizing optimized (with fix)
+- **Goal:** Depolarizing with optimize_kraus on qft, n=28, M=0.1,1, after fix/optimize-kraus-dominant
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise depolarizing --ps 0.000123153,0.00123153 --shots 1000 --reps 2 --budget 430 --option optimize_kraus=1
+- **Outcome:** exit 0; outputs in data/20261024-012859-a5-validation-qft-depolarizing-optimized-with-fix
+- **Next:** none
+- **Refs:** data/20261024-012859-a5-validation-qft-depolarizing-optimized-with-fix, code/bench/a2_runs.py
+
+## 2026-10-24 01:28 UTC  A5 validation brickwork depolarizing optimized (with fix)
+- **Goal:** Depolarizing with optimize_kraus on brickwork, n=28, M=0.1,1, after fix/optimize-kraus-dominant
+- **Task:** A5
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise depolarizing --ps 0.000121065,0.00121065 --shots 1000 --reps 2 --budget 430 --option optimize_kraus=1
+- **Outcome:** exit 124; outputs in data/20261024-011908-a5-validation-brickwork-depolarizing-optimized-with-fix
+- **Next:** none
+- **Refs:** data/20261024-011908-a5-validation-brickwork-depolarizing-optimized-with-fix, code/bench/a2_runs.py
+
+## 2026-10-24 01:19 UTC  A6 noisecirc variant pershot_k2 qaoa n=24
+- **Goal:** noisecirc with part of its algorithm off (pershot_k2) on qaoa, damping M=0.01/0.1/1, 1000 shots (per-shot variants: 100 single-shot runs scaled)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_variants.py --variant pershot_k2 --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000
+- **Outcome:** exit 0; outputs in data/20261024-011850-a6-noisecirc-variant-pershot-k2-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-011850-a6-noisecirc-variant-pershot-k2-qaoa-n-24, code/bench/a6_variants.py
+
+## 2026-10-24 01:18 UTC  A6 noisecirc variant pershot qaoa n=24
+- **Goal:** noisecirc with part of its algorithm off (pershot) on qaoa, damping M=0.01/0.1/1, 1000 shots (per-shot variants: 100 single-shot runs scaled)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_variants.py --variant pershot --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000
+- **Outcome:** exit 0; outputs in data/20261024-011842-a6-noisecirc-variant-pershot-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-011842-a6-noisecirc-variant-pershot-qaoa-n-24, code/bench/a6_variants.py
+
+## 2026-10-24 01:18 UTC  A6 noisecirc variant k2 qaoa n=24
+- **Goal:** noisecirc with part of its algorithm off (k2) on qaoa, damping M=0.01/0.1/1, 1000 shots (per-shot variants: 100 single-shot runs scaled)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_variants.py --variant k2 --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556,0.00555556 --shots 1000
+- **Outcome:** exit 0; outputs in data/20261024-011807-a6-noisecirc-variant-k2-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-011807-a6-noisecirc-variant-k2-qaoa-n-24, code/bench/a6_variants.py
+
+## 2026-10-24 01:18 UTC  A6 noisecirc variant pershot_k2 qft n=24
+- **Goal:** noisecirc with part of its algorithm off (pershot_k2) on qft, damping M=0.01/0.1/1, 1000 shots (per-shot variants: 100 single-shot runs scaled)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_variants.py --variant pershot_k2 --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000
+- **Outcome:** exit 0; outputs in data/20261024-011718-a6-noisecirc-variant-pershot-k2-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-011718-a6-noisecirc-variant-pershot-k2-qft-n-24, code/bench/a6_variants.py
+
+## 2026-10-24 01:17 UTC  A6 noisecirc variant pershot qft n=24
+- **Goal:** noisecirc with part of its algorithm off (pershot) on qft, damping M=0.01/0.1/1, 1000 shots (per-shot variants: 100 single-shot runs scaled)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_variants.py --variant pershot --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000
+- **Outcome:** exit 0; outputs in data/20261024-011709-a6-noisecirc-variant-pershot-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-011709-a6-noisecirc-variant-pershot-qft-n-24, code/bench/a6_variants.py
+
+## 2026-10-24 01:17 UTC  A6 noisecirc variant k2 qft n=24
+- **Goal:** noisecirc with part of its algorithm off (k2) on qft, damping M=0.01/0.1/1, 1000 shots (per-shot variants: 100 single-shot runs scaled)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_variants.py --variant k2 --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333,0.00333333 --shots 1000
+- **Outcome:** exit 0; outputs in data/20261024-011441-a6-noisecirc-variant-k2-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-011441-a6-noisecirc-variant-k2-qft-n-24, code/bench/a6_variants.py
+
+## 2026-10-24 01:14 UTC  A6 noisecirc variant pershot_k2 brickwork n=24
+- **Goal:** noisecirc with part of its algorithm off (pershot_k2) on brickwork, damping M=0.01/0.1/1, 1000 shots (per-shot variants: 100 single-shot runs scaled)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_variants.py --variant pershot_k2 --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000
+- **Outcome:** exit 0; outputs in data/20261024-011412-a6-noisecirc-variant-pershot-k2-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-011412-a6-noisecirc-variant-pershot-k2-brickwork-n-24, code/bench/a6_variants.py
+
+## 2026-10-24 01:14 UTC  A6 noisecirc variant pershot brickwork n=24
+- **Goal:** noisecirc with part of its algorithm off (pershot) on brickwork, damping M=0.01/0.1/1, 1000 shots (per-shot variants: 100 single-shot runs scaled)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_variants.py --variant pershot --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000
+- **Outcome:** exit 0; outputs in data/20261024-011402-a6-noisecirc-variant-pershot-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-011402-a6-noisecirc-variant-pershot-brickwork-n-24, code/bench/a6_variants.py
+
+## 2026-10-24 01:14 UTC  A6 noisecirc variant k2 brickwork n=24
+- **Goal:** noisecirc with part of its algorithm off (k2) on brickwork, damping M=0.01/0.1/1, 1000 shots (per-shot variants: 100 single-shot runs scaled)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_variants.py --variant k2 --circuit brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000
+- **Outcome:** exit 0; outputs in data/20261024-011239-a6-noisecirc-variant-k2-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-011239-a6-noisecirc-variant-k2-brickwork-n-24, code/bench/a6_variants.py
+
+## 2026-10-24 01:12 UTC  A6 noisecirc variant pershot_k2 ghz n=24
+- **Goal:** noisecirc with part of its algorithm off (pershot_k2) on ghz, damping M=0.01/0.1/1, 1000 shots (per-shot variants: 100 single-shot runs scaled)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_variants.py --variant pershot_k2 --circuit ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000
+- **Outcome:** exit 0; outputs in data/20261024-011230-a6-noisecirc-variant-pershot-k2-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-011230-a6-noisecirc-variant-pershot-k2-ghz-n-24, code/bench/a6_variants.py
+
+## 2026-10-24 01:12 UTC  A6 noisecirc variant pershot ghz n=24
+- **Goal:** noisecirc with part of its algorithm off (pershot) on ghz, damping M=0.01/0.1/1, 1000 shots (per-shot variants: 100 single-shot runs scaled)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_variants.py --variant pershot --circuit ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000
+- **Outcome:** exit 0; outputs in data/20261024-011224-a6-noisecirc-variant-pershot-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-011224-a6-noisecirc-variant-pershot-ghz-n-24, code/bench/a6_variants.py
+
+## 2026-10-24 01:12 UTC  A6 noisecirc variant k2 ghz n=24
+- **Goal:** noisecirc with part of its algorithm off (k2) on ghz, damping M=0.01/0.1/1, 1000 shots (per-shot variants: 100 single-shot runs scaled)
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_variants.py --variant k2 --circuit ghz --qubits 24 --noise damping --ps 0.000215054,0.00215054,0.0215054 --shots 1000
+- **Outcome:** exit 0; outputs in data/20261024-011214-a6-noisecirc-variant-k2-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-011214-a6-noisecirc-variant-k2-ghz-n-24, code/bench/a6_variants.py
+
+## 2026-10-24 01:12 UTC  A6 noisecirc brickwork n=24 (rerun)
+- **Goal:** Rerun of the invalid run 00:43 (wrong branch)
+- **Task:** A6
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 24 --noise damping --ps 3.26797e-05,0.000326797,0.00326797 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-011201-a6-noisecirc-brickwork-n-24-rerun
+- **Next:** none
+- **Refs:** data/20261024-011201-a6-noisecirc-brickwork-n-24-rerun, code/bench/a2_runs.py
+
+## 2026-10-24 01:12 UTC  GPU tests of bench/fixes (optimize_kraus fix)
+- **Goal:** svpass and noisecirc test suites on the H100 for bench/fixes e00cabd
+- **Task:** A5
+- **Method:** code/bench/gpurun run_tests.py
+- **Outcome:** exit 0; outputs in data/20261024-011123-gpu-tests-of-bench-fixes-optimize-kraus-fix
+- **Next:** none
+- **Refs:** data/20261024-011123-gpu-tests-of-bench-fixes-optimize-kraus-fix, code/bench/run_tests.py
+
 ## 2026-10-24 01:10 UTC  A6 cudaq qaoa n=24
 - **Goal:** cudaq on qaoa, damping M=0.01/0.1/1, 100 shots, n=24
 - **Task:** A6

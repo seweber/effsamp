@@ -30,8 +30,16 @@ from qiskit import QuantumCircuit, transpile
 import noise
 
 
-def fused_operations(circuit: QuantumCircuit, kind: str, p: float) -> list[tuple[list[int], list[np.ndarray]]]:
-    """Aer's fused operations of ``circuit`` with noise ``kind`` after every gate: (qubits, Kraus matrices)."""
+def fused_operations(
+    circuit: QuantumCircuit, kind: str, p: float, allow_kraus: bool = True, _nearby: bool = False
+) -> list[tuple[list[int], list[np.ndarray]]]:
+    """Aer's fused operations of ``circuit`` with noise ``kind`` after every gate: (qubits, Kraus matrices).
+
+    Where Aer's fusion of Kraus operators fails (its "heevx" bug), Aer runs without it, as the A6 runs
+    then do: every gate is then its own operation, a single matrix (a gate fusion of unitaries only
+    happens between noise channels, which are not fused; it is ignored here), and every channel a
+    Kraus operation of its own.
+    """
     from qiskit_aer import AerSimulator
     from qiskit_aer.noise import NoiseModel, kraus_error
 
@@ -39,11 +47,42 @@ def fused_operations(circuit: QuantumCircuit, kind: str, p: float) -> list[tuple
     error = kraus_error([np.asarray(k, dtype=complex) for k in noise.kraus(kind, p)])
     model.add_all_qubit_quantum_error(error, ["r", "rz"])
     model.add_all_qubit_quantum_error(error.tensor(error), ["cp"])
-    sim = AerSimulator(method="statevector", precision="single", noise_model=model, fusion_verbose=True)
+    sim = AerSimulator(method="statevector", precision="single", noise_model=model, fusion_verbose=True,
+                       max_parallel_threads=1)
     measured = circuit.copy()
     measured.measure_all()
     compiled = transpile(measured, sim, optimization_level=0)
-    ops = sim.run(compiled, shots=1, seed_simulator=0).result().results[0].metadata["fusion"]["output_ops"]
+    fusion = {}
+    # The heevx failure of Aer's Kraus fusion is not deterministic; a fused run is retried.
+    for attempt in range(20 if allow_kraus else 0):
+        result = sim.run(compiled, shots=1, seed_simulator=attempt).result()
+        fusion = result.results[0].metadata.get("fusion", {}) if result.success else {}
+        if "output_ops" in fusion:
+            break
+    if allow_kraus and "output_ops" not in fusion:
+        # Which gates and channels Aer fuses does not depend on p, only the fused matrices do: the
+        # fusion of a strength within 1% is taken instead, which changes the probabilities by as much.
+        if not _nearby:
+            for factor in (1.001, 0.999, 1.01, 0.99):
+                try:
+                    return fused_operations(circuit, kind, p * factor, True, _nearby=True)
+                except RuntimeError:
+                    continue
+        raise RuntimeError("Aer's Kraus fusion failed 20 times")
+    if not allow_kraus:
+        from qiskit.quantum_info import Operator
+
+        local = [np.asarray(k, dtype=complex) for k in noise.kraus(kind, p)]
+        out = []
+        for instruction in circuit.data:
+            qubits = [circuit.find_bit(q).index for q in instruction.qubits]
+            out.append((qubits, [Operator(instruction.operation).data]))
+            if len(qubits) == 1:
+                out.append((qubits, local))
+            else:  # the tensor of the channel on both qubits; Aer's qubits[0] is the low bit
+                out.append((qubits, [np.kron(b, a) for a in local for b in local]))
+        return out
+    ops = fusion["output_ops"]
     out = []
     for op in ops:
         if op["name"] == "measure":
@@ -87,10 +126,15 @@ def _probabilities(ops, n: int) -> list[np.ndarray]:
     return probs
 
 
-def count(circuit: QuantumCircuit, kind: str, p: float, shots: int, mode: str, seed: int = 0) -> dict[str, float]:
-    """Aer's norm reads, applies and copies for ``shots`` shots in ``mode`` ("plain" or "branch")."""
+def count(
+    circuit: QuantumCircuit, kind: str, p: float, shots: int, mode: str, seed: int = 0, allow_kraus: bool = True
+) -> dict[str, float]:
+    """Aer's norm reads, applies and copies for ``shots`` shots in ``mode`` ("plain" or "branch").
+
+    ``allow_kraus``: whether the run fused Kraus operators (it does not after Aer's heevx failure).
+    """
     rng = np.random.default_rng(seed)
-    ops = fused_operations(circuit, kind, p)
+    ops = fused_operations(circuit, kind, p, allow_kraus)
     probs = _probabilities(ops, circuit.num_qubits)
     reads = applies = copies = 0.0
     peak = 1
@@ -105,18 +149,15 @@ def count(circuit: QuantumCircuit, kind: str, p: float, shots: int, mode: str, s
     else:
         branches = np.array([shots])
         for pk in probs:
-            cum = np.cumsum(pk)[:-1]
-            new = []
-            for s in branches.tolist():
-                if len(pk) > 1:
-                    u = rng.random() ** (1.0 / s)  # the largest of s uniforms
-                    reads += min(int(np.searchsorted(cum, u, side="right")) + 1, len(pk) - 1)
-                children = rng.multinomial(s, pk)
-                children = children[children > 0]
-                applies += children.size
-                copies += children.size - 1
-                new.extend(children.tolist())
-            branches = np.array(new)
+            parents = branches.size
+            if len(pk) > 1:
+                cum = np.cumsum(pk)[:-1]
+                u = rng.random(parents) ** (1.0 / branches)  # the largest of each branch's uniforms
+                reads += float(np.minimum(np.searchsorted(cum, u, side="right") + 1, len(pk) - 1).sum())
+                children = rng.multinomial(branches, pk / pk.sum())
+                branches = children[children > 0]
+            applies += branches.size
+            copies += branches.size - parents
             peak = max(peak, branches.size)
     return {"ops": len(ops), "kraus_matrices": sum(len(m) for _, m in ops), "reads": reads, "applies": applies,
             "copies": copies, "passes": 0.5 * reads + applies + copies, "peak_branches": peak}
