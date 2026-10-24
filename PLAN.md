@@ -114,6 +114,22 @@ Tune parameters of noisecirc, for example i) the number of fused gates per block
 
 Also optimize parameters of the shot branching simulator of Qiskit Aer, for example the number of fused gates. I think this is necessary to make the comparison fair, if we optimize the parameters of noisecirc.
 
+### A12
+
+I wonder how to optimize the Kraus representation for noisecirc. Probably, it benefits if one uses the freedom that one has to make the first operator the most "dominant" one (I am not sure how to quantify this dominance yet), than from the remaining operators the second operator the most dominant one, etc. On the other hand, also oversampling should be kept small. Think about it. Play around with different ideas. My feeling is that one can find a way to opimize the Kraus operators that is provably close to optimal or even perfectly optimal for noisecirc's efficiency.
+
+### A13
+
+I wonder how gate fusion and the application of the block could be optimized further. I am not interested in getting tiny improvements, but I am thinking about changes that could make noisecirc substantially more efficient. One direction that I have in mind is to look at the complex32 data type and increase the size of the block as large as possible. I think in this scenario one easily runs into situations where the applictaion of the block is compute bound. I wonder how the optimal kernel should be designed in this regime. In particular i wonder whether there are changes that do not make the kernel more complicated but still improve the efficiency clearly. Maybe there are also better strategies than implemented currently in the kernel.
+
+### A14
+
+Building upon A14, I want to investigate the compute efficiency of the kernels fundamentally. I think there should be optimal ways to apply one block with as few flops as possible. For this, you probably must make perfect use of the sparse structure / diagonality / controlled qubits / etc. of the block. An additional direction to think about is to optimize the contraction order within a block instead of sequentially applying the gates to the state vector.
+
+### A15
+
+I wonder whether there is something that we were overlooking up to now and that would fundamentally improve noisecirc's efficiency. Note that I want to stay in the statevector world, so tensor network approaches, Clifford approaches, etc. are out of scope. To get ideas, brainstorm with subagents. Try out the most promising suggestions.
+
 ### References
 
 <!-- Pointers to seed literature, prior internal work, related codebases.
