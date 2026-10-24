@@ -17,6 +17,7 @@ Start with the [Overview](overview.md). Abbreviations and notation are in the [G
 - [Issues found in noisecirc](studies/noisecirc-issues.md) — Bugs and issues found in noisecirc during benchmarking, with their fix branches · *verified*
 - [Block passes against noisecirc's parameters](studies/pass-count.md) — How circuit, noise, shots and noisecirc's parameters set the number of blocks and block passes (A3) · *verified*
 - [Prior art of noisecirc's algorithm](studies/prior-art.md) — Systematic literature check: which of noisecirc's sampling and fusion ideas are anticipated · *partially verified*
+- [Checkpoint-dependent proposal bounds](studies/tighter-bounds.md) — Valid tighter proposal bounds from the checkpoint state, and how many rejected proposals they can avoid (A10) · *partially verified*
 - [Validation of the predicted work](studies/validation.md) — GPU runs of the benchmark circuits against the predicted block passes and times (A5) · *verified*
 
 ## Literature

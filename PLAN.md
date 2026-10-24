@@ -110,6 +110,10 @@ Tune parameters of noisecirc, for example i) the number of fused gates per block
 - **Discussion:**
   - 2026-10-24 AI: Proposed from the A3 and A6 results; it concerns noisecirc's core algorithm and needs the human's view on whether it is in scope.
 
+### A11
+
+Also optimize parameters of the shot branching simulator of Qiskit Aer, for example the number of fused gates. I think this is necessary to make the comparison fair, if we optimize the parameters of noisecirc.
+
 ### References
 
 <!-- Pointers to seed literature, prior internal work, related codebases.

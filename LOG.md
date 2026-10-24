@@ -11,6 +11,182 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-24 09:24 UTC  A10 tighter proposal bounds: theory and estimate
+- **Goal:** Determine how much of the 2MN error-proposal term valid checkpoint-dependent bounds can avoid
+- **Task:** A10
+- **Method:** Validity proof (per-operation acceptance factors <= 1; rules D diagonal prefix and S single-qubit prefix); a10_estimate.py dry-run scaling of error passes per block, n=28 damping M=0.1/1, variants free/all/all+S/oracle
+- **Outcome:** Free information: <=6% of passes (QFT), <=4% others; all populations: QFT 13-15%; rule S adds nothing (light-cone blocks); oracle limit 4-36% (GHZ most). Not worth implementing except for diagonal-heavy circuits
+- **Next:** none (A10 done unless the human wants an implementation for QFT-like circuits)
+- **Refs:** wiki/studies/tighter-bounds.md, code/bench/a10_estimate.py
+
+## 2026-10-24 09:24 UTC  A7 block times stage_qubits=4
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with stage_qubits=4
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label stage_qubits=4 --set stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261024-092333-a7-block-times-stage-qubits-4
+- **Next:** none
+- **Refs:** data/20261024-092333-a7-block-times-stage-qubits-4, code/bench/a7_blocks.py
+
+## 2026-10-24 09:23 UTC  A7 block times stage_qubits=2
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with stage_qubits=2
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label stage_qubits=2 --set stage_qubits=2
+- **Outcome:** exit 0; outputs in data/20261024-092310-a7-block-times-stage-qubits-2
+- **Next:** none
+- **Refs:** data/20261024-092310-a7-block-times-stage-qubits-2, code/bench/a7_blocks.py
+
+## 2026-10-24 09:23 UTC  A10 dry-run estimate with oracle bound
+- **Goal:** Same as the A10 estimate, plus the oracle limit (bounds = actual populations)
+- **Task:** A10
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a10_estimate.py
+- **Outcome:** exit 0; outputs in data/20261024-092215-a10-dry-run-estimate-with-oracle-bound
+- **Next:** none
+- **Refs:** data/20261024-092215-a10-dry-run-estimate-with-oracle-bound, code/bench/a10_estimate.py
+
+## 2026-10-24 09:23 UTC  A7 block times pinned_bytes=128
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with pinned_bytes=128
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label pinned_bytes=128 --set pinned_bytes=128
+- **Outcome:** exit 0; outputs in data/20261024-092244-a7-block-times-pinned-bytes-128
+- **Next:** none
+- **Refs:** data/20261024-092244-a7-block-times-pinned-bytes-128, code/bench/a7_blocks.py
+
+## 2026-10-24 09:22 UTC  A7 block times pinned_bytes=32
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with pinned_bytes=32
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label pinned_bytes=32 --set pinned_bytes=32
+- **Outcome:** exit 0; outputs in data/20261024-092217-a7-block-times-pinned-bytes-32
+- **Next:** none
+- **Refs:** data/20261024-092217-a7-block-times-pinned-bytes-32, code/bench/a7_blocks.py
+
+## 2026-10-24 09:22 UTC  A7 block times pinned_bytes=16
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with pinned_bytes=16
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label pinned_bytes=16 --set pinned_bytes=16
+- **Outcome:** exit 0; outputs in data/20261024-092149-a7-block-times-pinned-bytes-16
+- **Next:** none
+- **Refs:** data/20261024-092149-a7-block-times-pinned-bytes-16, code/bench/a7_blocks.py
+
+## 2026-10-24 09:21 UTC  A7 block times max_fused_qudits=10
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with max_fused_qudits=10
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label max_fused_qudits=10 --set max_fused_qudits=10
+- **Outcome:** exit 0; outputs in data/20261024-092121-a7-block-times-max-fused-qudits-10
+- **Next:** none
+- **Refs:** data/20261024-092121-a7-block-times-max-fused-qudits-10, code/bench/a7_blocks.py
+
+## 2026-10-24 09:21 UTC  A10 dry-run estimate of tighter proposal bounds
+- **Goal:** Estimate how many error proposals checkpoint-dependent bounds (rules D, S) avoid, n=28, damping M=0.1/1
+- **Task:** A10
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a10_estimate.py
+- **Outcome:** exit 0; outputs in data/20261024-092028-a10-dry-run-estimate-of-tighter-proposal-bounds
+- **Next:** none
+- **Refs:** data/20261024-092028-a10-dry-run-estimate-of-tighter-proposal-bounds, code/bench/a10_estimate.py
+
+## 2026-10-24 09:21 UTC  A7 block times max_fused_qudits=8
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with max_fused_qudits=8
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label max_fused_qudits=8 --set max_fused_qudits=8
+- **Outcome:** exit 0; outputs in data/20261024-092055-a7-block-times-max-fused-qudits-8
+- **Next:** none
+- **Refs:** data/20261024-092055-a7-block-times-max-fused-qudits-8, code/bench/a7_blocks.py
+
+## 2026-10-24 09:20 UTC  A7 block times max_fused_qudits=7
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with max_fused_qudits=7
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label max_fused_qudits=7 --set max_fused_qudits=7
+- **Outcome:** exit 0; outputs in data/20261024-092028-a7-block-times-max-fused-qudits-7
+- **Next:** none
+- **Refs:** data/20261024-092028-a7-block-times-max-fused-qudits-7, code/bench/a7_blocks.py
+
+## 2026-10-24 09:20 UTC  A7 block times max_fused_qudits=6
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with max_fused_qudits=6
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label max_fused_qudits=6 --set max_fused_qudits=6
+- **Outcome:** exit 0; outputs in data/20261024-092000-a7-block-times-max-fused-qudits-6
+- **Next:** none
+- **Refs:** data/20261024-092000-a7-block-times-max-fused-qudits-6, code/bench/a7_blocks.py
+
+## 2026-10-24 09:20 UTC  A7 block times max_fused_qudits=5
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with max_fused_qudits=5
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label max_fused_qudits=5 --set max_fused_qudits=5
+- **Outcome:** exit 0; outputs in data/20261024-091930-a7-block-times-max-fused-qudits-5
+- **Next:** none
+- **Refs:** data/20261024-091930-a7-block-times-max-fused-qudits-5, code/bench/a7_blocks.py
+
+## 2026-10-24 09:19 UTC  A7 block times max_operations=256
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with max_operations=256
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label max_operations=256 --set max_operations=256
+- **Outcome:** exit 0; outputs in data/20261024-091917-a7-block-times-max-operations-256
+- **Next:** none
+- **Refs:** data/20261024-091917-a7-block-times-max-operations-256, code/bench/a7_blocks.py
+
+## 2026-10-24 09:19 UTC  A7 block times max_operations=192
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with max_operations=192
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label max_operations=192 --set max_operations=192
+- **Outcome:** exit 0; outputs in data/20261024-091904-a7-block-times-max-operations-192
+- **Next:** none
+- **Refs:** data/20261024-091904-a7-block-times-max-operations-192, code/bench/a7_blocks.py
+
+## 2026-10-24 09:19 UTC  A7 block times max_operations=96
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with max_operations=96
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label max_operations=96 --set max_operations=96
+- **Outcome:** exit 0; outputs in data/20261024-091846-a7-block-times-max-operations-96
+- **Next:** none
+- **Refs:** data/20261024-091846-a7-block-times-max-operations-96, code/bench/a7_blocks.py
+
+## 2026-10-24 09:18 UTC  A7 block times max_operations=64
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with max_operations=64
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label max_operations=64 --set max_operations=64
+- **Outcome:** exit 0; outputs in data/20261024-091825-a7-block-times-max-operations-64
+- **Next:** none
+- **Refs:** data/20261024-091825-a7-block-times-max-operations-64, code/bench/a7_blocks.py
+
+## 2026-10-24 09:18 UTC  A7 block times max_operations=48
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with max_operations=48
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label max_operations=48 --set max_operations=48
+- **Outcome:** exit 0; outputs in data/20261024-091801-a7-block-times-max-operations-48
+- **Next:** none
+- **Refs:** data/20261024-091801-a7-block-times-max-operations-48, code/bench/a7_blocks.py
+
+## 2026-10-24 09:18 UTC  A7 block times max_operations=32
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with max_operations=32
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label max_operations=32 --set max_operations=32
+- **Outcome:** exit 0; outputs in data/20261024-091735-a7-block-times-max-operations-32
+- **Next:** none
+- **Refs:** data/20261024-091735-a7-block-times-max-operations-32, code/bench/a7_blocks.py
+
+## 2026-10-24 09:17 UTC  A7 block times max_operations=24
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with max_operations=24
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label max_operations=24 --set max_operations=24
+- **Outcome:** exit 0; outputs in data/20261024-091708-a7-block-times-max-operations-24
+- **Next:** none
+- **Refs:** data/20261024-091708-a7-block-times-max-operations-24, code/bench/a7_blocks.py
+
+## 2026-10-24 09:17 UTC  A7 block times max_operations=16
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with max_operations=16
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label max_operations=16 --set max_operations=16
+- **Outcome:** exit 0; outputs in data/20261024-091638-a7-block-times-max-operations-16
+- **Next:** none
+- **Refs:** data/20261024-091638-a7-block-times-max-operations-16, code/bench/a7_blocks.py
+
+## 2026-10-24 09:16 UTC  A7 block times default
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with default
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label default
+- **Outcome:** exit 0; outputs in data/20261024-091611-a7-block-times-default
+- **Next:** none
+- **Refs:** data/20261024-091611-a7-block-times-default, code/bench/a7_blocks.py
+
 ## 2026-10-24 03:13 UTC  A6 robustness: shots and thermal relaxation
 - **Goal:** Check the A6 comparison at 100/10000 shots and with thermal noise
 - **Task:** A6

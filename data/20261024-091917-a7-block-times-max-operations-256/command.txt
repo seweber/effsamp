@@ -1,0 +1,1 @@
+code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label max_operations=256 --set max_operations=256

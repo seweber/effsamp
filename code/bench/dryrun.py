@@ -40,6 +40,9 @@ class _Counters:
     writes: int = 0
     # Passes of rows that leave some operation's dominant choice in the block: general-kernel passes.
     general: int = 0
+    # Per block index: rows propagated with the dominant and with the general kernel.
+    dom_per_block: dict = field(default_factory=dict)
+    gen_per_block: dict = field(default_factory=dict)
 
 
 @dataclass
@@ -49,8 +52,10 @@ class FakeEngine:
     counters: _Counters = field(default_factory=_Counters)
 
 
-# The surrogate factor tables of the blocks of the circuit being predicted, by block identity.
+# The surrogate factor tables of the blocks of the circuit being predicted, by block identity, and
+# each block's index in the circuit.
 _FACTORS: dict[int, np.ndarray] = {}
+_INDEX: dict[int, int] = {}
 
 
 def _factors(block) -> np.ndarray:
@@ -79,6 +84,8 @@ def prepare(compiled, surrogate: str = "track") -> None:
     a qubit still in |0>); a qubit that a gate entangles is maximally mixed from then on.
     """
     _FACTORS.clear()
+    _INDEX.clear()
+    _INDEX.update((id(block), i) for i, block in enumerate(compiled.blocks))
     pure: dict[int, np.ndarray | None] = {q: np.array([1.0, 0.0], dtype=complex) for q in range(compiled.n)}
     for block in compiled.blocks:
         ops = block.operations
@@ -157,8 +164,12 @@ class SurrogateStates:
             table = _factors(block)
             k = len(block.operations)
             block_codes = codes[row : row + k]
-            SurrogateStates.engine.counters.general += int(
-                np.count_nonzero(~np.all(block_codes == block.dominant_codes[:, None], axis=0)))
+            n_general = int(np.count_nonzero(~np.all(block_codes == block.dominant_codes[:, None], axis=0)))
+            counters = SurrogateStates.engine.counters
+            counters.general += n_general
+            index = _INDEX[id(block)]
+            counters.gen_per_block[index] = counters.gen_per_block.get(index, 0) + n_general
+            counters.dom_per_block[index] = counters.dom_per_block.get(index, 0) + self.rows - n_general
             with np.errstate(divide="ignore"):
                 log += np.log(table[np.arange(k)[:, None], block_codes]).sum(axis=0)
             row += k
@@ -235,9 +246,13 @@ def predict(circuit, maps, shots: int, seed: int = 0, compiled=None, surrogate: 
         )
     finally:
         sample_module.TrajectoryStates = original
-    general = SurrogateStates.engine.counters.general
-    return {**diagnostics, "blocks": len(compiled.blocks), "general_passes": general,
-            "dominant_passes": diagnostics["block_passes"] - general}
+    counters = SurrogateStates.engine.counters
+    general = counters.general
+    blocks = len(compiled.blocks)
+    return {**diagnostics, "blocks": blocks, "general_passes": general,
+            "dominant_passes": diagnostics["block_passes"] - general,
+            "dom_per_block": [counters.dom_per_block.get(i, 0) for i in range(blocks)],
+            "gen_per_block": [counters.gen_per_block.get(i, 0) for i in range(blocks)]}
 
 
 if __name__ == "__main__":
