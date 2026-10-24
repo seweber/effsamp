@@ -11,6 +11,38 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-24 03:09 UTC  Records: A3 figures, bench worktree, PROBLEMS and TASKS
+- **Goal:** Reference remaining artefacts and record conceptual problems and proposals
+- **Task:** A3
+- **Method:** data/a3-figures (segments, collapse figures of A3); code/noisecirc-bench = git worktree of noisecirc branch bench/fixes that gpurun syncs (.gitignore entry added); PROBLEMS.md P001/P002 (closed); TASKS.md T001-T003 (open)
+- **Outcome:** Recorded
+- **Next:** Batch 5 (shots, thermal) for A6 robustness
+- **Refs:** data/a3-figures, code/noisecirc-bench, memory/topics/gpu-environment.md
+
+## 2026-10-24 03:08 UTC  A6 shots noisecirc qft n=24 N=10000
+- **Goal:** noisecirc with 10000 shots, damping M=0.01/0.1
+- **Task:** A6
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333 --shots 10000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-030840-a6-shots-noisecirc-qft-n-24-n-10000
+- **Next:** none
+- **Refs:** data/20261024-030840-a6-shots-noisecirc-qft-n-24-n-10000, code/bench/a2_runs.py
+
+## 2026-10-24 03:08 UTC  A6 shots aer_branch qft n=24 N=100
+- **Goal:** Aer shot branching with 100 shots, damping M=0.01/0.1
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333 --shots 100 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-030832-a6-shots-aer-branch-qft-n-24-n-100
+- **Next:** none
+- **Refs:** data/20261024-030832-a6-shots-aer-branch-qft-n-24-n-100, code/bench/a6_runs.py
+
+## 2026-10-24 03:08 UTC  A6 shots noisecirc qft n=24 N=100
+- **Goal:** noisecirc with 100 shots, damping M=0.01/0.1
+- **Task:** A6
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333 --shots 100 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-030825-a6-shots-noisecirc-qft-n-24-n-100
+- **Next:** none
+- **Refs:** data/20261024-030825-a6-shots-noisecirc-qft-n-24-n-100, code/bench/a2_runs.py
+
 ## 2026-10-24 03:07 UTC  A6 analysis and competitors page
 - **Goal:** Quantify noisecirc's speedup over Aer and CUDA-Q and split it into algorithm and implementation
 - **Task:** A6

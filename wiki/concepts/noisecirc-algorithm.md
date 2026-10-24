@@ -84,7 +84,7 @@ The second group changes how long a pass takes:
 - the dominant kernel that skips the choice logic,
 - batching many trajectories into one launch, which shares the host's work.
 
-How these ingredients compare with Qiskit Aer's shot branching, the closest competitor, is the subject of task A6.
+How much each ingredient gains against Qiskit Aer and CUDA-Q is measured in [noisecirc against Qiskit Aer and CUDA-Q](../studies/competitors.md): the first group accounts for nearly all of noisecirc's advantage, while at equal algorithm the implementations are within a factor of 2.
 
 ## Prior art
 
