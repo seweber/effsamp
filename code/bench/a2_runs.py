@@ -51,12 +51,25 @@ def main() -> None:
     parser.add_argument("--reps", type=int, default=3)
     parser.add_argument("--budget", type=float, default=500.0, help="seconds after which no new point starts")
     parser.add_argument("--option", action="append", default=[], help="Simulator option key=value")
+    parser.add_argument("--tunable", action="append", default=[], help="noisecirc.tunables NAME=VALUE (int, float, True/False)")
+    parser.add_argument("--config", action="append", default=[], help="svpass Config field=value, see configpatch.py")
     args = parser.parse_args()
 
     options = {}
     for item in args.option:
         key, value = item.split("=")
         options[key] = float(value) if "." in value or value in ("inf",) else int(value)
+    from noisecirc import tunables
+
+    import configpatch
+
+    extra_options, config = configpatch.parse(args.config)
+    options.update(extra_options)  # stage_qubits is a Simulator option, see configpatch.parse
+    configpatch.apply(config)
+
+    for item in args.tunable:
+        name, value = item.split("=")
+        setattr(tunables, name, {"True": True, "False": False}.get(value, value if not value[0].isdigit() else float(value) if "." in value else int(value)))
     begin = time.perf_counter()
     for n in [int(q) for q in args.qubits.split(",")]:
         t_bw = bandwidth_time(n)
@@ -84,7 +97,8 @@ def main() -> None:
                             "seed": seed, "time": elapsed, "t_first": t_first, "t_bw": t_bw,
                             "gates": len(qc.data), "channels": circuits.channels(qc),
                             "blocks": len(compiled.blocks), "blocks_per_segment": bps, "max_batch": batch,
-                            "options": options, **{k: float(v) for k, v in d.items()},
+                            "options": {**options, **config}, "tunables": args.tunable,
+                            "tuned": [list(v) for v in getattr(sim, "_tuned", {}).values()], **{k: float(v) for k, v in d.items()},
                         }), flush=True)
                     del sim
                     release_device_memory()

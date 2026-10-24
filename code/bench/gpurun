@@ -1,15 +1,22 @@
 #!/bin/bash
 # Sync code/noisecirc-bench (worktree of branch bench/fixes) and code/bench to bux, then run a Python script of code/bench on GPU 0
 # inside the bench podman image, with a hard timeout (PLAN.md: at most 10 minutes).
-# Usage: gpurun [-t SECONDS] script.py [args...]   (stdout: the script's output)
+# Usage: gpurun [-t SECONDS] [-p PYTHON] script.py [args...]   (stdout: the script's output)
+# -p runs another interpreter in the image instead of the project's environment, e.g.
+# /local/venv-cuq/bin/python (cuQuantum's cuStateVec Ex, task A9). -s DIR syncs code/DIR instead of
+# code/noisecirc-bench, e.g. -s noisecirc to test a development branch; options in this order.
 set -euo pipefail
 timeout=590
+python="uv run --frozen --group research python"
+source=noisecirc-bench
 if [[ ${1:-} == -t ]]; then timeout=$2; shift 2; fi
+if [[ ${1:-} == -p ]]; then python=$2; shift 2; fi
+if [[ ${1:-} == -s ]]; then source=$2; shift 2; fi
 here=$(cd "$(dirname "$0")" && pwd)
 rsync -rlt --delete --exclude .venv --exclude .benchmarks --exclude __pycache__ \
-  "$here/../noisecirc-bench/" ~/remote/bench/noisecirc/
+  "$here/../$source/" ~/remote/bench/noisecirc/
 rsync -rlt --delete --exclude __pycache__ --exclude gpurun "$here/" ~/remote/bench/bench/
 script=$1; shift
 args=""; (($#)) && args=$(printf '%q ' "$@")
-gpu_exec timeout "$timeout" bash -c "~/bench/run uv run --frozen --group research python /work/bench/$script $args" \
+gpu_exec timeout "$timeout" bash -c "~/bench/run $python /work/bench/$script $args" \
   2> >(grep -v -e 'Network file system' -e '^Resolved' >&2)

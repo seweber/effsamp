@@ -11,6 +11,614 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-24 10:41 UTC  A8 figure
+- **Goal:** Record the A8 analysis figure
+- **Task:** A8
+- **Method:** code/bench/a8_plot.py: per-block kernel ratios (dominant, general, masked) and masked/general run-time ratios
+- **Outcome:** data/a8-analysis/masked.svg, used by wiki/studies/error-kernels.md
+- **Next:** none
+- **Refs:** data/a8-analysis
+
+## 2026-10-24 10:40 UTC  A8 autotuning: implementation and runs
+- **Goal:** Choose block size and stage width per circuit now that error passes cost about a dominant pass
+- **Task:** A8
+- **Method:** noisecirc feature/autotune 60913e8 (Simulator(stage_qubits), Simulator(autotune) over max_operations 64/96/128 x stage_qubits 3/4, one timed trajectory each), merged bench/fixes dd4b8c8; GPU tests 326+182; a2_runs --option autotune=1 n=28, 5 circuits x M=0.1/1
+- **Outcome:** Chose 64/3 (brickwork), 64/4 (grid, qaoa), 64-96/4 (qft); vs masked default: brickwork -14%, grid -13/-2%, qft -3/-7%, qaoa -2%, ghz 0; geomean -6% (uniform best -4%); tuning cost 3-7 s per circuit. Masked kernels + autotune: 6-25% faster than defaults
+- **Next:** Overview, glossary, final audit
+- **Refs:** wiki/studies/error-kernels.md
+
+## 2026-10-24 10:39 UTC  A8 autotune grid n=28
+- **Goal:** End-to-end time with Simulator(autotune=True) (bench/fixes dd4b8c8), grid, damping M=0.1/1, 1000 shots, against the masked default
+- **Task:** A8
+- **Method:** code/bench/gpurun a2_runs.py --circuits grid --qubits 28 --noise damping --ps 0.000141443,0.00141443 --shots 1000 --reps 2 --budget 430 --option autotune=1
+- **Outcome:** exit 0; outputs in data/20261024-103624-a8-autotune-grid-n-28
+- **Next:** none
+- **Refs:** data/20261024-103624-a8-autotune-grid-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 10:36 UTC  A8 autotune qaoa n=28
+- **Goal:** End-to-end time with Simulator(autotune=True) (bench/fixes dd4b8c8), qaoa, damping M=0.1/1, 1000 shots, against the masked default
+- **Task:** A8
+- **Method:** code/bench/gpurun a2_runs.py --circuits qaoa --qubits 28 --noise damping --ps 0.00047619,0.0047619 --shots 1000 --reps 2 --budget 430 --option autotune=1
+- **Outcome:** exit 0; outputs in data/20261024-103508-a8-autotune-qaoa-n-28
+- **Next:** none
+- **Refs:** data/20261024-103508-a8-autotune-qaoa-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 10:35 UTC  A8 autotune qft n=28
+- **Goal:** End-to-end time with Simulator(autotune=True) (bench/fixes dd4b8c8), qft, damping M=0.1/1, 1000 shots, against the masked default
+- **Task:** A8
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise damping --ps 0.000246305,0.00246305 --shots 1000 --reps 2 --budget 430 --option autotune=1
+- **Outcome:** exit 0; outputs in data/20261024-103334-a8-autotune-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-103334-a8-autotune-qft-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 10:33 UTC  A8 autotune brickwork n=28
+- **Goal:** End-to-end time with Simulator(autotune=True) (bench/fixes dd4b8c8), brickwork, damping M=0.1/1, 1000 shots, against the masked default
+- **Task:** A8
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise damping --ps 0.000242131,0.00242131 --shots 1000 --reps 2 --budget 430 --option autotune=1
+- **Outcome:** exit 0; outputs in data/20261024-103113-a8-autotune-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-103113-a8-autotune-brickwork-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 10:31 UTC  A7 parameter tuning: predictions and validation
+- **Goal:** Find the best settings of noisecirc's fusion and kernel parameters on the H100 and the achievable gain
+- **Task:** A7
+- **Method:** 31 one-parameter settings (general kernels) and 13 settings/combinations (masked kernels) predicted from per-block times x dry-run per-block passes (n=26); best run end to end at n=28 (a2_runs with --option/--config)
+- **Outcome:** Defaults near-optimal (best single change -2.5% on average); max_operations=64 + group_amplitudes=4096 never slower, -4% geomean, brickwork -13/-14%; brickwork max_operations=64 -15/-16%; QFT stage_qubits=4 -3/-7%; predictions off by up to 15%
+- **Next:** A8 autotune runs
+- **Refs:** wiki/studies/parameter-tuning.md, data/a7-analysis
+
+## 2026-10-24 10:31 UTC  A8 autotune ghz n=28
+- **Goal:** End-to-end time with Simulator(autotune=True) (bench/fixes dd4b8c8), ghz, damping M=0.1/1, 1000 shots, against the masked default
+- **Task:** A8
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz --qubits 28 --noise damping --ps 0.00183486,0.0183486 --shots 1000 --reps 2 --budget 430 --option autotune=1
+- **Outcome:** exit 0; outputs in data/20261024-103044-a8-autotune-ghz-n-28
+- **Next:** none
+- **Refs:** data/20261024-103044-a8-autotune-ghz-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 10:28 UTC  A7 validation grid n=28 max_operations=64 group_amplitudes=4096
+- **Goal:** End-to-end time with max_operations=64 group_amplitudes=4096 (bench/fixes, masked kernels), grid, damping M=0.1/1, 1000 shots, against the default runs of A8
+- **Task:** A7
+- **Method:** code/bench/gpurun a2_runs.py --circuits grid --qubits 28 --noise damping --ps 0.000141443,0.00141443 --shots 1000 --reps 2 --budget 430 --option max_operations=64 --config group_amplitudes=4096
+- **Outcome:** exit 0; outputs in data/20261024-102605-a7-validation-grid-n-28-max-operations-64-group-amplitudes-4096
+- **Next:** none
+- **Refs:** data/20261024-102605-a7-validation-grid-n-28-max-operations-64-group-amplitudes-4096, code/bench/a2_runs.py
+
+## 2026-10-24 10:26 UTC  A7 validation qaoa n=28 max_operations=64 group_amplitudes=4096
+- **Goal:** End-to-end time with max_operations=64 group_amplitudes=4096 (bench/fixes, masked kernels), qaoa, damping M=0.1/1, 1000 shots, against the default runs of A8
+- **Task:** A7
+- **Method:** code/bench/gpurun a2_runs.py --circuits qaoa --qubits 28 --noise damping --ps 0.00047619,0.0047619 --shots 1000 --reps 2 --budget 430 --option max_operations=64 --config group_amplitudes=4096
+- **Outcome:** exit 0; outputs in data/20261024-102457-a7-validation-qaoa-n-28-max-operations-64-group-amplitudes-4096
+- **Next:** none
+- **Refs:** data/20261024-102457-a7-validation-qaoa-n-28-max-operations-64-group-amplitudes-4096, code/bench/a2_runs.py
+
+## 2026-10-24 10:24 UTC  A7 validation qft n=28 max_operations=64 group_amplitudes=4096
+- **Goal:** End-to-end time with max_operations=64 group_amplitudes=4096 (bench/fixes, masked kernels), qft, damping M=0.1/1, 1000 shots, against the default runs of A8
+- **Task:** A7
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise damping --ps 0.000246305,0.00246305 --shots 1000 --reps 2 --budget 430 --option max_operations=64 --config group_amplitudes=4096
+- **Outcome:** exit 0; outputs in data/20261024-102318-a7-validation-qft-n-28-max-operations-64-group-amplitudes-4096
+- **Next:** none
+- **Refs:** data/20261024-102318-a7-validation-qft-n-28-max-operations-64-group-amplitudes-4096, code/bench/a2_runs.py
+
+## 2026-10-24 10:23 UTC  A7 validation brickwork n=28 max_operations=64 group_amplitudes=4096
+- **Goal:** End-to-end time with max_operations=64 group_amplitudes=4096 (bench/fixes, masked kernels), brickwork, damping M=0.1/1, 1000 shots, against the default runs of A8
+- **Task:** A7
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise damping --ps 0.000242131,0.00242131 --shots 1000 --reps 2 --budget 430 --option max_operations=64 --config group_amplitudes=4096
+- **Outcome:** exit 0; outputs in data/20261024-102108-a7-validation-brickwork-n-28-max-operations-64-group-amplitudes-4096
+- **Next:** none
+- **Refs:** data/20261024-102108-a7-validation-brickwork-n-28-max-operations-64-group-amplitudes-4096, code/bench/a2_runs.py
+
+## 2026-10-24 10:21 UTC  A7 validation ghz n=28 max_operations=64 group_amplitudes=4096
+- **Goal:** End-to-end time with max_operations=64 group_amplitudes=4096 (bench/fixes, masked kernels), ghz, damping M=0.1/1, 1000 shots, against the default runs of A8
+- **Task:** A7
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz --qubits 28 --noise damping --ps 0.00183486,0.0183486 --shots 1000 --reps 2 --budget 430 --option max_operations=64 --config group_amplitudes=4096
+- **Outcome:** exit 0; outputs in data/20261024-102038-a7-validation-ghz-n-28-max-operations-64-group-amplitudes-4096
+- **Next:** none
+- **Refs:** data/20261024-102038-a7-validation-ghz-n-28-max-operations-64-group-amplitudes-4096, code/bench/a2_runs.py
+
+## 2026-10-24 10:20 UTC  A7 validation qft n=28 stage_qubits=4
+- **Goal:** End-to-end time with stage_qubits=4 (bench/fixes, masked kernels), qft, damping M=0.1/1, 1000 shots, against the default runs of A8
+- **Task:** A7
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise damping --ps 0.000246305,0.00246305 --shots 1000 --reps 2 --budget 430 --config stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261024-101902-a7-validation-qft-n-28-stage-qubits-4
+- **Next:** none
+- **Refs:** data/20261024-101902-a7-validation-qft-n-28-stage-qubits-4, code/bench/a2_runs.py
+
+## 2026-10-24 10:19 UTC  A7 validation grid n=28 max_operations=96
+- **Goal:** End-to-end time with max_operations=96 (bench/fixes, masked kernels), grid, damping M=0.1/1, 1000 shots, against the default runs of A8
+- **Task:** A7
+- **Method:** code/bench/gpurun a2_runs.py --circuits grid --qubits 28 --noise damping --ps 0.000141443,0.00141443 --shots 1000 --reps 2 --budget 430 --option max_operations=96
+- **Outcome:** exit 0; outputs in data/20261024-101622-a7-validation-grid-n-28-max-operations-96
+- **Next:** none
+- **Refs:** data/20261024-101622-a7-validation-grid-n-28-max-operations-96, code/bench/a2_runs.py
+
+## 2026-10-24 10:16 UTC  A7 validation brickwork n=28 max_operations=64
+- **Goal:** End-to-end time with max_operations=64 (bench/fixes, masked kernels), brickwork, damping M=0.1/1, 1000 shots, against the default runs of A8
+- **Task:** A7
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise damping --ps 0.000242131,0.00242131 --shots 1000 --reps 2 --budget 430 --option max_operations=64
+- **Outcome:** exit 0; outputs in data/20261024-101411-a7-validation-brickwork-n-28-max-operations-64
+- **Next:** none
+- **Refs:** data/20261024-101411-a7-validation-brickwork-n-28-max-operations-64, code/bench/a2_runs.py
+
+## 2026-10-24 10:15 UTC  A9 cuStateVec Ex comparison
+- **Goal:** Compare noisecirc with delayed lower-bound per-shot sampling and split the gain
+- **Task:** A9
+- **Method:** a9_custatevec.py (SVUpdater, default fusion = best of 3-6) at A6's points (n=24, damping M=0.01/0.1/1, 100 shots); a9_analyze.py with the A6 table
+- **Outcome:** cuStateVec Ex 12-69 passes/shot, 7-15x faster than CUDA-Q/Aer per shot; noisecirc 190-520x (M=0.01), 29-76x (0.1), 4-10x (1) faster; factors: sharing 15-270x (2.3-3.7 at M=1), per trajectory 1.6-3.2x
+- **Next:** A9 done
+- **Refs:** wiki/studies/lower-bound-sampling.md, data/a9-analysis
+
+## 2026-10-24 10:12 UTC  A8 predicted times with masked kernels
+- **Goal:** Predicted GPU times of the masked-kernel settings (error passes at t_mask), n=26, 5 circuits x 2 loads
+- **Task:** A8
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a7_predict.py --error-kernel masked data/20261024-100152-a7-a8-block-times-with-masked-kernels-default data/20261024-100223-a7-a8-block-times-with-masked-kernels-max-operations-32 data/20261024-100253-a7-a8-block-times-with-masked-kernels-max-operations-48 data/20261024-100320-a7-a8-block-times-with-masked-kernels-max-operations-64 data/20261024-100345-a7-a8-block-times-with-masked-kernels-max-operations-96 data/20261024-100407-a7-a8-block-times-with-masked-kernels-max-operations-192 data/20261024-100424-a7-a8-block-times-with-masked-kernels-max-operations-256 data/20261024-100440-a7-a8-block-times-with-masked-kernels-stage-qubits-4 data/20261024-100525-a7-a8-block-times-with-masked-kernels-group-amplitudes-4096 data/20261024-100547-a7-a8-block-times-with-masked-kernels-max-operations-64-group-amplitudes-4096 data/20261024-100623-a7-a8-block-times-with-masked-kernels-stage-qubits-4-group-amplitudes-4096 data/20261024-100657-a7-a8-block-times-with-masked-kernels-stage-qubits-4-max-operations-64-group-amplitudes-4096 data/20261024-100835-a7-a8-block-times-with-masked-kernels-max-operations-64-pinned-bytes-128
+- **Outcome:** exit 0; outputs in data/20261024-101021-a8-predicted-times-with-masked-kernels
+- **Next:** none
+- **Refs:** data/20261024-101021-a8-predicted-times-with-masked-kernels, code/bench/a7_predict.py
+
+## 2026-10-24 10:12 UTC  A9 cuStateVec Ex qaoa n=24 dense fusion 6
+- **Goal:** cuStateVec Ex with DENSE_FUSION_SIZE=6, qaoa, damping M=0.1, 100 shots
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit qaoa --qubits 24 --ps 0.000555556 --shots 100 --dense-fusion 6
+- **Outcome:** exit 0; outputs in data/20261024-101214-a9-custatevec-ex-qaoa-n-24-dense-fusion-6
+- **Next:** none
+- **Refs:** data/20261024-101214-a9-custatevec-ex-qaoa-n-24-dense-fusion-6, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:12 UTC  A9 cuStateVec Ex qaoa n=24 dense fusion 5
+- **Goal:** cuStateVec Ex with DENSE_FUSION_SIZE=5, qaoa, damping M=0.1, 100 shots
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit qaoa --qubits 24 --ps 0.000555556 --shots 100 --dense-fusion 5
+- **Outcome:** exit 0; outputs in data/20261024-101211-a9-custatevec-ex-qaoa-n-24-dense-fusion-5
+- **Next:** none
+- **Refs:** data/20261024-101211-a9-custatevec-ex-qaoa-n-24-dense-fusion-5, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:12 UTC  A9 cuStateVec Ex qaoa n=24 dense fusion 4
+- **Goal:** cuStateVec Ex with DENSE_FUSION_SIZE=4, qaoa, damping M=0.1, 100 shots
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit qaoa --qubits 24 --ps 0.000555556 --shots 100 --dense-fusion 4
+- **Outcome:** exit 0; outputs in data/20261024-101208-a9-custatevec-ex-qaoa-n-24-dense-fusion-4
+- **Next:** none
+- **Refs:** data/20261024-101208-a9-custatevec-ex-qaoa-n-24-dense-fusion-4, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:12 UTC  A9 cuStateVec Ex qaoa n=24 dense fusion 3
+- **Goal:** cuStateVec Ex with DENSE_FUSION_SIZE=3, qaoa, damping M=0.1, 100 shots
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit qaoa --qubits 24 --ps 0.000555556 --shots 100 --dense-fusion 3
+- **Outcome:** exit 0; outputs in data/20261024-101205-a9-custatevec-ex-qaoa-n-24-dense-fusion-3
+- **Next:** none
+- **Refs:** data/20261024-101205-a9-custatevec-ex-qaoa-n-24-dense-fusion-3, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:12 UTC  A9 cuStateVec Ex qaoa n=24
+- **Goal:** cuStateVec Ex SVUpdater per-shot trajectories, qaoa, damping M=0.01/0.1/1, 100 shots, default fusion
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit qaoa --qubits 24 --ps 5.55556e-05,0.000555556,0.00555556 --shots 100
+- **Outcome:** exit 0; outputs in data/20261024-101201-a9-custatevec-ex-qaoa-n-24
+- **Next:** none
+- **Refs:** data/20261024-101201-a9-custatevec-ex-qaoa-n-24, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:12 UTC  A9 cuStateVec Ex qft n=24 dense fusion 6
+- **Goal:** cuStateVec Ex with DENSE_FUSION_SIZE=6, qft, damping M=0.1, 100 shots
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit qft --qubits 24 --ps 0.000333333 --shots 100 --dense-fusion 6
+- **Outcome:** exit 0; outputs in data/20261024-101156-a9-custatevec-ex-qft-n-24-dense-fusion-6
+- **Next:** none
+- **Refs:** data/20261024-101156-a9-custatevec-ex-qft-n-24-dense-fusion-6, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:11 UTC  A9 cuStateVec Ex qft n=24 dense fusion 5
+- **Goal:** cuStateVec Ex with DENSE_FUSION_SIZE=5, qft, damping M=0.1, 100 shots
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit qft --qubits 24 --ps 0.000333333 --shots 100 --dense-fusion 5
+- **Outcome:** exit 0; outputs in data/20261024-101153-a9-custatevec-ex-qft-n-24-dense-fusion-5
+- **Next:** none
+- **Refs:** data/20261024-101153-a9-custatevec-ex-qft-n-24-dense-fusion-5, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:11 UTC  A9 cuStateVec Ex qft n=24 dense fusion 4
+- **Goal:** cuStateVec Ex with DENSE_FUSION_SIZE=4, qft, damping M=0.1, 100 shots
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit qft --qubits 24 --ps 0.000333333 --shots 100 --dense-fusion 4
+- **Outcome:** exit 0; outputs in data/20261024-101149-a9-custatevec-ex-qft-n-24-dense-fusion-4
+- **Next:** none
+- **Refs:** data/20261024-101149-a9-custatevec-ex-qft-n-24-dense-fusion-4, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:11 UTC  A9 cuStateVec Ex qft n=24 dense fusion 3
+- **Goal:** cuStateVec Ex with DENSE_FUSION_SIZE=3, qft, damping M=0.1, 100 shots
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit qft --qubits 24 --ps 0.000333333 --shots 100 --dense-fusion 3
+- **Outcome:** exit 0; outputs in data/20261024-101145-a9-custatevec-ex-qft-n-24-dense-fusion-3
+- **Next:** none
+- **Refs:** data/20261024-101145-a9-custatevec-ex-qft-n-24-dense-fusion-3, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:11 UTC  A9 cuStateVec Ex qft n=24
+- **Goal:** cuStateVec Ex SVUpdater per-shot trajectories, qft, damping M=0.01/0.1/1, 100 shots, default fusion
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit qft --qubits 24 --ps 3.33333e-05,0.000333333,0.00333333 --shots 100
+- **Outcome:** exit 0; outputs in data/20261024-101140-a9-custatevec-ex-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-101140-a9-custatevec-ex-qft-n-24, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:11 UTC  A9 cuStateVec Ex brickwork n=24 dense fusion 6
+- **Goal:** cuStateVec Ex with DENSE_FUSION_SIZE=6, brickwork, damping M=0.1, 100 shots
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit brickwork --qubits 24 --ps 0.000326797 --shots 100 --dense-fusion 6
+- **Outcome:** exit 0; outputs in data/20261024-101136-a9-custatevec-ex-brickwork-n-24-dense-fusion-6
+- **Next:** none
+- **Refs:** data/20261024-101136-a9-custatevec-ex-brickwork-n-24-dense-fusion-6, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:11 UTC  A9 cuStateVec Ex brickwork n=24 dense fusion 5
+- **Goal:** cuStateVec Ex with DENSE_FUSION_SIZE=5, brickwork, damping M=0.1, 100 shots
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit brickwork --qubits 24 --ps 0.000326797 --shots 100 --dense-fusion 5
+- **Outcome:** exit 0; outputs in data/20261024-101133-a9-custatevec-ex-brickwork-n-24-dense-fusion-5
+- **Next:** none
+- **Refs:** data/20261024-101133-a9-custatevec-ex-brickwork-n-24-dense-fusion-5, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:11 UTC  A9 cuStateVec Ex brickwork n=24 dense fusion 4
+- **Goal:** cuStateVec Ex with DENSE_FUSION_SIZE=4, brickwork, damping M=0.1, 100 shots
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit brickwork --qubits 24 --ps 0.000326797 --shots 100 --dense-fusion 4
+- **Outcome:** exit 0; outputs in data/20261024-101130-a9-custatevec-ex-brickwork-n-24-dense-fusion-4
+- **Next:** none
+- **Refs:** data/20261024-101130-a9-custatevec-ex-brickwork-n-24-dense-fusion-4, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:11 UTC  A9 cuStateVec Ex brickwork n=24 dense fusion 3
+- **Goal:** cuStateVec Ex with DENSE_FUSION_SIZE=3, brickwork, damping M=0.1, 100 shots
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit brickwork --qubits 24 --ps 0.000326797 --shots 100 --dense-fusion 3
+- **Outcome:** exit 0; outputs in data/20261024-101127-a9-custatevec-ex-brickwork-n-24-dense-fusion-3
+- **Next:** none
+- **Refs:** data/20261024-101127-a9-custatevec-ex-brickwork-n-24-dense-fusion-3, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:11 UTC  A9 cuStateVec Ex brickwork n=24
+- **Goal:** cuStateVec Ex SVUpdater per-shot trajectories, brickwork, damping M=0.01/0.1/1, 100 shots, default fusion
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit brickwork --qubits 24 --ps 3.26797e-05,0.000326797,0.00326797 --shots 100
+- **Outcome:** exit 0; outputs in data/20261024-101122-a9-custatevec-ex-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-101122-a9-custatevec-ex-brickwork-n-24, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:11 UTC  A9 cuStateVec Ex ghz n=24 dense fusion 6
+- **Goal:** cuStateVec Ex with DENSE_FUSION_SIZE=6, ghz, damping M=0.1, 100 shots
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit ghz --qubits 24 --ps 0.00215054 --shots 100 --dense-fusion 6
+- **Outcome:** exit 0; outputs in data/20261024-101119-a9-custatevec-ex-ghz-n-24-dense-fusion-6
+- **Next:** none
+- **Refs:** data/20261024-101119-a9-custatevec-ex-ghz-n-24-dense-fusion-6, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:11 UTC  A9 cuStateVec Ex ghz n=24 dense fusion 5
+- **Goal:** cuStateVec Ex with DENSE_FUSION_SIZE=5, ghz, damping M=0.1, 100 shots
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit ghz --qubits 24 --ps 0.00215054 --shots 100 --dense-fusion 5
+- **Outcome:** exit 0; outputs in data/20261024-101117-a9-custatevec-ex-ghz-n-24-dense-fusion-5
+- **Next:** none
+- **Refs:** data/20261024-101117-a9-custatevec-ex-ghz-n-24-dense-fusion-5, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:11 UTC  A9 cuStateVec Ex ghz n=24 dense fusion 4
+- **Goal:** cuStateVec Ex with DENSE_FUSION_SIZE=4, ghz, damping M=0.1, 100 shots
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit ghz --qubits 24 --ps 0.00215054 --shots 100 --dense-fusion 4
+- **Outcome:** exit 0; outputs in data/20261024-101115-a9-custatevec-ex-ghz-n-24-dense-fusion-4
+- **Next:** none
+- **Refs:** data/20261024-101115-a9-custatevec-ex-ghz-n-24-dense-fusion-4, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:11 UTC  A9 cuStateVec Ex ghz n=24 dense fusion 3
+- **Goal:** cuStateVec Ex with DENSE_FUSION_SIZE=3, ghz, damping M=0.1, 100 shots
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit ghz --qubits 24 --ps 0.00215054 --shots 100 --dense-fusion 3
+- **Outcome:** exit 0; outputs in data/20261024-101111-a9-custatevec-ex-ghz-n-24-dense-fusion-3
+- **Next:** none
+- **Refs:** data/20261024-101111-a9-custatevec-ex-ghz-n-24-dense-fusion-3, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:11 UTC  A9 cuStateVec Ex ghz n=24
+- **Goal:** cuStateVec Ex SVUpdater per-shot trajectories, ghz, damping M=0.01/0.1/1, 100 shots, default fusion
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit ghz --qubits 24 --ps 0.000215054,0.00215054,0.0215054 --shots 100
+- **Outcome:** exit 0; outputs in data/20261024-101109-a9-custatevec-ex-ghz-n-24
+- **Next:** none
+- **Refs:** data/20261024-101109-a9-custatevec-ex-ghz-n-24, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:11 UTC  A9 cuStateVec Ex runner: correctness check
+- **Goal:** Check that the SVUpdater trajectory runner samples the noisy distribution
+- **Task:** A9
+- **Method:** a9_custatevec.py --check: 20000 shots of ghz (p=0.2) and brickwork (p=0.1) at n=4 against exact density matrix
+- **Outcome:** TVD 0.008/0.007, max |z| 1.9/1.6: consistent with sampling noise
+- **Next:** A9 timing batch
+- **Refs:** code/bench/a9_custatevec.py
+
+## 2026-10-24 10:10 UTC  A9 cuStateVec Ex tier 1
+- **Goal:** Check the SVUpdater trajectory runner on brickwork n=20
+- **Task:** A9
+- **Method:** code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit brickwork --qubits 20 --ps 0.001 --shots 20
+- **Outcome:** exit 0; outputs in data/20261024-101021-a9-custatevec-ex-tier-1
+- **Next:** none
+- **Refs:** data/20261024-101021-a9-custatevec-ex-tier-1, code/bench/a9_custatevec.py
+
+## 2026-10-24 10:09 UTC  A7/A8 block times with masked kernels max_operations=64,pinned_bytes=128
+- **Goal:** Per-block dominant, general and masked kernel times on bench/fixes 807fe90 (masked error kernels), 5 circuits x 2 loads, n=26
+- **Task:** A8
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label masked:max_operations=64,pinned_bytes=128 --set max_operations=64 --set pinned_bytes=128
+- **Outcome:** exit 0; outputs in data/20261024-100835-a7-a8-block-times-with-masked-kernels-max-operations-64-pinned-bytes-128
+- **Next:** none
+- **Refs:** data/20261024-100835-a7-a8-block-times-with-masked-kernels-max-operations-64-pinned-bytes-128, code/bench/a7_blocks.py
+
+## 2026-10-24 10:08 UTC  A7/A8 block times with masked kernels stage_qubits=4,max_operations=64,group_amplitudes=4096
+- **Goal:** Per-block dominant, general and masked kernel times on bench/fixes 807fe90 (masked error kernels), 5 circuits x 2 loads, n=26
+- **Task:** A8
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label masked:stage_qubits=4,max_operations=64,group_amplitudes=4096 --set stage_qubits=4 --set max_operations=64 --set group_amplitudes=4096
+- **Outcome:** exit 0; outputs in data/20261024-100657-a7-a8-block-times-with-masked-kernels-stage-qubits-4-max-operations-64-group-amplitudes-4096
+- **Next:** none
+- **Refs:** data/20261024-100657-a7-a8-block-times-with-masked-kernels-stage-qubits-4-max-operations-64-group-amplitudes-4096, code/bench/a7_blocks.py
+
+## 2026-10-24 10:06 UTC  A7/A8 block times with masked kernels stage_qubits=4,group_amplitudes=4096
+- **Goal:** Per-block dominant, general and masked kernel times on bench/fixes 807fe90 (masked error kernels), 5 circuits x 2 loads, n=26
+- **Task:** A8
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label masked:stage_qubits=4,group_amplitudes=4096 --set stage_qubits=4 --set group_amplitudes=4096
+- **Outcome:** exit 0; outputs in data/20261024-100623-a7-a8-block-times-with-masked-kernels-stage-qubits-4-group-amplitudes-4096
+- **Next:** none
+- **Refs:** data/20261024-100623-a7-a8-block-times-with-masked-kernels-stage-qubits-4-group-amplitudes-4096, code/bench/a7_blocks.py
+
+## 2026-10-24 10:06 UTC  A7/A8 block times with masked kernels max_operations=64,group_amplitudes=4096
+- **Goal:** Per-block dominant, general and masked kernel times on bench/fixes 807fe90 (masked error kernels), 5 circuits x 2 loads, n=26
+- **Task:** A8
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label masked:max_operations=64,group_amplitudes=4096 --set max_operations=64 --set group_amplitudes=4096
+- **Outcome:** exit 0; outputs in data/20261024-100547-a7-a8-block-times-with-masked-kernels-max-operations-64-group-amplitudes-4096
+- **Next:** none
+- **Refs:** data/20261024-100547-a7-a8-block-times-with-masked-kernels-max-operations-64-group-amplitudes-4096, code/bench/a7_blocks.py
+
+## 2026-10-24 10:05 UTC  A7/A8 block times with masked kernels group_amplitudes=4096
+- **Goal:** Per-block dominant, general and masked kernel times on bench/fixes 807fe90 (masked error kernels), 5 circuits x 2 loads, n=26
+- **Task:** A8
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label masked:group_amplitudes=4096 --set group_amplitudes=4096
+- **Outcome:** exit 0; outputs in data/20261024-100525-a7-a8-block-times-with-masked-kernels-group-amplitudes-4096
+- **Next:** none
+- **Refs:** data/20261024-100525-a7-a8-block-times-with-masked-kernels-group-amplitudes-4096, code/bench/a7_blocks.py
+
+## 2026-10-24 10:05 UTC  A7/A8 block times with masked kernels stage_qubits=4
+- **Goal:** Per-block dominant, general and masked kernel times on bench/fixes 807fe90 (masked error kernels), 5 circuits x 2 loads, n=26
+- **Task:** A8
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label masked:stage_qubits=4 --set stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261024-100440-a7-a8-block-times-with-masked-kernels-stage-qubits-4
+- **Next:** none
+- **Refs:** data/20261024-100440-a7-a8-block-times-with-masked-kernels-stage-qubits-4, code/bench/a7_blocks.py
+
+## 2026-10-24 10:04 UTC  A7/A8 block times with masked kernels max_operations=256
+- **Goal:** Per-block dominant, general and masked kernel times on bench/fixes 807fe90 (masked error kernels), 5 circuits x 2 loads, n=26
+- **Task:** A8
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label masked:max_operations=256 --set max_operations=256
+- **Outcome:** exit 0; outputs in data/20261024-100424-a7-a8-block-times-with-masked-kernels-max-operations-256
+- **Next:** none
+- **Refs:** data/20261024-100424-a7-a8-block-times-with-masked-kernels-max-operations-256, code/bench/a7_blocks.py
+
+## 2026-10-24 10:04 UTC  A7/A8 block times with masked kernels max_operations=192
+- **Goal:** Per-block dominant, general and masked kernel times on bench/fixes 807fe90 (masked error kernels), 5 circuits x 2 loads, n=26
+- **Task:** A8
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label masked:max_operations=192 --set max_operations=192
+- **Outcome:** exit 0; outputs in data/20261024-100407-a7-a8-block-times-with-masked-kernels-max-operations-192
+- **Next:** none
+- **Refs:** data/20261024-100407-a7-a8-block-times-with-masked-kernels-max-operations-192, code/bench/a7_blocks.py
+
+## 2026-10-24 10:04 UTC  A7/A8 block times with masked kernels max_operations=96
+- **Goal:** Per-block dominant, general and masked kernel times on bench/fixes 807fe90 (masked error kernels), 5 circuits x 2 loads, n=26
+- **Task:** A8
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label masked:max_operations=96 --set max_operations=96
+- **Outcome:** exit 0; outputs in data/20261024-100345-a7-a8-block-times-with-masked-kernels-max-operations-96
+- **Next:** none
+- **Refs:** data/20261024-100345-a7-a8-block-times-with-masked-kernels-max-operations-96, code/bench/a7_blocks.py
+
+## 2026-10-24 10:03 UTC  A7/A8 block times with masked kernels max_operations=64
+- **Goal:** Per-block dominant, general and masked kernel times on bench/fixes 807fe90 (masked error kernels), 5 circuits x 2 loads, n=26
+- **Task:** A8
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label masked:max_operations=64 --set max_operations=64
+- **Outcome:** exit 0; outputs in data/20261024-100320-a7-a8-block-times-with-masked-kernels-max-operations-64
+- **Next:** none
+- **Refs:** data/20261024-100320-a7-a8-block-times-with-masked-kernels-max-operations-64, code/bench/a7_blocks.py
+
+## 2026-10-24 10:03 UTC  A7/A8 block times with masked kernels max_operations=48
+- **Goal:** Per-block dominant, general and masked kernel times on bench/fixes 807fe90 (masked error kernels), 5 circuits x 2 loads, n=26
+- **Task:** A8
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label masked:max_operations=48 --set max_operations=48
+- **Outcome:** exit 0; outputs in data/20261024-100253-a7-a8-block-times-with-masked-kernels-max-operations-48
+- **Next:** none
+- **Refs:** data/20261024-100253-a7-a8-block-times-with-masked-kernels-max-operations-48, code/bench/a7_blocks.py
+
+## 2026-10-24 10:02 UTC  A7/A8 block times with masked kernels max_operations=32
+- **Goal:** Per-block dominant, general and masked kernel times on bench/fixes 807fe90 (masked error kernels), 5 circuits x 2 loads, n=26
+- **Task:** A8
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label masked:max_operations=32 --set max_operations=32
+- **Outcome:** exit 0; outputs in data/20261024-100223-a7-a8-block-times-with-masked-kernels-max-operations-32
+- **Next:** none
+- **Refs:** data/20261024-100223-a7-a8-block-times-with-masked-kernels-max-operations-32, code/bench/a7_blocks.py
+
+## 2026-10-24 10:02 UTC  A7/A8 block times with masked kernels default
+- **Goal:** Per-block dominant, general and masked kernel times on bench/fixes 807fe90 (masked error kernels), 5 circuits x 2 loads, n=26
+- **Task:** A8
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label masked:default
+- **Outcome:** exit 0; outputs in data/20261024-100152-a7-a8-block-times-with-masked-kernels-default
+- **Next:** none
+- **Refs:** data/20261024-100152-a7-a8-block-times-with-masked-kernels-default, code/bench/a7_blocks.py
+
+## 2026-10-24 10:01 UTC  A8 masked error kernels: implementation and A/B
+- **Goal:** Make passes of trajectories with errors as cheap as dominant passes
+- **Task:** A8
+- **Method:** svpass Block.with_defaults + stage mask rows, two bodies per stage (feature/masked-error-kernels d6f43d1, docs 2nd commit; merged into bench/fixes 807fe90/7578381); tests 326+179 GPU, statistical 2; a7_blocks masked timing; a2_runs n=28 5 circuits x M=0.1/1 MASKED_ERROR_KERNELS True vs False
+- **Outcome:** Masked kernel per pass 1.1-1.7 t_bw vs general 1.3-2.5 (dominant 1.1-1.6); end-to-end 4-13% faster (brickwork 12-13%, qaoa 8-10%, ghz 8-9%, qft 5%, grid 4%), identical passes
+- **Next:** Block-size sweep with masked kernels (a7batch2)
+- **Refs:** data/a7-analysis, code/noisecirc
+
+## 2026-10-24 10:01 UTC  A8 masked kernels False grid n=28
+- **Goal:** End-to-end time with MASKED_ERROR_KERNELS=False (bench/fixes 807fe90), grid, damping M=0.1/1, 1000 shots
+- **Task:** A8
+- **Method:** code/bench/gpurun a2_runs.py --circuits grid --qubits 28 --noise damping --ps 0.000141443,0.00141443 --shots 1000 --reps 2 --budget 430 --tunable MASKED_ERROR_KERNELS=False
+- **Outcome:** exit 0; outputs in data/20261024-095850-a8-masked-kernels-false-grid-n-28
+- **Next:** none
+- **Refs:** data/20261024-095850-a8-masked-kernels-false-grid-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 09:58 UTC  A8 masked kernels True grid n=28
+- **Goal:** End-to-end time with MASKED_ERROR_KERNELS=True (bench/fixes 807fe90), grid, damping M=0.1/1, 1000 shots
+- **Task:** A8
+- **Method:** code/bench/gpurun a2_runs.py --circuits grid --qubits 28 --noise damping --ps 0.000141443,0.00141443 --shots 1000 --reps 2 --budget 430 --tunable MASKED_ERROR_KERNELS=True
+- **Outcome:** exit 0; outputs in data/20261024-095606-a8-masked-kernels-true-grid-n-28
+- **Next:** none
+- **Refs:** data/20261024-095606-a8-masked-kernels-true-grid-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 09:56 UTC  A8 masked kernels False qaoa n=28
+- **Goal:** End-to-end time with MASKED_ERROR_KERNELS=False (bench/fixes 807fe90), qaoa, damping M=0.1/1, 1000 shots
+- **Task:** A8
+- **Method:** code/bench/gpurun a2_runs.py --circuits qaoa --qubits 28 --noise damping --ps 0.00047619,0.0047619 --shots 1000 --reps 2 --budget 430 --tunable MASKED_ERROR_KERNELS=False
+- **Outcome:** exit 0; outputs in data/20261024-095448-a8-masked-kernels-false-qaoa-n-28
+- **Next:** none
+- **Refs:** data/20261024-095448-a8-masked-kernels-false-qaoa-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 09:54 UTC  A8 masked kernels True qaoa n=28
+- **Goal:** End-to-end time with MASKED_ERROR_KERNELS=True (bench/fixes 807fe90), qaoa, damping M=0.1/1, 1000 shots
+- **Task:** A8
+- **Method:** code/bench/gpurun a2_runs.py --circuits qaoa --qubits 28 --noise damping --ps 0.00047619,0.0047619 --shots 1000 --reps 2 --budget 430 --tunable MASKED_ERROR_KERNELS=True
+- **Outcome:** exit 0; outputs in data/20261024-095337-a8-masked-kernels-true-qaoa-n-28
+- **Next:** none
+- **Refs:** data/20261024-095337-a8-masked-kernels-true-qaoa-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 09:53 UTC  A8 masked kernels False qft n=28
+- **Goal:** End-to-end time with MASKED_ERROR_KERNELS=False (bench/fixes 807fe90), qft, damping M=0.1/1, 1000 shots
+- **Task:** A8
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise damping --ps 0.000246305,0.00246305 --shots 1000 --reps 2 --budget 430 --tunable MASKED_ERROR_KERNELS=False
+- **Outcome:** exit 0; outputs in data/20261024-095154-a8-masked-kernels-false-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-095154-a8-masked-kernels-false-qft-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 09:51 UTC  A8 masked kernels True qft n=28
+- **Goal:** End-to-end time with MASKED_ERROR_KERNELS=True (bench/fixes 807fe90), qft, damping M=0.1/1, 1000 shots
+- **Task:** A8
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise damping --ps 0.000246305,0.00246305 --shots 1000 --reps 2 --budget 430 --tunable MASKED_ERROR_KERNELS=True
+- **Outcome:** exit 0; outputs in data/20261024-095013-a8-masked-kernels-true-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-095013-a8-masked-kernels-true-qft-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 09:50 UTC  A8 masked kernels False brickwork n=28
+- **Goal:** End-to-end time with MASKED_ERROR_KERNELS=False (bench/fixes 807fe90), brickwork, damping M=0.1/1, 1000 shots
+- **Task:** A8
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise damping --ps 0.000242131,0.00242131 --shots 1000 --reps 2 --budget 430 --tunable MASKED_ERROR_KERNELS=False
+- **Outcome:** exit 0; outputs in data/20261024-094724-a8-masked-kernels-false-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-094724-a8-masked-kernels-false-brickwork-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 09:48 UTC  A7 predicted times of all settings
+- **Goal:** Combine per-block kernel times of 31 settings with dry-run per-block passes into predicted GPU times (n=26, 5 circuits x 2 loads, 1000 shots)
+- **Task:** A7
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a7_predict.py data/20261024-091611-a7-block-times-default data/20261024-091638-a7-block-times-max-operations-16 data/20261024-091708-a7-block-times-max-operations-24 data/20261024-091735-a7-block-times-max-operations-32 data/20261024-091801-a7-block-times-max-operations-48 data/20261024-091825-a7-block-times-max-operations-64 data/20261024-091846-a7-block-times-max-operations-96 data/20261024-091904-a7-block-times-max-operations-192 data/20261024-091917-a7-block-times-max-operations-256 data/20261024-091930-a7-block-times-max-fused-qudits-5 data/20261024-092000-a7-block-times-max-fused-qudits-6 data/20261024-092028-a7-block-times-max-fused-qudits-7 data/20261024-092055-a7-block-times-max-fused-qudits-8 data/20261024-092121-a7-block-times-max-fused-qudits-10 data/20261024-092149-a7-block-times-pinned-bytes-16 data/20261024-092217-a7-block-times-pinned-bytes-32 data/20261024-092244-a7-block-times-pinned-bytes-128 data/20261024-092310-a7-block-times-stage-qubits-2 data/20261024-092333-a7-block-times-stage-qubits-4 data/20261024-092412-a7-block-times-group-amplitudes-512 data/20261024-092428-a7-block-times-group-amplitudes-1024 data/20261024-092441-a7-block-times-group-amplitudes-4096 data/20261024-092457-a7-block-times-group-amplitudes-8192 data/20261024-092523-a7-block-times-threads-64 data/20261024-092552-a7-block-times-threads-128 data/20261024-092619-a7-block-times-threads-512 data/20261024-092645-a7-block-times-min-registers-32 data/20261024-092713-a7-block-times-min-registers-48 data/20261024-092741-a7-block-times-min-registers-96 data/20261024-092807-a7-block-times-min-registers-128
+- **Outcome:** exit 0; outputs in data/20261024-094143-a7-predicted-times-of-all-settings
+- **Next:** none
+- **Refs:** data/20261024-094143-a7-predicted-times-of-all-settings, code/bench/a7_predict.py
+
+## 2026-10-24 09:47 UTC  A8 masked kernels True brickwork n=28
+- **Goal:** End-to-end time with MASKED_ERROR_KERNELS=True (bench/fixes 807fe90), brickwork, damping M=0.1/1, 1000 shots
+- **Task:** A8
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 28 --noise damping --ps 0.000242131,0.00242131 --shots 1000 --reps 2 --budget 430 --tunable MASKED_ERROR_KERNELS=True
+- **Outcome:** exit 0; outputs in data/20261024-094452-a8-masked-kernels-true-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-094452-a8-masked-kernels-true-brickwork-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 09:44 UTC  A8 masked kernels False ghz n=28
+- **Goal:** End-to-end time with MASKED_ERROR_KERNELS=False (bench/fixes 807fe90), ghz, damping M=0.1/1, 1000 shots
+- **Task:** A8
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz --qubits 28 --noise damping --ps 0.00183486,0.0183486 --shots 1000 --reps 2 --budget 430 --tunable MASKED_ERROR_KERNELS=False
+- **Outcome:** exit 0; outputs in data/20261024-094421-a8-masked-kernels-false-ghz-n-28
+- **Next:** none
+- **Refs:** data/20261024-094421-a8-masked-kernels-false-ghz-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 09:44 UTC  A8 masked kernels True ghz n=28
+- **Goal:** End-to-end time with MASKED_ERROR_KERNELS=True (bench/fixes 807fe90), ghz, damping M=0.1/1, 1000 shots
+- **Task:** A8
+- **Method:** code/bench/gpurun a2_runs.py --circuits ghz --qubits 28 --noise damping --ps 0.00183486,0.0183486 --shots 1000 --reps 2 --budget 430 --tunable MASKED_ERROR_KERNELS=True
+- **Outcome:** exit 0; outputs in data/20261024-094352-a8-masked-kernels-true-ghz-n-28
+- **Next:** none
+- **Refs:** data/20261024-094352-a8-masked-kernels-true-ghz-n-28, code/bench/a2_runs.py
+
+## 2026-10-24 09:28 UTC  A7 block times min_registers=128
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with min_registers=128
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label min_registers=128 --set min_registers=128
+- **Outcome:** exit 0; outputs in data/20261024-092807-a7-block-times-min-registers-128
+- **Next:** none
+- **Refs:** data/20261024-092807-a7-block-times-min-registers-128, code/bench/a7_blocks.py
+
+## 2026-10-24 09:28 UTC  A7 block times min_registers=96
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with min_registers=96
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label min_registers=96 --set min_registers=96
+- **Outcome:** exit 0; outputs in data/20261024-092741-a7-block-times-min-registers-96
+- **Next:** none
+- **Refs:** data/20261024-092741-a7-block-times-min-registers-96, code/bench/a7_blocks.py
+
+## 2026-10-24 09:27 UTC  A7 block times min_registers=48
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with min_registers=48
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label min_registers=48 --set min_registers=48
+- **Outcome:** exit 0; outputs in data/20261024-092713-a7-block-times-min-registers-48
+- **Next:** none
+- **Refs:** data/20261024-092713-a7-block-times-min-registers-48, code/bench/a7_blocks.py
+
+## 2026-10-24 09:27 UTC  A7 block times min_registers=32
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with min_registers=32
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label min_registers=32 --set min_registers=32
+- **Outcome:** exit 0; outputs in data/20261024-092645-a7-block-times-min-registers-32
+- **Next:** none
+- **Refs:** data/20261024-092645-a7-block-times-min-registers-32, code/bench/a7_blocks.py
+
+## 2026-10-24 09:26 UTC  A7 block times threads=512
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with threads=512
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label threads=512 --set threads=512
+- **Outcome:** exit 0; outputs in data/20261024-092619-a7-block-times-threads-512
+- **Next:** none
+- **Refs:** data/20261024-092619-a7-block-times-threads-512, code/bench/a7_blocks.py
+
+## 2026-10-24 09:26 UTC  A7 block times threads=128
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with threads=128
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label threads=128 --set threads=128
+- **Outcome:** exit 0; outputs in data/20261024-092552-a7-block-times-threads-128
+- **Next:** none
+- **Refs:** data/20261024-092552-a7-block-times-threads-128, code/bench/a7_blocks.py
+
+## 2026-10-24 09:25 UTC  A7 block times threads=64
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with threads=64
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label threads=64 --set threads=64
+- **Outcome:** exit 0; outputs in data/20261024-092523-a7-block-times-threads-64
+- **Next:** none
+- **Refs:** data/20261024-092523-a7-block-times-threads-64, code/bench/a7_blocks.py
+
+## 2026-10-24 09:25 UTC  A7 block times group_amplitudes=8192
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with group_amplitudes=8192
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label group_amplitudes=8192 --set group_amplitudes=8192
+- **Outcome:** exit 2; outputs in data/20261024-092457-a7-block-times-group-amplitudes-8192
+- **Next:** none
+- **Refs:** data/20261024-092457-a7-block-times-group-amplitudes-8192, code/bench/a7_blocks.py
+
+## 2026-10-24 09:24 UTC  A7 block times group_amplitudes=4096
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with group_amplitudes=4096
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label group_amplitudes=4096 --set group_amplitudes=4096
+- **Outcome:** exit 0; outputs in data/20261024-092441-a7-block-times-group-amplitudes-4096
+- **Next:** none
+- **Refs:** data/20261024-092441-a7-block-times-group-amplitudes-4096, code/bench/a7_blocks.py
+
+## 2026-10-24 09:24 UTC  A7 block times group_amplitudes=1024
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with group_amplitudes=1024
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label group_amplitudes=1024 --set group_amplitudes=1024
+- **Outcome:** exit 0; outputs in data/20261024-092428-a7-block-times-group-amplitudes-1024
+- **Next:** none
+- **Refs:** data/20261024-092428-a7-block-times-group-amplitudes-1024, code/bench/a7_blocks.py
+
+## 2026-10-24 09:24 UTC  A7 block times group_amplitudes=512
+- **Goal:** Per-block kernel times of 5 circuits x 2 loads at n=26 with group_amplitudes=512
+- **Task:** A7
+- **Method:** code/bench/gpurun a7_blocks.py --workloads ghz:damping:0.0019802,ghz:damping:0.019802,brickwork:damping:0.000280112,brickwork:damping:0.00280112,qft:damping:0.0002849,qft:damping:0.002849,qaoa:damping:0.000512821,qaoa:damping:0.00512821,grid:damping:0.00017094,grid:damping:0.0017094 --qubits 26 --label group_amplitudes=512 --set group_amplitudes=512
+- **Outcome:** exit 0; outputs in data/20261024-092412-a7-block-times-group-amplitudes-512
+- **Next:** none
+- **Refs:** data/20261024-092412-a7-block-times-group-amplitudes-512, code/bench/a7_blocks.py
+
 ## 2026-10-24 09:24 UTC  A10 tighter proposal bounds: theory and estimate
 - **Goal:** Determine how much of the 2MN error-proposal term valid checkpoint-dependent bounds can avoid
 - **Task:** A10

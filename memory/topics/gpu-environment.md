@@ -17,3 +17,4 @@ updated: 2026-10-23
 - Local rsync to the sshfs mount: use `-rlt` (`-a` fails on chgrp).
 - Env verified 2026-10-23: 178 noisecirc tests pass on the H100; qiskit-aer-gpu-cu11 0.17.2 sees GPU; cudaq 0.15.1 imports.
 - Local CPU dry runs: the venv `code/noisecirc/.venv` imports noisecirc from `code/noisecirc` (checked out at `main`). To dry-run `bench/fixes`, prepend `PYTHONPATH=$PWD/code/noisecirc-bench/src:$PWD/code/noisecirc-bench/packages/svpass/src` (from the project root). Do not pgrep -f for a script name inside a wait loop whose own command line contains that name (it matches itself).
+- Never edit code/bench/gpurun while a batch runs: bash reads scripts lazily (a7 group_amplitudes=8192 run ended with a syntax error after its output was complete).

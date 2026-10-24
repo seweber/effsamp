@@ -1,0 +1,1 @@
+code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit brickwork --qubits 24 --ps 0.000326797 --shots 100 --dense-fusion 3

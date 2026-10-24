@@ -46,7 +46,7 @@ A related, smaller cost remains: measuring draws from a cumulative sum of the ch
 
    The kernels are as fast as without the option (QFT: 1.14 and 1.79 times $t_{bw}$), and the optimization itself takes less compile time than on `main` (first runs of 22 to 67 s against 72 to 144 s).
 
-All later measurements of this project use the branch `bench/fixes`, which is `main` with the fixes merged.
+All later measurements of this project use the branch `bench/fixes`, which is `main` with the fixes merged; from 2026-10-24 09:30 UTC on (tasks A7 to A9), it also contains the improvements of [Error kernels and block sizes](error-kernels.md) (masked error kernels, on by default, and autotuning, off by default).
 
 ## Caveats
 

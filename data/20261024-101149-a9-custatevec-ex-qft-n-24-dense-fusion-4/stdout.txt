@@ -1,0 +1,1 @@
+{"kind": "run", "sim": "custatevec_ex", "circuit": "qft", "n": 24, "noise": "damping", "p": 0.000333333, "shots": 100, "time": 1.1494668209925294, "randnums": 600, "gates": 324, "channels": 600, "dense_fusion": 4, "diagonal_fusion": null, "distinct_outcomes": 100}

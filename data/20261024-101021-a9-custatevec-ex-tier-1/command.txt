@@ -1,0 +1,1 @@
+code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit brickwork --qubits 20 --ps 0.001 --shots 20

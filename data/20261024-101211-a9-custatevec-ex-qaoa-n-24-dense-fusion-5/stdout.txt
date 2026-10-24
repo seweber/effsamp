@@ -1,0 +1,1 @@
+{"kind": "run", "sim": "custatevec_ex", "circuit": "qaoa", "n": 24, "noise": "damping", "p": 0.000555556, "shots": 100, "time": 0.5233919434249401, "randnums": 360, "gates": 288, "channels": 360, "dense_fusion": 5, "diagonal_fusion": null, "distinct_outcomes": 100}

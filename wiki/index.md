@@ -14,7 +14,10 @@ Start with the [Overview](overview.md). Abbreviations and notation are in the [G
 - [Benchmark circuits and predicted work](studies/benchmark-suite.md) — Categories of benchmark circuits and noise, and noisecirc's predicted block passes and times for them (A4) · *verified*
 - [Block-pass time on the H100](studies/block-pass-time.md) — How well block passes times the state-vector bandwidth time predicts noisecirc's runtime on the H100 (A2) · *verified*
 - [noisecirc against Qiskit Aer and CUDA-Q](studies/competitors.md) — Run times of Aer (shot branching, batched, per shot) and CUDA-Q against noisecirc, translated into passes, and the speedup split into algorithm and implementation (A6) · *verified*
+- [Error kernels and block sizes](studies/error-kernels.md) — Masked kernels for trajectories with errors, and whether the best block size depends on the noise (A8) · *verified*
+- [noisecirc against delayed lower-bound sampling (cuStateVec Ex)](studies/lower-bound-sampling.md) — cuStateVec Ex's per-shot trajectories with qsim's lower-bound sampling against noisecirc: how much of the gain is the sharing that only upper bounds permit (A9) · *verified*
 - [Issues found in noisecirc](studies/noisecirc-issues.md) — Bugs and issues found in noisecirc during benchmarking, with their fix branches · *verified*
+- [Tuning noisecirc's parameters on the H100](studies/parameter-tuning.md) — Which settings of noisecirc's fusion and kernel parameters are best on the H100, and what tuning gains (A7) · *verified*
 - [Block passes against noisecirc's parameters](studies/pass-count.md) — How circuit, noise, shots and noisecirc's parameters set the number of blocks and block passes (A3) · *verified*
 - [Prior art of noisecirc's algorithm](studies/prior-art.md) — Systematic literature check: which of noisecirc's sampling and fusion ideas are anticipated · *partially verified*
 - [Checkpoint-dependent proposal bounds](studies/tighter-bounds.md) — Valid tighter proposal bounds from the checkpoint state, and how many rejected proposals they can avoid (A10) · *partially verified*

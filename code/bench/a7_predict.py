@@ -36,6 +36,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--shots", type=int, default=1000)
     parser.add_argument("--seeds", type=int, default=3)
+    parser.add_argument("--error-kernel", choices=("general", "masked"), default="general",
+                        help="which measured time the error passes take: t_gen or t_mask")
     parser.add_argument("dirs", nargs="+")
     args = parser.parse_args()
     for r in records(args.dirs):
@@ -47,10 +49,11 @@ def main():
             print(json.dumps({"label": r["label"], "circuit": r["circuit"], "p": r["p"], "error": "block mismatch",
                               "dry_blocks": runs[0]["blocks"], "gpu_blocks": len(r["t_dom"])}), flush=True)
             continue
-        t_dom, t_gen = np.array(r["t_dom"]), np.array(r["t_gen"])
+        t_dom = np.array(r["t_dom"])
+        t_gen = np.array(r["t_mask"] if args.error_kernel == "masked" else r["t_gen"])
         t_gpu = [float(np.dot(d["dom_per_block"], t_dom) + np.dot(d["gen_per_block"], t_gen)) for d in runs]
         print(json.dumps({
-            "label": r["label"], "options": r["options"], "config": r["config"], "circuit": r["circuit"],
+            "label": r["label"], "error_kernel": args.error_kernel, "options": r["options"], "config": r["config"], "circuit": r["circuit"],
             "p": r["p"], "n": r["n"], "shots": args.shots, "blocks": r["blocks"], "t_bw": r["t_bw"],
             "t_compile": r["t_compile"], "T_gpu": float(np.mean(t_gpu)),
             "passes": float(np.mean([d["block_passes"] for d in runs])),

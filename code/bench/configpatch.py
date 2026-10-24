@@ -22,7 +22,9 @@ def apply(overrides: dict) -> None:
 
 def parse(items: list[str]) -> tuple[dict, dict]:
     """Split ``key=value`` items into Simulator options and Config overrides."""
-    config_fields = {"stage_qubits", "group_amplitudes", "threads", "min_registers"}
+    # stage_qubits is a Simulator option since noisecirc's feature/autotune (CompiledCircuit passes it
+    # explicitly, which would override a patched default), so it goes to the options.
+    config_fields = {"group_amplitudes", "threads", "min_registers"}
     options, config = {}, {}
     for item in items:
         key, value = item.split("=")

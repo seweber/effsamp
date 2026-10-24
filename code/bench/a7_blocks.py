@@ -75,25 +75,37 @@ def main() -> None:
         first = engine.compile(compiled.blocks[0].dominant_block).result()
         first.apply(state)  # a row of its own
         seen = {}
-        t_dom, t_gen, gates = [], [], []
+        t_dom, t_gen, t_mask, gates = [], [], [], []
         for block in compiled.blocks:
             if block not in seen:
                 dom = engine.compile(block.dominant_block).result()
                 td = timed(lambda: dom.apply(state), engine.synchronize)
-                tg = td
+                tg = tm = td
                 if block.has_choices:
                     gen = engine.compile(block.engine_block).result()
                     choices = engine.upload(block.choices(block.dominant_codes[:, None]))
                     tg = timed(lambda: gen.apply(state, choices), engine.synchronize)
-                seen[block] = (td, tg)
-            td, tg = seen[block]
+                    if hasattr(block, "masked_block"):
+                        # The masked kernel for a trajectory leaving the dominant choice at one
+                        # operation in the middle of the block, its typical case at low noise.
+                        masked_block = block.masked_block
+                        masked = engine.compile(masked_block).result()
+                        host = block.choices(block.dominant_codes[:, None])
+                        multi = [i for i, placed in enumerate(block.operations) if placed.operation.stack.shape[0] > 1]
+                        i = multi[len(multi) // 2]
+                        host[i, 0] = (host[i, 0] + 1) % block.operations[i].operation.stack.shape[0]
+                        rows = engine.upload(np.concatenate([host, masked_block.stage_mask(host)]))
+                        tm = timed(lambda: masked.apply(state, rows), engine.synchronize)
+                seen[block] = (td, tg, tm)
+            td, tg, tm = seen[block]
             t_dom.append(td)
             t_gen.append(tg)
+            t_mask.append(tm)
             gates.append(len(block.operations))
         print(json.dumps({
             "label": args.label, "circuit": name, "noise": kind, "p": p, "n": n, "options": options,
             "config": config, "blocks": len(compiled.blocks), "blocks_per_segment": bps, "max_batch": batch,
-            "t_bw": t_bw, "t_compile": t_compile, "t_dom": t_dom, "t_gen": t_gen, "gates": gates,
+            "t_bw": t_bw, "t_compile": t_compile, "t_dom": t_dom, "t_gen": t_gen, "t_mask": t_mask, "gates": gates,
             "distinct": len(seen),
         }), flush=True)
         del state, first

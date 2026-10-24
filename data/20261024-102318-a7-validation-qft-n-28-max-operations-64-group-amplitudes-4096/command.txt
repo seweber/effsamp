@@ -1,0 +1,1 @@
+code/bench/gpurun a2_runs.py --circuits qft --qubits 28 --noise damping --ps 0.000246305,0.00246305 --shots 1000 --reps 2 --budget 430 --option max_operations=64 --config group_amplitudes=4096

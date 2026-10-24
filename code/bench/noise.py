@@ -18,9 +18,6 @@ from functools import cache
 from itertools import product
 
 import numpy as np
-import qutip as qt
-
-from noisecirc.maps import DEFAULT_MAPS, QuantumMap, qubit_restricted_maps
 
 
 def kraus(kind: str, p: float) -> list[np.ndarray]:
@@ -52,8 +49,13 @@ def kraus(kind: str, p: float) -> list[np.ndarray]:
 
 
 @cache
-def maps(kind: str | None, p: float = 0.0) -> dict[str, QuantumMap]:
+def maps(kind: str | None, p: float = 0.0) -> dict:
     """Return qubit maps of the default gates, each followed by noise ``kind`` on every target; ideal for None."""
+    # Imported here, so that `kraus` works without noisecirc (e.g. in the cuStateVec environment of A9).
+    import qutip as qt
+
+    from noisecirc.maps import DEFAULT_MAPS, QuantumMap, qubit_restricted_maps
+
     ideal = qubit_restricted_maps(DEFAULT_MAPS)
     if kind is None or p == 0.0:
         return ideal
@@ -63,7 +65,7 @@ def maps(kind: str | None, p: float = 0.0) -> dict[str, QuantumMap]:
         width = ideal_map.num_qudits
         noise = [qt.tensor(list(ops)) if width > 1 else ops[0] for ops in product(local, repeat=width)]
 
-        def channel(*params: float, ideal_map: QuantumMap = ideal_map, noise: list = noise) -> list[qt.Qobj]:
+        def channel(*params: float, ideal_map=ideal_map, noise: list = noise) -> list:
             unitary = ideal_map.channel(params)
             return [op @ unitary for op in noise]
 

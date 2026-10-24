@@ -1,0 +1,1 @@
+code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit ghz --qubits 24 --ps 0.000215054,0.00215054,0.0215054 --shots 100

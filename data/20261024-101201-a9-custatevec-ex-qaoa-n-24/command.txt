@@ -1,0 +1,1 @@
+code/bench/gpurun -p /local/venv-cuq/bin/python a9_custatevec.py --circuit qaoa --qubits 24 --ps 5.55556e-05,0.000555556,0.00555556 --shots 100

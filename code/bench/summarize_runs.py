@@ -24,13 +24,15 @@ def load(dirs):
 def points(rows):
     groups = defaultdict(list)
     for r in rows:
-        groups[(r["circuit"], r["n"], r.get("noise"), r["p"], r["shots"], json.dumps(r.get("options", {})))].append(r)
+        groups[(r["circuit"], r["n"], r.get("noise"), r["p"], r["shots"], json.dumps(r.get("options", {})),
+                json.dumps(r.get("tunables", [])))].append(r)
     out = []
     for key, rs in groups.items():
         first = rs[0]
         out.append({
             **{k: first[k] for k in ("circuit", "n", "noise", "p", "shots", "blocks", "t_bw", "gates", "channels")},
             "options": first.get("options", {}),
+            "tunables": first.get("tunables", []),
             "time": float(np.median([r["time"] for r in rs])),
             "t_first": first["t_first"],
             **{k: float(np.mean([r[k] for r in rs])) for k in (

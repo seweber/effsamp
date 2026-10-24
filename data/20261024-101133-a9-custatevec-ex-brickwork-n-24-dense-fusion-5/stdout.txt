@@ -1,0 +1,1 @@
+{"kind": "run", "sim": "custatevec_ex", "circuit": "brickwork", "n": 24, "noise": "damping", "p": 0.000326797, "shots": 100, "time": 0.6111260466277599, "randnums": 612, "gates": 462, "channels": 612, "dense_fusion": 5, "diagonal_fusion": null, "distinct_outcomes": 100}
