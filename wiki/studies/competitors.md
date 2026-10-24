@@ -83,9 +83,16 @@ The factors multiply to the measured pass ratios within their interplay: wide fu
 
 Aer's shot branching keeps every branch's state on the device. At 28 qubits, a state takes 2 GB and the H100 holds about 35; with 1000 shots, about $1 + N(1 - e^{-M})$ branches arise, 11 at $M = 0.01$ and 96 at $M = 0.1$. Aer crashed (segmentation fault, no message) at $M = 0.1$ on GHZ, QAOA and brickwork and at $M = 1$ on the QFT. Where it ran, noisecirc was 8 to 41 times faster: at $M = 0.01$, Aer took 1.8 s (GHZ), 3.0 s (QAOA), 7.3 s (QFT) and 6.0 s (brickwork) against noisecirc's 0.13, 0.35, 0.60 and 0.67 s; at $M = 0.1$ on the QFT, 134 s against 3.3 s. noisecirc's depth-first traversal holds one batch per segment and ran all points. The per-shot simulators scale with the state: at $M = 0.1$ and 1000 shots (scaled from 20 shots), Aer per shot takes 316 to 2934 s and CUDA-Q 204 to 1439 s, 290 to 890 and 160 to 440 times noisecirc's time.
 
+### The result holds for other shot counts and for thermal relaxation (verified, 24 qubits)
+
+Two checks repeat parts of the comparison with one parameter changed (LOG.md entries "A6 shots …" and "A6 thermal …"):
+
+- **Shots.** On the QFT and QAOA, Aer's shot branching took 10 to 30 times noisecirc's time at 100 shots, 21 to 46 times at 1000 and 11 to 55 times at 10000. Both simulators share trajectories, so neither gains more than the other from more shots; at 10000 shots and $M = 0.1$ Aer ran on 24 qubits without crashing.
+- **Thermal relaxation** (damping and dephasing, three Kraus operators) at $M = 0.1$: noisecirc took 0.14 s on the QFT and 0.24 s on brickwork, against 5.0 and 4.5 s for Aer's shot branching (36 and 19 times), 145 and 77 s for Aer per shot (1000 and 330 times) and 80 and 56 s for CUDA-Q (570 and 240 times), close to the factors with amplitude damping.
+
 ## Caveats
 
-- One device, single precision, amplitude damping only, four circuits, 24 and 28 qubits, 1000 shots. Two timed runs per point for noisecirc and Aer's shot branching at 24 qubits, one for the slower modes.
+- One device, single precision, four circuits, 24 and 28 qubits; amplitude damping throughout and thermal relaxation at one point per circuit; 1000 shots except the shot check. Two timed runs per point for noisecirc and Aer's shot branching at 24 qubits, one for the slower modes.
 - Aer's passes are a model of its algorithm on a surrogate, checked indirectly: its time per counted pass is nearly constant over the loads (2.1 to 3.3 times $t_{bw}$ per shot, 2.1 to 2.8 with branching at loads of 0.1 and above, GHZ excepted), as it should be if the count is right; CUDA-Q's algorithm was not modelled.
 - The brickwork point at $M = 0.1$ ran without Aer's Kraus fusion because of Aer's bug; it overstates noisecirc's advantage there by about 2.6 times (Aer per shot: 208 s without against 76 to 80 s with its fusion at the neighbouring loads).
 - noisecirc's per-shot variants run 1000 separate runs, whose host overhead (about 10 ms each) inflates their times; their algorithmic factors are therefore given in passes.

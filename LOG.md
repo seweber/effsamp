@@ -11,6 +11,118 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-24 03:13 UTC  A6 robustness: shots and thermal relaxation
+- **Goal:** Check the A6 comparison at 100/10000 shots and with thermal noise
+- **Task:** A6
+- **Method:** a2_runs.py and a6_runs.py at n=24: qft/qaoa damping M=0.01/0.1 with 100 and 10000 shots (noisecirc, aer_branch); qft/brickwork thermal M=0.1 (all simulators)
+- **Outcome:** Aer branching / noisecirc: 10-30x (100 shots), 11-55x (10000 shots); thermal: 19-36x over Aer branching, 330-1000x over Aer per shot, 240-570x over CUDA-Q
+- **Next:** none
+- **Refs:** wiki/studies/competitors.md
+
+## 2026-10-24 03:12 UTC  A6 thermal cudaq brickwork n=24
+- **Goal:** cudaq with thermal relaxation at M=0.1, 100 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim cudaq --circuit brickwork --qubits 24 --noise thermal --ps 0.000217865 --shots 100 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-031241-a6-thermal-cudaq-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-031241-a6-thermal-cudaq-brickwork-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 03:12 UTC  A6 thermal aer_plain brickwork n=24
+- **Goal:** aer_plain with thermal relaxation at M=0.1, 100 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_plain --circuit brickwork --qubits 24 --noise thermal --ps 0.000217865 --shots 100 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-031218-a6-thermal-aer-plain-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-031218-a6-thermal-aer-plain-brickwork-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 03:12 UTC  A6 thermal aer_branch brickwork n=24
+- **Goal:** aer_branch with thermal relaxation at M=0.1, 1000 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit brickwork --qubits 24 --noise thermal --ps 0.000217865 --shots 1000 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-031202-a6-thermal-aer-branch-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-031202-a6-thermal-aer-branch-brickwork-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 03:12 UTC  A6 thermal noisecirc brickwork n=24
+- **Goal:** noisecirc with thermal relaxation at M=0.1, 1000 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a2_runs.py --circuits brickwork --qubits 24 --noise thermal --ps 0.000217865 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-031153-a6-thermal-noisecirc-brickwork-n-24
+- **Next:** none
+- **Refs:** data/20261024-031153-a6-thermal-noisecirc-brickwork-n-24, code/bench/a2_runs.py
+
+## 2026-10-24 03:11 UTC  A6 thermal cudaq qft n=24
+- **Goal:** cudaq with thermal relaxation at M=0.1, 100 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim cudaq --circuit qft --qubits 24 --noise thermal --ps 0.000222222 --shots 100 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-031133-a6-thermal-cudaq-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-031133-a6-thermal-cudaq-qft-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 03:11 UTC  A6 thermal aer_plain qft n=24
+- **Goal:** aer_plain with thermal relaxation at M=0.1, 100 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_plain --circuit qft --qubits 24 --noise thermal --ps 0.000222222 --shots 100 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-031056-a6-thermal-aer-plain-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-031056-a6-thermal-aer-plain-qft-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 03:10 UTC  A6 thermal aer_branch qft n=24
+- **Goal:** aer_branch with thermal relaxation at M=0.1, 1000 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 24 --noise thermal --ps 0.000222222 --shots 1000 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-031039-a6-thermal-aer-branch-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-031039-a6-thermal-aer-branch-qft-n-24, code/bench/a6_runs.py
+
+## 2026-10-24 03:10 UTC  A6 thermal noisecirc qft n=24
+- **Goal:** noisecirc with thermal relaxation at M=0.1, 1000 shots
+- **Task:** A6
+- **Method:** code/bench/gpurun a2_runs.py --circuits qft --qubits 24 --noise thermal --ps 0.000222222 --shots 1000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-031032-a6-thermal-noisecirc-qft-n-24
+- **Next:** none
+- **Refs:** data/20261024-031032-a6-thermal-noisecirc-qft-n-24, code/bench/a2_runs.py
+
+## 2026-10-24 03:10 UTC  A6 shots aer_branch qaoa n=24 N=10000
+- **Goal:** Aer shot branching with 10000 shots, damping M=0.01/0.1
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556 --shots 10000 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-031008-a6-shots-aer-branch-qaoa-n-24-n-10000
+- **Next:** none
+- **Refs:** data/20261024-031008-a6-shots-aer-branch-qaoa-n-24-n-10000, code/bench/a6_runs.py
+
+## 2026-10-24 03:10 UTC  A6 shots noisecirc qaoa n=24 N=10000
+- **Goal:** noisecirc with 10000 shots, damping M=0.01/0.1
+- **Task:** A6
+- **Method:** code/bench/gpurun a2_runs.py --circuits qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556 --shots 10000 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-031001-a6-shots-noisecirc-qaoa-n-24-n-10000
+- **Next:** none
+- **Refs:** data/20261024-031001-a6-shots-noisecirc-qaoa-n-24-n-10000, code/bench/a2_runs.py
+
+## 2026-10-24 03:10 UTC  A6 shots aer_branch qaoa n=24 N=100
+- **Goal:** Aer shot branching with 100 shots, damping M=0.01/0.1
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556 --shots 100 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-030953-a6-shots-aer-branch-qaoa-n-24-n-100
+- **Next:** none
+- **Refs:** data/20261024-030953-a6-shots-aer-branch-qaoa-n-24-n-100, code/bench/a6_runs.py
+
+## 2026-10-24 03:09 UTC  A6 shots noisecirc qaoa n=24 N=100
+- **Goal:** noisecirc with 100 shots, damping M=0.01/0.1
+- **Task:** A6
+- **Method:** code/bench/gpurun a2_runs.py --circuits qaoa --qubits 24 --noise damping --ps 5.55556e-05,0.000555556 --shots 100 --reps 2
+- **Outcome:** exit 0; outputs in data/20261024-030948-a6-shots-noisecirc-qaoa-n-24-n-100
+- **Next:** none
+- **Refs:** data/20261024-030948-a6-shots-noisecirc-qaoa-n-24-n-100, code/bench/a2_runs.py
+
+## 2026-10-24 03:09 UTC  A6 shots aer_branch qft n=24 N=10000
+- **Goal:** Aer shot branching with 10000 shots, damping M=0.01/0.1
+- **Task:** A6
+- **Method:** code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 24 --noise damping --ps 3.33333e-05,0.000333333 --shots 10000 --reps 1 --budget 400
+- **Outcome:** exit 0; outputs in data/20261024-030848-a6-shots-aer-branch-qft-n-24-n-10000
+- **Next:** none
+- **Refs:** data/20261024-030848-a6-shots-aer-branch-qft-n-24-n-10000, code/bench/a6_runs.py
+
 ## 2026-10-24 03:09 UTC  Records: A3 figures, bench worktree, PROBLEMS and TASKS
 - **Goal:** Reference remaining artefacts and record conceptual problems and proposals
 - **Task:** A3

@@ -1,0 +1,1 @@
+{"kind": "run", "sim": "cudaq", "circuit": "qft", "n": 24, "noise": "thermal", "p": 0.000222222, "shots": 100, "gates": 324, "channels": 600, "seed": 1, "time": 8.02840290684253, "t_first": 8.167908750474453, "metadata": {}}

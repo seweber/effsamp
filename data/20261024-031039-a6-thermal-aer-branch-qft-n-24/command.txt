@@ -1,0 +1,1 @@
+code/bench/gpurun a6_runs.py --sim aer_branch --circuit qft --qubits 24 --noise thermal --ps 0.000222222 --shots 1000 --reps 1 --budget 400
