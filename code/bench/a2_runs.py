@@ -53,6 +53,8 @@ def main() -> None:
     parser.add_argument("--option", action="append", default=[], help="Simulator option key=value")
     parser.add_argument("--tunable", action="append", default=[], help="noisecirc.tunables NAME=VALUE (int, float, True/False)")
     parser.add_argument("--config", action="append", default=[], help="svpass Config field=value, see configpatch.py")
+    parser.add_argument("--kraus-set", default="canonical", choices=["canonical", "optimum"],
+                        help="optimum: the optimal Kraus sets of task A12 (a12_dryrun.optimal_maps)")
     args = parser.parse_args()
 
     options = {}
@@ -77,6 +79,13 @@ def main() -> None:
             qc = circuits.make(name, n)
             for p in [float(x) for x in args.ps.split(",")]:
                 maps = noise.maps(None if args.noise == "none" or p == 0 else args.noise, p)
+                if args.kraus_set == "optimum":
+                    import a12_dryrun
+                    import noisecirc.block.operation as operation_module
+
+                    operation_module.sta_sectors = a12_dryrun.sta_as_given
+                    maps = a12_dryrun.optimal_maps(args.noise, p)
+                    options["optimize_kraus"] = True
                 for shots in [int(s) for s in args.shots.split(",")]:
                     if time.perf_counter() - begin > args.budget:
                         print(json.dumps({"kind": "skipped", "circuit": name, "n": n, "p": p, "shots": shots}))
@@ -97,7 +106,7 @@ def main() -> None:
                             "seed": seed, "time": elapsed, "t_first": t_first, "t_bw": t_bw,
                             "gates": len(qc.data), "channels": circuits.channels(qc),
                             "blocks": len(compiled.blocks), "blocks_per_segment": bps, "max_batch": batch,
-                            "options": {**options, **config}, "tunables": args.tunable,
+                            "options": {**options, **config}, "tunables": args.tunable, "kraus_set": args.kraus_set,
                             "tuned": [list(v) for v in getattr(sim, "_tuned", {}).values()], **{k: float(v) for k, v in d.items()},
                         }), flush=True)
                     del sim

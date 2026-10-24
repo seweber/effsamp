@@ -1,0 +1,6 @@
+ghz | sq3: bound  38.0 default  84.5 fused  38.7 rot  38.7
+brickwork | sq3: bound  62.7 default 215.2 fused 176.1 rot 152.2
+qft | sq3: bound   8.0 default  63.0 fused  41.5 rot  41.5
+qaoa | sq3: bound  26.3 default 160.0 fused  76.9 rot  61.8
+grid | sq3: bound  58.9 default 206.7 fused 159.5 rot 150.4
+random | sq3: bound 100.4 default 297.4 fused  73.9 rot  73.8

@@ -13,10 +13,14 @@ Start with the [Overview](overview.md). Abbreviations and notation are in the [G
 
 - [Tuning Qiskit Aer's shot branching](studies/aer-tuning.md) — Which of Aer's options make its shot branching faster, and noisecirc's speedup when both simulators are tuned (A11) · *verified*
 - [Benchmark circuits and predicted work](studies/benchmark-suite.md) — Categories of benchmark circuits and noise, and noisecirc's predicted block passes and times for them (A4) · *verified*
+- [Fewer instructions per block pass](studies/block-instructions.md) — Applying a block with fewer floating-point instructions: fusing runs within stages and real rotations between deferred diagonals (A14) · *verified*
 - [Block-pass time on the H100](studies/block-pass-time.md) — How well block passes times the state-vector bandwidth time predicts noisecirc's runtime on the H100 (A2) · *verified*
 - [noisecirc against Qiskit Aer and CUDA-Q](studies/competitors.md) — Run times of Aer (shot branching, batched, per shot) and CUDA-Q against noisecirc, translated into passes, and the speedup split into algorithm and implementation (A6) · *verified*
 - [Error kernels and block sizes](studies/error-kernels.md) — Masked kernels for trajectories with errors, and whether the best block size depends on the noise (A8) · *verified*
+- [Precision, block size and the instruction-bound pass](studies/kernel-regime.md) — Whether complex32 and larger blocks speed up noisecirc on the H100, and what limits a pass when it is not bandwidth bound (A13) · *verified*
+- [Optimal Kraus representations for noisecirc](studies/kraus-representation.md) — Which Kraus set of a noise channel costs noisecirc the fewest passes, a lower bound, and the set that attains it (A12) · *partially verified*
 - [noisecirc against delayed lower-bound sampling (cuStateVec Ex)](studies/lower-bound-sampling.md) — cuStateVec Ex's per-shot trajectories with qsim's lower-bound sampling against noisecirc: how much of the gain is the sharing that only upper bounds permit (A9) · *verified*
+- [Directions beyond the current algorithm](studies/new-directions.md) — Brainstormed ideas for fundamentally faster noisecirc and the estimates or tests of the most promising (A15) · *partially verified*
 - [Issues found in noisecirc](studies/noisecirc-issues.md) — Bugs and issues found in noisecirc during benchmarking, with their fix branches · *verified*
 - [Tuning noisecirc's parameters on the H100](studies/parameter-tuning.md) — Which settings of noisecirc's fusion and kernel parameters are best on the H100, and what tuning gains (A7) · *verified*
 - [Block passes against noisecirc's parameters](studies/pass-count.md) — How circuit, noise, shots and noisecirc's parameters set the number of blocks and block passes (A3) · *verified*

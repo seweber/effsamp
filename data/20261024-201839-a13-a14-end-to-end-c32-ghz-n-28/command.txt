@@ -1,0 +1,1 @@
+code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits ghz --qubits 28 --noise damping --ps 0.00183486,0.0183486 --shots 1000 --reps 3 --budget 450 --config dtype=complex32

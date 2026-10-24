@@ -24,10 +24,13 @@ def parse(items: list[str]) -> tuple[dict, dict]:
     """Split ``key=value`` items into Simulator options and Config overrides."""
     # stage_qubits is a Simulator option since noisecirc's feature/autotune (CompiledCircuit passes it
     # explicitly, which would override a patched default), so it goes to the options.
-    config_fields = {"group_amplitudes", "threads", "min_registers"}
+    config_fields = {"group_amplitudes", "threads", "min_registers", "stage_fusion", "rotation_form", "stage_populations"}
     options, config = {}, {}
     for item in items:
         key, value = item.split("=")
-        number = float(value) if ("." in value or value == "inf") else int(value)
+        try:
+            number = float(value) if ("." in value or value == "inf") else int(value)
+        except ValueError:
+            number = value  # a string option, e.g. dtype=complex32
         (config if key in config_fields else options)[key] = number
     return options, config

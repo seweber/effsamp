@@ -12,6 +12,7 @@ Channels (``p`` is the strength):
 - ``thermal``: amplitude damping ``p`` followed by pure dephasing ``p`` (a T1/T2 pair), not mixed-unitary.
 - ``dephasing``: phase damping, mixed-unitary (equals a random Z), included for completeness.
 - ``depolarizing``: random X, Y, Z of total probability ``p``, mixed-unitary.
+- ``damp_depol``: amplitude damping ``p`` followed by depolarizing ``p``, not mixed-unitary (A12).
 """
 
 from functools import cache
@@ -45,6 +46,8 @@ def kraus(kind: str, p: float) -> list[np.ndarray]:
         y = np.array([[0, -1j], [1j, 0]])
         z = np.diag([1, -1])
         return [np.sqrt(1 - p) * np.eye(2), *(np.sqrt(p / 3) * m for m in (x, y, z))]
+    if kind == "damp_depol":
+        return [d @ a for d, a in product(kraus("depolarizing", p), kraus("damping", p))]
     raise ValueError(f"unknown noise {kind!r}")
 
 

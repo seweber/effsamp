@@ -1,0 +1,10 @@
+{"circuit": "ghz", "load": 0.1, "blocks": 3, "passes": 203.33333333333331, "last_block": 93.66666666666666, "entering": 53.0, "gain": 1.4932680538555692}
+{"circuit": "ghz", "load": 1.0, "blocks": 3, "passes": 2491.666666666667, "last_block": 1125.0, "entering": 448.6666666666667, "gain": 1.5661009847056355}
+{"circuit": "brickwork", "load": 0.1, "blocks": 16, "passes": 1143.3333333333335, "last_block": 109.0, "entering": 108.66666666666667, "gain": 1.0502143294549908}
+{"circuit": "brickwork", "load": 1.0, "blocks": 16, "passes": 9427.333333333334, "last_block": 795.0, "entering": 790.6666666666666, "gain": 1.0442713141084812}
+{"circuit": "qft", "load": 0.1, "blocks": 19, "passes": 968.0, "last_block": 94.33333333333334, "entering": 84.66666666666667, "gain": 1.056768558951965}
+{"circuit": "qft", "load": 1.0, "blocks": 19, "passes": 8312.0, "last_block": 804.3333333333334, "entering": 695.0, "gain": 1.0581570516220746}
+{"circuit": "qaoa", "load": 0.1, "blocks": 9, "passes": 677.6666666666666, "last_block": 99.66666666666667, "entering": 95.66666666666667, "gain": 1.0828229027962717}
+{"circuit": "qaoa", "load": 1.0, "blocks": 9, "passes": 5957.666666666666, "last_block": 798.3333333333334, "entering": 736.0, "gain": 1.0778555059703292}
+{"circuit": "grid", "load": 0.1, "blocks": 30, "passes": 2267.6666666666665, "last_block": 135.0, "entering": 134.66666666666666, "gain": 1.0307575757575758}
+{"circuit": "grid", "load": 1.0, "blocks": 30, "passes": 16286.000000000002, "last_block": 830.0, "entering": 825.3333333333334, "gain": 1.0262992059824392}

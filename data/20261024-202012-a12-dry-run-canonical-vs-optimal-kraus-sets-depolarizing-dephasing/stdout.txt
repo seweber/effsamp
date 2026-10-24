@@ -1,0 +1,11 @@
+{"circuit": "ghz", "noise": "depolarizing", "load": 0.1, "p": 0.001834862385321101, "set": "canonical", "passes": 423.3333333333333, "general": 254.33333333333334, "blocks": 3}
+{"circuit": "ghz", "noise": "depolarizing", "load": 0.1, "p": 0.001834862385321101, "set": "optimum", "passes": 312.3333333333333, "general": 153.33333333333334, "blocks": 3}
+{"circuit": "ghz", "noise": "depolarizing", "load": 1.0, "p": 0.01834862385321101, "set": "canonical", "passes": 4022.6666666666665, "general": 3297.6666666666665, "blocks": 3}
+{"circuit": "ghz", "noise": "depolarizing", "load": 1.0, "p": 0.01834862385321101, "set": "optimum", "passes": 1720.3333333333333, "general": 1133.3333333333333, "blocks": 3}
+{"circuit": "ghz", "noise": "dephasing", "load": 0.1, "p": 0.001834862385321101, "set": "canonical", "passes": 107.66666666666667, "general": 55.333333333333336, "blocks": 3}
+{"circuit": "ghz", "noise": "dephasing", "load": 0.1, "p": 0.001834862385321101, "set": "optimum", "passes": 92.66666666666667, "general": 44.0, "blocks": 3}
+{"circuit": "ghz", "noise": "dephasing", "load": 1.0, "p": 0.01834862385321101, "set": "canonical", "passes": 608.0, "general": 346.6666666666667, "blocks": 3}
+{"circuit": "ghz", "noise": "dephasing", "load": 1.0, "p": 0.01834862385321101, "set": "optimum", "passes": 378.3333333333333, "general": 202.0, "blocks": 3}
+{"circuit": "brickwork", "noise": "depolarizing", "load": 0.1, "p": 0.00024213075060532688, "set": "canonical", "passes": 2102.3333333333335, "general": 348.6666666666667, "blocks": 16}
+{"circuit": "brickwork", "noise": "depolarizing", "load": 0.1, "p": 0.00024213075060532688, "set": "optimum", "passes": 1733.6666666666667, "general": 193.66666666666666, "blocks": 16}
+{"circuit": "brickwork", "noise": "depolarizing", "load": 1.0, "p": 0.002421307506053269, "set": "canonical", "passes": 12561.0, "general": 3415.0, "blocks": 16}

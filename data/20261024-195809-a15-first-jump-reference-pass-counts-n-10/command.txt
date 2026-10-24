@@ -1,0 +1,1 @@
+env PYTHONPATH=/itp3/home/sebastian/effsamp/code/noisecirc-bench/src:/itp3/home/sebastian/effsamp/code/noisecirc-bench/packages/svpass/src code/noisecirc/.venv/bin/python code/bench/a15_firstjump_ref.py

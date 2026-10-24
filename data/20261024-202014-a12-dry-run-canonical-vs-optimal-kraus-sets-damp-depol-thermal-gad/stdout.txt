@@ -1,0 +1,11 @@
+{"circuit": "ghz", "noise": "damp_depol", "load": 0.1, "p": 0.001834862385321101, "set": "canonical", "passes": 620.3333333333334, "general": 375.6666666666667, "blocks": 3}
+{"circuit": "ghz", "noise": "damp_depol", "load": 0.1, "p": 0.001834862385321101, "set": "optimum", "passes": 551.3333333333334, "general": 300.3333333333333, "blocks": 3}
+{"circuit": "ghz", "noise": "damp_depol", "load": 1.0, "p": 0.01834862385321101, "set": "canonical", "passes": 8004.0, "general": 6563.0, "blocks": 4}
+{"circuit": "ghz", "noise": "damp_depol", "load": 1.0, "p": 0.01834862385321101, "set": "optimum", "passes": 4627.666666666667, "general": 3745.0, "blocks": 3}
+{"circuit": "ghz", "noise": "thermal", "load": 0.1, "p": 0.001834862385321101, "set": "canonical", "passes": 321.3333333333333, "general": 183.33333333333334, "blocks": 3}
+{"circuit": "ghz", "noise": "thermal", "load": 0.1, "p": 0.001834862385321101, "set": "optimum", "passes": 299.6666666666667, "general": 164.0, "blocks": 3}
+{"circuit": "ghz", "noise": "thermal", "load": 1.0, "p": 0.01834862385321101, "set": "canonical", "passes": 3784.3333333333335, "general": 2882.0, "blocks": 3}
+{"circuit": "ghz", "noise": "thermal", "load": 1.0, "p": 0.01834862385321101, "set": "optimum", "passes": 3465.0, "general": 2575.3333333333335, "blocks": 3}
+{"circuit": "ghz", "noise": "gad", "load": 0.1, "p": 0.001834862385321101, "set": "canonical", "passes": 226.33333333333334, "general": 135.33333333333334, "blocks": 3}
+{"circuit": "ghz", "noise": "gad", "load": 0.1, "p": 0.001834862385321101, "set": "optimum", "passes": 227.66666666666666, "general": 127.66666666666667, "blocks": 3}
+{"circuit": "ghz", "noise": "gad", "load": 1.0, "p": 0.01834862385321101, "set": "canonical", "passes": 2415.3333333333335, "general": 1771.3333333333333, "blocks": 3}

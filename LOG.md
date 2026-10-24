@@ -11,6 +11,638 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-24 21:18 UTC  A12 dry run canonical vs optimal Kraus sets damp_depol-thermal-gad
+- **Goal:** Block passes with canonical and optimal Kraus sets for noise damp_depol,thermal,gad on five circuits, n=28, M=0.1 and 1
+- **Task:** A12
+- **Method:** env PYTHONPATH=/itp3/home/sebastian/effsamp/code/noisecirc-bench/src:/itp3/home/sebastian/effsamp/code/noisecirc-bench/packages/svpass/src code/noisecirc/.venv/bin/python code/bench/a12_dryrun.py damp_depol,thermal,gad ghz,brickwork,qft,qaoa,grid
+- **Outcome:** blocked: timeout after 3500s; outputs in data/20261024-202014-a12-dry-run-canonical-vs-optimal-kraus-sets-damp-depol-thermal-gad
+- **Next:** none
+- **Refs:** data/20261024-202014-a12-dry-run-canonical-vs-optimal-kraus-sets-damp-depol-thermal-gad, code/bench/a12_dryrun.py, code/bench/a12_kraus.py
+
+## 2026-10-24 21:18 UTC  A12 dry run canonical vs optimal Kraus sets depolarizing-dephasing
+- **Goal:** Block passes with canonical and optimal Kraus sets for noise depolarizing,dephasing on five circuits, n=28, M=0.1 and 1
+- **Task:** A12
+- **Method:** env PYTHONPATH=/itp3/home/sebastian/effsamp/code/noisecirc-bench/src:/itp3/home/sebastian/effsamp/code/noisecirc-bench/packages/svpass/src code/noisecirc/.venv/bin/python code/bench/a12_dryrun.py depolarizing,dephasing ghz,brickwork,qft,qaoa,grid
+- **Outcome:** blocked: timeout after 3500s; outputs in data/20261024-202012-a12-dry-run-canonical-vs-optimal-kraus-sets-depolarizing-dephasing
+- **Next:** none
+- **Refs:** data/20261024-202012-a12-dry-run-canonical-vs-optimal-kraus-sets-depolarizing-dephasing, code/bench/a12_dryrun.py, code/bench/a12_kraus.py
+
+## 2026-10-24 21:07 UTC  A12 tests of bench/fixes with fix/optimize-kraus-residual-target
+- **Goal:** svpass and noisecirc test suites on the H100 after merging the residual-target fix into bench/fixes (5c8fc57)
+- **Task:** A12
+- **Method:** code/bench/gpurun -t 590 run_tests.py
+- **Outcome:** exit 0; outputs in data/20261024-210719-a12-tests-of-bench-fixes-with-fix-optimize-kraus-residual-target
+- **Next:** none
+- **Refs:** data/20261024-210719-a12-tests-of-bench-fixes-with-fix-optimize-kraus-residual-target, code/bench/run_tests.py, code/noisecirc-bench
+
+## 2026-10-24 20:33 UTC  A15 population reductions v2 fused-sq4-c32-on
+- **Goal:** Pass times at n=26 with and without per-stage population reductions (first-jump kernel cost prototype v2, partials to distinct addresses, svpass stage_populations), setting fused-sq4-c32-on
+- **Task:** A15
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --no-masked --set stage_fusion=1 --set rotation_form=1 --set stage_qubits=4 --set dtype=complex32 --set stage_populations=1 --label pop:fused-sq4-c32-on
+- **Outcome:** exit 0; outputs in data/20261024-203320-a15-population-reductions-v2-fused-sq4-c32-on
+- **Next:** none
+- **Refs:** data/20261024-203320-a15-population-reductions-v2-fused-sq4-c32-on, code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 20:33 UTC  A15 population reductions v2 fused-sq4-c32-off
+- **Goal:** Pass times at n=26 with and without per-stage population reductions (first-jump kernel cost prototype v2, partials to distinct addresses, svpass stage_populations), setting fused-sq4-c32-off
+- **Task:** A15
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --no-masked --set stage_fusion=1 --set rotation_form=1 --set stage_qubits=4 --set dtype=complex32 --label pop:fused-sq4-c32-off
+- **Outcome:** exit 0; outputs in data/20261024-203306-a15-population-reductions-v2-fused-sq4-c32-off
+- **Next:** none
+- **Refs:** data/20261024-203306-a15-population-reductions-v2-fused-sq4-c32-off, code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 20:33 UTC  A15 population reductions v2 fused-on
+- **Goal:** Pass times at n=26 with and without per-stage population reductions (first-jump kernel cost prototype v2, partials to distinct addresses, svpass stage_populations), setting fused-on
+- **Task:** A15
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --no-masked --set stage_fusion=1 --set rotation_form=1 --set stage_populations=1 --label pop:fused-on
+- **Outcome:** exit 0; outputs in data/20261024-203255-a15-population-reductions-v2-fused-on
+- **Next:** none
+- **Refs:** data/20261024-203255-a15-population-reductions-v2-fused-on, code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 20:32 UTC  A15 population reductions v2 fused-off
+- **Goal:** Pass times at n=26 with and without per-stage population reductions (first-jump kernel cost prototype v2, partials to distinct addresses, svpass stage_populations), setting fused-off
+- **Task:** A15
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --no-masked --set stage_fusion=1 --set rotation_form=1 --label pop:fused-off
+- **Outcome:** exit 0; outputs in data/20261024-203246-a15-population-reductions-v2-fused-off
+- **Next:** none
+- **Refs:** data/20261024-203246-a15-population-reductions-v2-fused-off, code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 20:32 UTC  A15 population reductions v2 default-on
+- **Goal:** Pass times at n=26 with and without per-stage population reductions (first-jump kernel cost prototype v2, partials to distinct addresses, svpass stage_populations), setting default-on
+- **Task:** A15
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --no-masked --set stage_populations=1 --label pop:default-on
+- **Outcome:** exit 0; outputs in data/20261024-203235-a15-population-reductions-v2-default-on
+- **Next:** none
+- **Refs:** data/20261024-203235-a15-population-reductions-v2-default-on, code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 20:32 UTC  A15 population reductions v2 default-off
+- **Goal:** Pass times at n=26 with and without per-stage population reductions (first-jump kernel cost prototype v2, partials to distinct addresses, svpass stage_populations), setting default-off
+- **Task:** A15
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --no-masked --label pop:default-off
+- **Outcome:** exit 0; outputs in data/20261024-203228-a15-population-reductions-v2-default-off
+- **Next:** none
+- **Refs:** data/20261024-203228-a15-population-reductions-v2-default-off, code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 20:32 UTC  A15 population reductions v1 summary
+- **Goal:** Kernel cost of per-stage population reductions (first-jump sampling) with the v1 prototype
+- **Task:** A15
+- **Method:** svpass stage_populations v1: per stage, per register qubit, warp shuffle reduction then a double atomicAdd by lane 0 to one of 256 shared global addresses; a13_blocks.py n=26, dominant kernels
+- **Outcome:** Trajectory time 2.3-3.6x (default kernels), 2.2-3.6x (A14 kernels), 3.0-4.1x (A14, 4-qubit stages, complex32) of the same kernels without reductions, e.g. QFT 10.0 -> 36.4 ms. Dominated by contention of all warps on the same 256 atomic addresses, an artifact: v2 writes partials to distinct addresses
+- **Next:** time v2
+- **Refs:** code/noisecirc, code/bench/a13_blocks.py
+
+## 2026-10-24 20:31 UTC  A15 population reductions fused-sq4-c32-on
+- **Goal:** Pass times at n=26 with and without per-stage population reductions (first-jump kernel cost prototype, svpass stage_populations), setting fused-sq4-c32-on
+- **Task:** A15
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --no-masked --set stage_fusion=1 --set rotation_form=1 --set stage_qubits=4 --set dtype=complex32 --set stage_populations=1 --label pop:fused-sq4-c32-on
+- **Outcome:** exit 0; prototype v1 (contended global atomics); outputs deleted by mistake, times kept in the entry "A15 population reductions v1 summary"
+- **Next:** none
+- **Refs:** code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 20:31 UTC  A15 population reductions fused-sq4-c32-off
+- **Goal:** Pass times at n=26 with and without per-stage population reductions (first-jump kernel cost prototype, svpass stage_populations), setting fused-sq4-c32-off
+- **Task:** A15
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --no-masked --set stage_fusion=1 --set rotation_form=1 --set stage_qubits=4 --set dtype=complex32 --label pop:fused-sq4-c32-off
+- **Outcome:** exit 0; prototype v1 (contended global atomics); outputs deleted by mistake, times kept in the entry "A15 population reductions v1 summary"
+- **Next:** none
+- **Refs:** code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 20:31 UTC  A15 population reductions fused-on
+- **Goal:** Pass times at n=26 with and without per-stage population reductions (first-jump kernel cost prototype, svpass stage_populations), setting fused-on
+- **Task:** A15
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --no-masked --set stage_fusion=1 --set rotation_form=1 --set stage_populations=1 --label pop:fused-on
+- **Outcome:** exit 0; prototype v1 (contended global atomics); outputs deleted by mistake, times kept in the entry "A15 population reductions v1 summary"
+- **Next:** none
+- **Refs:** code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 20:30 UTC  A15 population reductions fused-off
+- **Goal:** Pass times at n=26 with and without per-stage population reductions (first-jump kernel cost prototype, svpass stage_populations), setting fused-off
+- **Task:** A15
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --no-masked --set stage_fusion=1 --set rotation_form=1 --label pop:fused-off
+- **Outcome:** exit 0; prototype v1 (contended global atomics); outputs deleted by mistake, times kept in the entry "A15 population reductions v1 summary"
+- **Next:** none
+- **Refs:** code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 20:30 UTC  A15 population reductions default-on
+- **Goal:** Pass times at n=26 with and without per-stage population reductions (first-jump kernel cost prototype, svpass stage_populations), setting default-on
+- **Task:** A15
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --no-masked --set stage_populations=1 --label pop:default-on
+- **Outcome:** exit 0; prototype v1 (contended global atomics); outputs deleted by mistake, times kept in the entry "A15 population reductions v1 summary"
+- **Next:** none
+- **Refs:** code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 20:30 UTC  A15 population reductions default-off
+- **Goal:** Pass times at n=26 with and without per-stage population reductions (first-jump kernel cost prototype, svpass stage_populations), setting default-off
+- **Task:** A15
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --no-masked --label pop:default-off
+- **Outcome:** exit 0; prototype v1 (contended global atomics); outputs deleted by mistake, times kept in the entry "A15 population reductions v1 summary"
+- **Next:** none
+- **Refs:** code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 20:29 UTC  A13 A14 end-to-end c32 grid n=28
+- **Goal:** End-to-end noisy run of grid at n=28, damping M=0.1 and 1, 1000 shots, complex32 with the default kernels (noisecirc feature/stage-fusion, flags off)
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits grid --qubits 28 --noise damping --ps 0.000141443,0.00141443 --shots 1000 --reps 3 --budget 450 --config dtype=complex32
+- **Outcome:** exit 0; outputs in data/20261024-202449-a13-a14-end-to-end-c32-grid-n-28
+- **Next:** none
+- **Refs:** data/20261024-202449-a13-a14-end-to-end-c32-grid-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 20:24 UTC  A13 A14 end-to-end c32 qaoa n=28
+- **Goal:** End-to-end noisy run of qaoa at n=28, damping M=0.1 and 1, 1000 shots, complex32 with the default kernels (noisecirc feature/stage-fusion, flags off)
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits qaoa --qubits 28 --noise damping --ps 0.00047619,0.0047619 --shots 1000 --reps 3 --budget 450 --config dtype=complex32
+- **Outcome:** exit 0; outputs in data/20261024-202330-a13-a14-end-to-end-c32-qaoa-n-28
+- **Next:** none
+- **Refs:** data/20261024-202330-a13-a14-end-to-end-c32-qaoa-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 20:23 UTC  A13 A14 end-to-end c32 qft n=28
+- **Goal:** End-to-end noisy run of qft at n=28, damping M=0.1 and 1, 1000 shots, complex32 with the default kernels (noisecirc feature/stage-fusion, flags off)
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits qft --qubits 28 --noise damping --ps 0.000246305,0.00246305 --shots 1000 --reps 3 --budget 450 --config dtype=complex32
+- **Outcome:** exit 0; outputs in data/20261024-202155-a13-a14-end-to-end-c32-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-202155-a13-a14-end-to-end-c32-qft-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 20:21 UTC  A13 A14 end-to-end c32 brickwork n=28
+- **Goal:** End-to-end noisy run of brickwork at n=28, damping M=0.1 and 1, 1000 shots, complex32 with the default kernels (noisecirc feature/stage-fusion, flags off)
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits brickwork --qubits 28 --noise damping --ps 0.000242131,0.00242131 --shots 1000 --reps 3 --budget 450 --config dtype=complex32
+- **Outcome:** exit 0; outputs in data/20261024-201909-a13-a14-end-to-end-c32-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-201909-a13-a14-end-to-end-c32-brickwork-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 20:20 UTC  A12 dry runs with optimize_kraus aborted
+- **Goal:** Dry-run block passes for canonical, optimize_kraus and optimal Kraus sets, five circuits, five noise kinds
+- **Task:** A12
+- **Method:** code/bench/a12_dryrun.py with all three sets, two parallel CPU processes
+- **Outcome:** Killed after about 50 min: optimize_kraus re-optimizes every distinct gate (hundreds of random angles in brickwork/QFT, up to 20 s per two-qubit set), so the runs would exceed their timeouts; outputs incomplete and deleted. optimize_kraus is within 1% of the optimum per gate (data/a12-kraus), so the dry run now compares canonical and optimum only
+- **Next:** rerun a12_dryrun.py with two sets
+- **Refs:** code/bench/a12_dryrun.py, data/a12-kraus
+
+## 2026-10-24 20:19 UTC  A13 A14 end-to-end c32 ghz n=28
+- **Goal:** End-to-end noisy run of ghz at n=28, damping M=0.1 and 1, 1000 shots, complex32 with the default kernels (noisecirc feature/stage-fusion, flags off)
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits ghz --qubits 28 --noise damping --ps 0.00183486,0.0183486 --shots 1000 --reps 3 --budget 450 --config dtype=complex32
+- **Outcome:** exit 0; outputs in data/20261024-201839-a13-a14-end-to-end-c32-ghz-n-28
+- **Next:** none
+- **Refs:** data/20261024-201839-a13-a14-end-to-end-c32-ghz-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 20:18 UTC  A15 readout map dry run
+- **Goal:** Block passes when channels followed only by tail (diagonal, measurement-final) gates are applied as classical readout noise, five circuits, n=28, damping M=0.1/1, 1000 shots
+- **Task:** A15
+- **Method:** env PYTHONPATH=/itp3/home/sebastian/effsamp/code/noisecirc-bench/src:/itp3/home/sebastian/effsamp/code/noisecirc-bench/packages/svpass/src code/noisecirc/.venv/bin/python code/bench/a15_readout.py
+- **Outcome:** exit 0; outputs in data/20261024-201403-a15-readout-map-dry-run
+- **Next:** none
+- **Refs:** data/20261024-201403-a15-readout-map-dry-run, code/bench/a15_readout.py, code/bench/a15_readout_check.py, data/a15-readout
+
+## 2026-10-24 20:11 UTC  A13 A14 end-to-end fused-sq4-c32 grid n=28
+- **Goal:** End-to-end noisy run of grid at n=28, damping M=0.1 and 1, 1000 shots, kernels fused-sq4-c32 (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits grid --qubits 28 --noise damping --ps 0.000141443,0.00141443 --shots 1000 --reps 3 --budget 450 --config stage_fusion=1 --config rotation_form=1 --config stage_qubits=4 --config dtype=complex32
+- **Outcome:** exit 0; outputs in data/20261024-200741-a13-a14-end-to-end-fused-sq4-c32-grid-n-28
+- **Next:** none
+- **Refs:** data/20261024-200741-a13-a14-end-to-end-fused-sq4-c32-grid-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 20:07 UTC  A13 A14 end-to-end fused-sq4-c32 qaoa n=28
+- **Goal:** End-to-end noisy run of qaoa at n=28, damping M=0.1 and 1, 1000 shots, kernels fused-sq4-c32 (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits qaoa --qubits 28 --noise damping --ps 0.00047619,0.0047619 --shots 1000 --reps 3 --budget 450 --config stage_fusion=1 --config rotation_form=1 --config stage_qubits=4 --config dtype=complex32
+- **Outcome:** exit 0; outputs in data/20261024-200638-a13-a14-end-to-end-fused-sq4-c32-qaoa-n-28
+- **Next:** none
+- **Refs:** data/20261024-200638-a13-a14-end-to-end-fused-sq4-c32-qaoa-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 20:06 UTC  A13 A14 end-to-end fused-sq4-c32 qft n=28
+- **Goal:** End-to-end noisy run of qft at n=28, damping M=0.1 and 1, 1000 shots, kernels fused-sq4-c32 (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits qft --qubits 28 --noise damping --ps 0.000246305,0.00246305 --shots 1000 --reps 3 --budget 450 --config stage_fusion=1 --config rotation_form=1 --config stage_qubits=4 --config dtype=complex32
+- **Outcome:** exit 0; outputs in data/20261024-200522-a13-a14-end-to-end-fused-sq4-c32-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-200522-a13-a14-end-to-end-fused-sq4-c32-qft-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 20:05 UTC  A13 A14 end-to-end fused-sq4-c32 brickwork n=28
+- **Goal:** End-to-end noisy run of brickwork at n=28, damping M=0.1 and 1, 1000 shots, kernels fused-sq4-c32 (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits brickwork --qubits 28 --noise damping --ps 0.000242131,0.00242131 --shots 1000 --reps 3 --budget 450 --config stage_fusion=1 --config rotation_form=1 --config stage_qubits=4 --config dtype=complex32
+- **Outcome:** exit 0; outputs in data/20261024-200257-a13-a14-end-to-end-fused-sq4-c32-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-200257-a13-a14-end-to-end-fused-sq4-c32-brickwork-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 20:02 UTC  A13 A14 end-to-end fused-sq4-c32 ghz n=28
+- **Goal:** End-to-end noisy run of ghz at n=28, damping M=0.1 and 1, 1000 shots, kernels fused-sq4-c32 (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits ghz --qubits 28 --noise damping --ps 0.00183486,0.0183486 --shots 1000 --reps 3 --budget 450 --config stage_fusion=1 --config rotation_form=1 --config stage_qubits=4 --config dtype=complex32
+- **Outcome:** exit 0; outputs in data/20261024-200228-a13-a14-end-to-end-fused-sq4-c32-ghz-n-28
+- **Next:** none
+- **Refs:** data/20261024-200228-a13-a14-end-to-end-fused-sq4-c32-ghz-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 20:02 UTC  A13 A14 end-to-end fused-sq4 grid n=28
+- **Goal:** End-to-end noisy run of grid at n=28, damping M=0.1 and 1, 1000 shots, kernels fused-sq4 (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits grid --qubits 28 --noise damping --ps 0.000141443,0.00141443 --shots 1000 --reps 3 --budget 450 --config stage_fusion=1 --config rotation_form=1 --config stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261024-195942-a13-a14-end-to-end-fused-sq4-grid-n-28
+- **Next:** none
+- **Refs:** data/20261024-195942-a13-a14-end-to-end-fused-sq4-grid-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 20:00 UTC  A15 first-jump reference pass counts n=10
+- **Goal:** Block passes of noisecirc's proposals vs first-jump sampling (with and without oversampling ceiling) with real states, NumPy reference on noisecirc's compiled blocks, n=10, 1000 shots, damping M=0.1/1/3
+- **Task:** A15
+- **Method:** env PYTHONPATH=/itp3/home/sebastian/effsamp/code/noisecirc-bench/src:/itp3/home/sebastian/effsamp/code/noisecirc-bench/packages/svpass/src code/noisecirc/.venv/bin/python code/bench/a15_firstjump_ref.py
+- **Outcome:** exit 0; outputs in data/20261024-195809-a15-first-jump-reference-pass-counts-n-10
+- **Next:** none
+- **Refs:** data/20261024-195809-a15-first-jump-reference-pass-counts-n-10, code/bench/a15_firstjump_ref.py
+
+## 2026-10-24 19:59 UTC  A13 A14 end-to-end fused-sq4 qaoa n=28
+- **Goal:** End-to-end noisy run of qaoa at n=28, damping M=0.1 and 1, 1000 shots, kernels fused-sq4 (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits qaoa --qubits 28 --noise damping --ps 0.00047619,0.0047619 --shots 1000 --reps 3 --budget 450 --config stage_fusion=1 --config rotation_form=1 --config stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261024-195816-a13-a14-end-to-end-fused-sq4-qaoa-n-28
+- **Next:** none
+- **Refs:** data/20261024-195816-a13-a14-end-to-end-fused-sq4-qaoa-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 19:58 UTC  A13 A14 end-to-end fused-sq4 qft n=28
+- **Goal:** End-to-end noisy run of qft at n=28, damping M=0.1 and 1, 1000 shots, kernels fused-sq4 (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits qft --qubits 28 --noise damping --ps 0.000246305,0.00246305 --shots 1000 --reps 3 --budget 450 --config stage_fusion=1 --config rotation_form=1 --config stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261024-195610-a13-a14-end-to-end-fused-sq4-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-195610-a13-a14-end-to-end-fused-sq4-qft-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 19:56 UTC  A13 A14 end-to-end fused-sq4 brickwork n=28
+- **Goal:** End-to-end noisy run of brickwork at n=28, damping M=0.1 and 1, 1000 shots, kernels fused-sq4 (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits brickwork --qubits 28 --noise damping --ps 0.000242131,0.00242131 --shots 1000 --reps 3 --budget 450 --config stage_fusion=1 --config rotation_form=1 --config stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261024-195302-a13-a14-end-to-end-fused-sq4-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-195302-a13-a14-end-to-end-fused-sq4-brickwork-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 19:53 UTC  A13 A14 end-to-end fused-sq4 ghz n=28
+- **Goal:** End-to-end noisy run of ghz at n=28, damping M=0.1 and 1, 1000 shots, kernels fused-sq4 (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits ghz --qubits 28 --noise damping --ps 0.00183486,0.0183486 --shots 1000 --reps 3 --budget 450 --config stage_fusion=1 --config rotation_form=1 --config stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261024-195221-a13-a14-end-to-end-fused-sq4-ghz-n-28
+- **Next:** none
+- **Refs:** data/20261024-195221-a13-a14-end-to-end-fused-sq4-ghz-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 19:52 UTC  A13 A14 end-to-end fused grid n=28
+- **Goal:** End-to-end noisy run of grid at n=28, damping M=0.1 and 1, 1000 shots, kernels fused (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits grid --qubits 28 --noise damping --ps 0.000141443,0.00141443 --shots 1000 --reps 3 --budget 450 --config stage_fusion=1 --config rotation_form=1
+- **Outcome:** exit 0; outputs in data/20261024-194939-a13-a14-end-to-end-fused-grid-n-28
+- **Next:** none
+- **Refs:** data/20261024-194939-a13-a14-end-to-end-fused-grid-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 19:49 UTC  A13 A14 end-to-end fused qaoa n=28
+- **Goal:** End-to-end noisy run of qaoa at n=28, damping M=0.1 and 1, 1000 shots, kernels fused (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits qaoa --qubits 28 --noise damping --ps 0.00047619,0.0047619 --shots 1000 --reps 3 --budget 450 --config stage_fusion=1 --config rotation_form=1
+- **Outcome:** exit 0; outputs in data/20261024-194814-a13-a14-end-to-end-fused-qaoa-n-28
+- **Next:** none
+- **Refs:** data/20261024-194814-a13-a14-end-to-end-fused-qaoa-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 19:48 UTC  A13 A14 end-to-end fused qft n=28
+- **Goal:** End-to-end noisy run of qft at n=28, damping M=0.1 and 1, 1000 shots, kernels fused (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits qft --qubits 28 --noise damping --ps 0.000246305,0.00246305 --shots 1000 --reps 3 --budget 450 --config stage_fusion=1 --config rotation_form=1
+- **Outcome:** exit 0; outputs in data/20261024-194600-a13-a14-end-to-end-fused-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-194600-a13-a14-end-to-end-fused-qft-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 19:46 UTC  A13 A14 end-to-end fused brickwork n=28
+- **Goal:** End-to-end noisy run of brickwork at n=28, damping M=0.1 and 1, 1000 shots, kernels fused (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits brickwork --qubits 28 --noise damping --ps 0.000242131,0.00242131 --shots 1000 --reps 3 --budget 450 --config stage_fusion=1 --config rotation_form=1
+- **Outcome:** exit 0; outputs in data/20261024-194258-a13-a14-end-to-end-fused-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-194258-a13-a14-end-to-end-fused-brickwork-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 19:42 UTC  A13 A14 end-to-end fused ghz n=28
+- **Goal:** End-to-end noisy run of ghz at n=28, damping M=0.1 and 1, 1000 shots, kernels fused (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits ghz --qubits 28 --noise damping --ps 0.00183486,0.0183486 --shots 1000 --reps 3 --budget 450 --config stage_fusion=1 --config rotation_form=1
+- **Outcome:** exit 0; outputs in data/20261024-194220-a13-a14-end-to-end-fused-ghz-n-28
+- **Next:** none
+- **Refs:** data/20261024-194220-a13-a14-end-to-end-fused-ghz-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 19:42 UTC  A13 A14 end-to-end default grid n=28
+- **Goal:** End-to-end noisy run of grid at n=28, damping M=0.1 and 1, 1000 shots, kernels default (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits grid --qubits 28 --noise damping --ps 0.000141443,0.00141443 --shots 1000 --reps 3 --budget 450
+- **Outcome:** exit 0; outputs in data/20261024-193930-a13-a14-end-to-end-default-grid-n-28
+- **Next:** none
+- **Refs:** data/20261024-193930-a13-a14-end-to-end-default-grid-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 19:39 UTC  A13 A14 end-to-end default qaoa n=28
+- **Goal:** End-to-end noisy run of qaoa at n=28, damping M=0.1 and 1, 1000 shots, kernels default (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits qaoa --qubits 28 --noise damping --ps 0.00047619,0.0047619 --shots 1000 --reps 3 --budget 450
+- **Outcome:** exit 0; outputs in data/20261024-193758-a13-a14-end-to-end-default-qaoa-n-28
+- **Next:** none
+- **Refs:** data/20261024-193758-a13-a14-end-to-end-default-qaoa-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 19:37 UTC  A13 A14 end-to-end default qft n=28
+- **Goal:** End-to-end noisy run of qft at n=28, damping M=0.1 and 1, 1000 shots, kernels default (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits qft --qubits 28 --noise damping --ps 0.000246305,0.00246305 --shots 1000 --reps 3 --budget 450
+- **Outcome:** exit 0; outputs in data/20261024-193547-a13-a14-end-to-end-default-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-193547-a13-a14-end-to-end-default-qft-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 19:37 UTC  A12 dry run Kraus sets damp_depol-thermal-gad
+- **Goal:** Block passes with canonical, optimize_kraus and optimal Kraus sets for noise damp_depol,thermal,gad on five circuits, n=28, M=0.1 and 1
+- **Task:** A12
+- **Method:** env PYTHONPATH=/itp3/home/sebastian/effsamp/code/noisecirc-bench/src:/itp3/home/sebastian/effsamp/code/noisecirc-bench/packages/svpass/src code/noisecirc/.venv/bin/python code/bench/a12_dryrun.py damp_depol,thermal,gad ghz,brickwork,qft,qaoa,grid
+- **Outcome:** exit 1 at once: code/bench/noise.py had no channel damp_depol (added); failed output deleted, rerun in the entry above
+- **Next:** none
+- **Refs:** code/bench/noise.py, code/bench/a12_dryrun.py, code/bench/a12_kraus.py
+
+## 2026-10-24 19:35 UTC  A13 A14 end-to-end default brickwork n=28
+- **Goal:** End-to-end noisy run of brickwork at n=28, damping M=0.1 and 1, 1000 shots, kernels default (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits brickwork --qubits 28 --noise damping --ps 0.000242131,0.00242131 --shots 1000 --reps 3 --budget 450
+- **Outcome:** exit 0; outputs in data/20261024-193231-a13-a14-end-to-end-default-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-193231-a13-a14-end-to-end-default-brickwork-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 19:32 UTC  A13 A14 end-to-end default ghz n=28
+- **Goal:** End-to-end noisy run of ghz at n=28, damping M=0.1 and 1, 1000 shots, kernels default (noisecirc feature/stage-fusion)
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits ghz --qubits 28 --noise damping --ps 0.00183486,0.0183486 --shots 1000 --reps 3 --budget 450
+- **Outcome:** exit 0; outputs in data/20261024-193150-a13-a14-end-to-end-default-ghz-n-28
+- **Next:** none
+- **Refs:** data/20261024-193150-a13-a14-end-to-end-default-ghz-n-28, code/bench/a2_runs.py, code/noisecirc
+
+## 2026-10-24 19:31 UTC  A13 complex32 accuracy n=24
+- **Goal:** Accuracy of complex32 and complex64 against complex128 for the no-error trajectory through each circuit, fused kernels with 4-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_accuracy.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094,random:damping:0.0001 --qubits 24 --set stage_fusion=1 --set rotation_form=1 --set stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261024-192627-a13-complex32-accuracy-n-24
+- **Next:** none
+- **Refs:** data/20261024-192627-a13-complex32-accuracy-n-24, code/bench/a13_accuracy.py
+
+## 2026-10-24 19:16 UTC  A13 block times fused kernels c32-w10
+- **Goal:** Pass times at n=26 with stage fusion and rotation form (noisecirc feature/stage-fusion), setting c32-w10
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set stage_fusion=1 --set rotation_form=1 --set dtype=complex32 --set max_fused_qudits=10 --label fr:c32-w10
+- **Outcome:** exit 0; outputs in data/20261024-191623-a13-block-times-fused-kernels-c32-w10
+- **Next:** none
+- **Refs:** data/20261024-191623-a13-block-times-fused-kernels-c32-w10, code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 19:16 UTC  A13 block times fused kernels c32-sq4
+- **Goal:** Pass times at n=26 with stage fusion and rotation form (noisecirc feature/stage-fusion), setting c32-sq4
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set stage_fusion=1 --set rotation_form=1 --set dtype=complex32 --set stage_qubits=4 --label fr:c32-sq4
+- **Outcome:** exit 0; outputs in data/20261024-191550-a13-block-times-fused-kernels-c32-sq4
+- **Next:** none
+- **Refs:** data/20261024-191550-a13-block-times-fused-kernels-c32-sq4, code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 19:15 UTC  A13 block times fused kernels w10
+- **Goal:** Pass times at n=26 with stage fusion and rotation form (noisecirc feature/stage-fusion), setting w10
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set stage_fusion=1 --set rotation_form=1 --set max_fused_qudits=10 --label fr:w10
+- **Outcome:** exit 0; outputs in data/20261024-191530-a13-block-times-fused-kernels-w10
+- **Next:** none
+- **Refs:** data/20261024-191530-a13-block-times-fused-kernels-w10, code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 19:15 UTC  A13 block times fused kernels c32
+- **Goal:** Pass times at n=26 with stage fusion and rotation form (noisecirc feature/stage-fusion), setting c32
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set stage_fusion=1 --set rotation_form=1 --set dtype=complex32 --label fr:c32
+- **Outcome:** exit 0; outputs in data/20261024-191510-a13-block-times-fused-kernels-c32
+- **Next:** none
+- **Refs:** data/20261024-191510-a13-block-times-fused-kernels-c32, code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 19:15 UTC  A13 block times fused kernels sq4-reg96
+- **Goal:** Pass times at n=26 with stage fusion and rotation form (noisecirc feature/stage-fusion), setting sq4-reg96
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set stage_fusion=1 --set rotation_form=1 --set stage_qubits=4 --set min_registers=96 --label fr:sq4-reg96
+- **Outcome:** exit 0; outputs in data/20261024-191438-a13-block-times-fused-kernels-sq4-reg96
+- **Next:** none
+- **Refs:** data/20261024-191438-a13-block-times-fused-kernels-sq4-reg96, code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 19:14 UTC  A13 block times fused kernels sq4
+- **Goal:** Pass times at n=26 with stage fusion and rotation form (noisecirc feature/stage-fusion), setting sq4
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set stage_fusion=1 --set rotation_form=1 --set stage_qubits=4 --label fr:sq4
+- **Outcome:** exit 0; outputs in data/20261024-191404-a13-block-times-fused-kernels-sq4
+- **Next:** none
+- **Refs:** data/20261024-191404-a13-block-times-fused-kernels-sq4, code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 19:14 UTC  A13 block times fused kernels base
+- **Goal:** Pass times at n=26 with stage fusion and rotation form (noisecirc feature/stage-fusion), setting base
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set stage_fusion=1 --set rotation_form=1 --label fr:base
+- **Outcome:** exit 0; outputs in data/20261024-191352-a13-block-times-fused-kernels-base
+- **Next:** none
+- **Refs:** data/20261024-191352-a13-block-times-fused-kernels-base, code/bench/a13_blocks.py, code/noisecirc
+
+## 2026-10-24 19:13 UTC  A14 stage fusion and rotation form check n=26
+- **Goal:** Correctness and pass times of in-stage fusion plus rotation form (svpass stage_fusion, rotation_form; noisecirc feature/stage-fusion) against the default kernels, A7 workloads at M=0.1
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a14_check.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --variant stage_fusion=1 --variant rotation_form=1 --label fusion+rotation
+- **Outcome:** exit 0; outputs in data/20261024-190951-a14-stage-fusion-and-rotation-form-check-n-26
+- **Next:** none
+- **Refs:** data/20261024-190951-a14-stage-fusion-and-rotation-form-check-n-26, code/bench/a14_check.py, code/noisecirc
+
+## 2026-10-24 19:05 UTC  A14 stage fusion check n=26
+- **Goal:** Correctness and pass times of in-stage fusion (svpass stage_fusion, noisecirc feature/stage-fusion) against the default kernels on every block of the A7 workloads at M=0.1
+- **Task:** A14
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a14_check.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --variant stage_fusion=1 --label fusion
+- **Outcome:** exit 0; outputs in data/20261024-190130-a14-stage-fusion-check-n-26
+- **Next:** none
+- **Refs:** data/20261024-190130-a14-stage-fusion-check-n-26, code/bench/a14_check.py, code/noisecirc
+
+## 2026-10-24 19:00 UTC  A13 block times complex32 max-fused-qudits 11 max-operations 1024
+- **Goal:** Pass times and static work of every block at n=26 for precision complex32, max_fused_qudits=11, max_operations=1024 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex32 --set max_fused_qudits=11 --set max_operations=1024 --label complex32:11:1024
+- **Outcome:** exit 0; outputs in data/20261024-190024-a13-block-times-complex32-max-fused-qudits-11-max-operations-1024
+- **Next:** none
+- **Refs:** data/20261024-190024-a13-block-times-complex32-max-fused-qudits-11-max-operations-1024, code/bench/a13_blocks.py
+
+## 2026-10-24 19:00 UTC  A13 block times complex32 max-fused-qudits 11 max-operations 256
+- **Goal:** Pass times and static work of every block at n=26 for precision complex32, max_fused_qudits=11, max_operations=256 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex32 --set max_fused_qudits=11 --set max_operations=256 --label complex32:11:256
+- **Outcome:** exit 0; outputs in data/20261024-190010-a13-block-times-complex32-max-fused-qudits-11-max-operations-256
+- **Next:** none
+- **Refs:** data/20261024-190010-a13-block-times-complex32-max-fused-qudits-11-max-operations-256, code/bench/a13_blocks.py
+
+## 2026-10-24 19:00 UTC  A13 block times complex32 max-fused-qudits 11 max-operations 128
+- **Goal:** Pass times and static work of every block at n=26 for precision complex32, max_fused_qudits=11, max_operations=128 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex32 --set max_fused_qudits=11 --set max_operations=128 --label complex32:11:128
+- **Outcome:** exit 0; outputs in data/20261024-185952-a13-block-times-complex32-max-fused-qudits-11-max-operations-128
+- **Next:** none
+- **Refs:** data/20261024-185952-a13-block-times-complex32-max-fused-qudits-11-max-operations-128, code/bench/a13_blocks.py
+
+## 2026-10-24 18:59 UTC  A13 block times complex32 max-fused-qudits 11 max-operations 64
+- **Goal:** Pass times and static work of every block at n=26 for precision complex32, max_fused_qudits=11, max_operations=64 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex32 --set max_fused_qudits=11 --set max_operations=64 --label complex32:11:64
+- **Outcome:** exit 0; outputs in data/20261024-185935-a13-block-times-complex32-max-fused-qudits-11-max-operations-64
+- **Next:** none
+- **Refs:** data/20261024-185935-a13-block-times-complex32-max-fused-qudits-11-max-operations-64, code/bench/a13_blocks.py
+
+## 2026-10-24 18:59 UTC  A13 block times complex32 max-fused-qudits 10 max-operations 1024
+- **Goal:** Pass times and static work of every block at n=26 for precision complex32, max_fused_qudits=10, max_operations=1024 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex32 --set max_fused_qudits=10 --set max_operations=1024 --label complex32:10:1024
+- **Outcome:** exit 0; outputs in data/20261024-185927-a13-block-times-complex32-max-fused-qudits-10-max-operations-1024
+- **Next:** none
+- **Refs:** data/20261024-185927-a13-block-times-complex32-max-fused-qudits-10-max-operations-1024, code/bench/a13_blocks.py
+
+## 2026-10-24 18:59 UTC  A13 block times complex32 max-fused-qudits 10 max-operations 256
+- **Goal:** Pass times and static work of every block at n=26 for precision complex32, max_fused_qudits=10, max_operations=256 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex32 --set max_fused_qudits=10 --set max_operations=256 --label complex32:10:256
+- **Outcome:** exit 0; outputs in data/20261024-185916-a13-block-times-complex32-max-fused-qudits-10-max-operations-256
+- **Next:** none
+- **Refs:** data/20261024-185916-a13-block-times-complex32-max-fused-qudits-10-max-operations-256, code/bench/a13_blocks.py
+
+## 2026-10-24 18:59 UTC  A13 block times complex32 max-fused-qudits 10 max-operations 128
+- **Goal:** Pass times and static work of every block at n=26 for precision complex32, max_fused_qudits=10, max_operations=128 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex32 --set max_fused_qudits=10 --set max_operations=128 --label complex32:10:128
+- **Outcome:** exit 0; outputs in data/20261024-185857-a13-block-times-complex32-max-fused-qudits-10-max-operations-128
+- **Next:** none
+- **Refs:** data/20261024-185857-a13-block-times-complex32-max-fused-qudits-10-max-operations-128, code/bench/a13_blocks.py
+
+## 2026-10-24 18:58 UTC  A13 block times complex32 max-fused-qudits 10 max-operations 64
+- **Goal:** Pass times and static work of every block at n=26 for precision complex32, max_fused_qudits=10, max_operations=64 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex32 --set max_fused_qudits=10 --set max_operations=64 --label complex32:10:64
+- **Outcome:** exit 0; outputs in data/20261024-185841-a13-block-times-complex32-max-fused-qudits-10-max-operations-64
+- **Next:** none
+- **Refs:** data/20261024-185841-a13-block-times-complex32-max-fused-qudits-10-max-operations-64, code/bench/a13_blocks.py
+
+## 2026-10-24 18:58 UTC  A13 block times complex32 max-fused-qudits 9 max-operations 1024
+- **Goal:** Pass times and static work of every block at n=26 for precision complex32, max_fused_qudits=9, max_operations=1024 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex32 --set max_fused_qudits=9 --set max_operations=1024 --label complex32:9:1024
+- **Outcome:** exit 0; outputs in data/20261024-185832-a13-block-times-complex32-max-fused-qudits-9-max-operations-1024
+- **Next:** none
+- **Refs:** data/20261024-185832-a13-block-times-complex32-max-fused-qudits-9-max-operations-1024, code/bench/a13_blocks.py
+
+## 2026-10-24 18:58 UTC  A13 block times complex32 max-fused-qudits 9 max-operations 256
+- **Goal:** Pass times and static work of every block at n=26 for precision complex32, max_fused_qudits=9, max_operations=256 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex32 --set max_fused_qudits=9 --set max_operations=256 --label complex32:9:256
+- **Outcome:** exit 0; outputs in data/20261024-185823-a13-block-times-complex32-max-fused-qudits-9-max-operations-256
+- **Next:** none
+- **Refs:** data/20261024-185823-a13-block-times-complex32-max-fused-qudits-9-max-operations-256, code/bench/a13_blocks.py
+
+## 2026-10-24 18:58 UTC  A13 block times complex32 max-fused-qudits 9 max-operations 128
+- **Goal:** Pass times and static work of every block at n=26 for precision complex32, max_fused_qudits=9, max_operations=128 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex32 --set max_fused_qudits=9 --set max_operations=128 --label complex32:9:128
+- **Outcome:** exit 0; outputs in data/20261024-185808-a13-block-times-complex32-max-fused-qudits-9-max-operations-128
+- **Next:** none
+- **Refs:** data/20261024-185808-a13-block-times-complex32-max-fused-qudits-9-max-operations-128, code/bench/a13_blocks.py
+
+## 2026-10-24 18:58 UTC  A13 block times complex32 max-fused-qudits 9 max-operations 64
+- **Goal:** Pass times and static work of every block at n=26 for precision complex32, max_fused_qudits=9, max_operations=64 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex32 --set max_fused_qudits=9 --set max_operations=64 --label complex32:9:64
+- **Outcome:** exit 0; outputs in data/20261024-185751-a13-block-times-complex32-max-fused-qudits-9-max-operations-64
+- **Next:** none
+- **Refs:** data/20261024-185751-a13-block-times-complex32-max-fused-qudits-9-max-operations-64, code/bench/a13_blocks.py
+
+## 2026-10-24 18:57 UTC  A13 block times complex64 max-fused-qudits 11 max-operations 1024
+- **Goal:** Pass times and static work of every block at n=26 for precision complex64, max_fused_qudits=11, max_operations=1024 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex64 --set max_fused_qudits=11 --set max_operations=1024 --label complex64:11:1024
+- **Outcome:** exit 0; outputs in data/20261024-185743-a13-block-times-complex64-max-fused-qudits-11-max-operations-1024
+- **Next:** none
+- **Refs:** data/20261024-185743-a13-block-times-complex64-max-fused-qudits-11-max-operations-1024, code/bench/a13_blocks.py
+
+## 2026-10-24 18:57 UTC  A13 block times complex64 max-fused-qudits 11 max-operations 256
+- **Goal:** Pass times and static work of every block at n=26 for precision complex64, max_fused_qudits=11, max_operations=256 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex64 --set max_fused_qudits=11 --set max_operations=256 --label complex64:11:256
+- **Outcome:** exit 0; outputs in data/20261024-185728-a13-block-times-complex64-max-fused-qudits-11-max-operations-256
+- **Next:** none
+- **Refs:** data/20261024-185728-a13-block-times-complex64-max-fused-qudits-11-max-operations-256, code/bench/a13_blocks.py
+
+## 2026-10-24 18:57 UTC  A13 block times complex64 max-fused-qudits 11 max-operations 128
+- **Goal:** Pass times and static work of every block at n=26 for precision complex64, max_fused_qudits=11, max_operations=128 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex64 --set max_fused_qudits=11 --set max_operations=128 --label complex64:11:128
+- **Outcome:** exit 0; outputs in data/20261024-185709-a13-block-times-complex64-max-fused-qudits-11-max-operations-128
+- **Next:** none
+- **Refs:** data/20261024-185709-a13-block-times-complex64-max-fused-qudits-11-max-operations-128, code/bench/a13_blocks.py
+
+## 2026-10-24 18:57 UTC  A13 block times complex64 max-fused-qudits 11 max-operations 64
+- **Goal:** Pass times and static work of every block at n=26 for precision complex64, max_fused_qudits=11, max_operations=64 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex64 --set max_fused_qudits=11 --set max_operations=64 --label complex64:11:64
+- **Outcome:** exit 0; outputs in data/20261024-185652-a13-block-times-complex64-max-fused-qudits-11-max-operations-64
+- **Next:** none
+- **Refs:** data/20261024-185652-a13-block-times-complex64-max-fused-qudits-11-max-operations-64, code/bench/a13_blocks.py
+
+## 2026-10-24 18:56 UTC  A13 block times complex64 max-fused-qudits 10 max-operations 1024
+- **Goal:** Pass times and static work of every block at n=26 for precision complex64, max_fused_qudits=10, max_operations=1024 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex64 --set max_fused_qudits=10 --set max_operations=1024 --label complex64:10:1024
+- **Outcome:** exit 0; outputs in data/20261024-185644-a13-block-times-complex64-max-fused-qudits-10-max-operations-1024
+- **Next:** none
+- **Refs:** data/20261024-185644-a13-block-times-complex64-max-fused-qudits-10-max-operations-1024, code/bench/a13_blocks.py
+
+## 2026-10-24 18:56 UTC  A13 block times complex64 max-fused-qudits 10 max-operations 256
+- **Goal:** Pass times and static work of every block at n=26 for precision complex64, max_fused_qudits=10, max_operations=256 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex64 --set max_fused_qudits=10 --set max_operations=256 --label complex64:10:256
+- **Outcome:** exit 0; outputs in data/20261024-185633-a13-block-times-complex64-max-fused-qudits-10-max-operations-256
+- **Next:** none
+- **Refs:** data/20261024-185633-a13-block-times-complex64-max-fused-qudits-10-max-operations-256, code/bench/a13_blocks.py
+
+## 2026-10-24 18:56 UTC  A13 block times complex64 max-fused-qudits 10 max-operations 128
+- **Goal:** Pass times and static work of every block at n=26 for precision complex64, max_fused_qudits=10, max_operations=128 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex64 --set max_fused_qudits=10 --set max_operations=128 --label complex64:10:128
+- **Outcome:** exit 0; outputs in data/20261024-185614-a13-block-times-complex64-max-fused-qudits-10-max-operations-128
+- **Next:** none
+- **Refs:** data/20261024-185614-a13-block-times-complex64-max-fused-qudits-10-max-operations-128, code/bench/a13_blocks.py
+
+## 2026-10-24 18:56 UTC  A13 block times complex64 max-fused-qudits 10 max-operations 64
+- **Goal:** Pass times and static work of every block at n=26 for precision complex64, max_fused_qudits=10, max_operations=64 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex64 --set max_fused_qudits=10 --set max_operations=64 --label complex64:10:64
+- **Outcome:** exit 0; outputs in data/20261024-185558-a13-block-times-complex64-max-fused-qudits-10-max-operations-64
+- **Next:** none
+- **Refs:** data/20261024-185558-a13-block-times-complex64-max-fused-qudits-10-max-operations-64, code/bench/a13_blocks.py
+
+## 2026-10-24 18:55 UTC  A13 block times complex64 max-fused-qudits 9 max-operations 1024
+- **Goal:** Pass times and static work of every block at n=26 for precision complex64, max_fused_qudits=9, max_operations=1024 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex64 --set max_fused_qudits=9 --set max_operations=1024 --label complex64:9:1024
+- **Outcome:** exit 0; outputs in data/20261024-185550-a13-block-times-complex64-max-fused-qudits-9-max-operations-1024
+- **Next:** none
+- **Refs:** data/20261024-185550-a13-block-times-complex64-max-fused-qudits-9-max-operations-1024, code/bench/a13_blocks.py
+
+## 2026-10-24 18:55 UTC  A13 block times complex64 max-fused-qudits 9 max-operations 256
+- **Goal:** Pass times and static work of every block at n=26 for precision complex64, max_fused_qudits=9, max_operations=256 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex64 --set max_fused_qudits=9 --set max_operations=256 --label complex64:9:256
+- **Outcome:** exit 0; outputs in data/20261024-185541-a13-block-times-complex64-max-fused-qudits-9-max-operations-256
+- **Next:** none
+- **Refs:** data/20261024-185541-a13-block-times-complex64-max-fused-qudits-9-max-operations-256, code/bench/a13_blocks.py
+
+## 2026-10-24 18:55 UTC  A13 block times complex64 max-fused-qudits 9 max-operations 128
+- **Goal:** Pass times and static work of every block at n=26 for precision complex64, max_fused_qudits=9, max_operations=128 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex64 --set max_fused_qudits=9 --set max_operations=128 --label complex64:9:128
+- **Outcome:** exit 0; outputs in data/20261024-185533-a13-block-times-complex64-max-fused-qudits-9-max-operations-128
+- **Next:** none
+- **Refs:** data/20261024-185533-a13-block-times-complex64-max-fused-qudits-9-max-operations-128, code/bench/a13_blocks.py
+
+## 2026-10-24 18:55 UTC  A13 block times complex64 max-fused-qudits 9 max-operations 64
+- **Goal:** Pass times and static work of every block at n=26 for precision complex64, max_fused_qudits=9, max_operations=64 (A7 workloads, damping M=0.1)
+- **Task:** A13
+- **Method:** code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex64 --set max_fused_qudits=9 --set max_operations=64 --label complex64:9:64
+- **Outcome:** exit 0; outputs in data/20261024-185525-a13-block-times-complex64-max-fused-qudits-9-max-operations-64
+- **Next:** none
+- **Refs:** data/20261024-185525-a13-block-times-complex64-max-fused-qudits-9-max-operations-64, code/bench/a13_blocks.py
+
 ## 2026-10-24 15:40 UTC  A11 Aer tuning: analysis and conclusion
 - **Goal:** Tune Qiskit Aer's shot branching options and compare tuned Aer with tuned noisecirc
 - **Task:** A11

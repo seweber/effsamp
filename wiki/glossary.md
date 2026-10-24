@@ -12,6 +12,9 @@
 - **GHZ** — Greenberger–Horne–Zeilinger state; here the circuit preparing it as a chain of controlled phases
 - **GPU** — graphics processing unit
 - **H100** — NVIDIA H100 PCIe, the GPU used here (GPU 0 of bux)
+- **KB** — kilobyte, 1024 bytes
+- **TF32** — NVIDIA's tensor-core format with an 8-bit exponent and a 10-bit significand
+- **TFLOP** — $10^{12}$ floating-point operations
 - **HPCA** — International Symposium on High-Performance Computer Architecture
 - **ICS** — International Conference on Supercomputing
 - **PTSBE** — pre-trajectory sampling with batched execution, CUDA-Q's method of pre-sampled noisy trajectories
@@ -42,3 +45,13 @@
 - **dominant / general / masked kernel** — a block's kernel for trajectories without error (each gate's most likely Kraus choice), for any choices (switching on each gate's choice in every stage), and for trajectories with errors that runs the dominant code in every stage but those its stage mask flags
 - **autotuning** — noisecirc's choice of `max_operations` and `stage_qubits` per circuit by timing one trajectory under each candidate (branch `feature/autotune`)
 - **fusion width** — the most qubits of one fused operation: Aer's `fusion_max_qubit` (2 by default for circuits with Kraus noise), noisecirc's `max_fused_qudits` plus its pinned qubits
+- $E$ — error proposals of a Kraus set per gate and shot, $Z - \lVert L_0\rVert^2$: proposals of non-dominant operators until acceptance, each a pass of an error kernel
+- $\mu(\rho)$ — accepted errors of a Kraus set per gate for input $\rho$, $1 - \mathrm{tr}(\rho L_0^\dagger L_0)$, with $L_0$ the dominant operator
+- **canonical Kraus set** — the Kraus operators from the eigenvectors of the channel's Choi matrix, largest first; noisecirc's default
+- $F$, $S$ — floating-point instructions and shared-memory accesses per amplitude of a pass; $F_{bw} \approx 206$, $S_{bw} \approx 29$ the numbers the H100 issues in $t_{bw}$ per amplitude
+- **instruction-bound pass** — a pass whose time is set by the instructions it issues (arithmetic plus shared accesses), not by moving the state
+- **complex32** — noisecirc's/svpass's precision that stores each amplitude as two 16-bit floats and computes in single precision
+- **stage fusion** — multiplying a run of a stage's operations into one matrix where that needs fewer instructions (svpass `Config.stage_fusion`, branch `feature/stage-fusion`)
+- **rotation form** — applying a one-qubit gate as $D_L T D_R$ with a real two-term rotation $T$ and diagonals deferred at generation time (svpass `Config.rotation_form`)
+- **first-jump sampling** — splitting a checkpoint's shots exactly over the first error in a block, with probabilities reduced during the dominant pass, instead of proposing errors from bounds (A15 idea, reference implementation only)
+- **readout map** — moving noise channels in a circuit's diagonal tail out of the simulation into a classical map on the sampled bits

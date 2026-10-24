@@ -49,6 +49,24 @@ deleted; IDs (T001, T002, ...) are stable, never reused, and independent of
   - 2026-10-24 Human: not interested.
 - **Outcome:** rejected (2026-10-24)
 
+## T005 — Exact first-jump sampling in noisecirc
+- **State:** OPEN
+- **Proposed:** 2026-10-24 by Claude
+- **Purpose:** noisecirc pays a pass for every error proposal, and about half are rejected; at strong noise its oversampling ceiling also splits blocks, and there its advantage over Qiskit Aer is smallest (wiki/studies/competitors.md). First-jump sampling, the top idea of the A15 brainstorm, computes the exact probability of each first error in a block during the dominant pass and splits the shots by one multinomial, so nothing is rejected and no ceiling is needed. A NumPy reference on noisecirc's compiled blocks verified that it is exact (chi-square against density matrices) and needs 1.04 to 3.3 times fewer passes at M <= 1 and 1.7 to 4.7 times at M = 3 (10 qubits, real states); a kernel prototype puts the cost of the reductions at 3 to 32% of a dominant pass (wiki/studies/new-directions.md; LOG.md "A15 first-jump reference pass counts n=10", "A15 population reductions v2 ...").
+- **Proposal:** Implement first-jump sampling in noisecirc's sampler and kernels (per-channel jump probabilities reduced in the passes, a dominant pass before the error passes of each segment, no ceiling, reductions skipped where no shot can err), keeping the current proposals for mixed-unitary channels; validate exactness on the GPU and measure end to end against the current scheme and against Aer's shot branching at M = 0.1 to 10. Expected: about break-even at weak noise, 1.1 to 2.5 times at M = 1 and more at strong noise. Cost: about a week; risk: synchronisation between the two phases of a segment and register pressure of the reductions.
+- **Discussion:**
+  - 2026-10-24 AI: Proposed from A15; it extends noisecirc's core idea (shared trajectories, state-independent proposals for the rest) rather than replacing it.
+- **Outcome:** pending
+
+## T006 — Instruction-lean kernels and complex32 as noisecirc's defaults
+- **State:** OPEN
+- **Proposed:** 2026-10-24 by Claude
+- **Purpose:** On the H100, passes are bound by issued instructions (arithmetic plus shared accesses). The opt-in kernels of A14 (in-stage fusion, real rotations between deferred diagonals) with 4-qubit stages and `complex32` made whole runs 1.45 to 1.9 times faster, at an accuracy of about 1e-3 instead of 1e-6 (wiki/studies/kernel-regime.md, wiki/studies/block-instructions.md). The remaining arithmetic is 2.3 to 5 times the lower bound, mostly controlled phases between rotations.
+- **Proposal:** Apply diagonal gates outside the stages that hold their qubits (from the index bits), choose stages by cost rather than width, and add asynchronous tile loads; then decide which settings become defaults per precision, and whether a `complex32` mode with a stated accuracy is acceptable for the publication. Expected 10 to 30% beyond A14 in `complex64`. Cost: several days; risk: code-generation complexity.
+- **Discussion:**
+  - 2026-10-24 AI: Proposed from A13/A14; it concerns implementation, not the algorithm, and touches PLAN.md's complex64-only rule, so it needs the human's view.
+- **Outcome:** pending
+
 <!-- Add proposals above this line, oldest first. Template:
 
 ## T00X — Short scientific task title

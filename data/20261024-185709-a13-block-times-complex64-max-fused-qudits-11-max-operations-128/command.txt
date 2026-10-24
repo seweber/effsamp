@@ -1,0 +1,1 @@
+code/bench/gpurun a13_blocks.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex64 --set max_fused_qudits=11 --set max_operations=128 --label complex64:11:128

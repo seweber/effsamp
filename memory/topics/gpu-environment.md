@@ -18,3 +18,5 @@ updated: 2026-10-23
 - Env verified 2026-10-23: 178 noisecirc tests pass on the H100; qiskit-aer-gpu-cu11 0.17.2 sees GPU; cudaq 0.15.1 imports.
 - Local CPU dry runs: the venv `code/noisecirc/.venv` imports noisecirc from `code/noisecirc` (checked out at `main`). To dry-run `bench/fixes`, prepend `PYTHONPATH=$PWD/code/noisecirc-bench/src:$PWD/code/noisecirc-bench/packages/svpass/src` (from the project root). Do not pgrep -f for a script name inside a wait loop whose own command line contains that name (it matches itself).
 - Never edit code/bench/gpurun while a batch runs: bash reads scripts lazily (a7 group_amplitudes=8192 run ended with a syntax error after its output was complete).
+- Never `pkill -f PATTERN` or `ps | grep PATTERN | kill` from a shell whose own command line contains PATTERN (also inside heredocs): it kills the calling shell (exit 144; happened 3 times on 2026-10-24). Kill by PID found in a separate command, or wait on status files.
+- `research-run` writes stdout.txt progressively but status.txt only at the end; two research-runs started in the same second get distinct dirs only if titles differ.

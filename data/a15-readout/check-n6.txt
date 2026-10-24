@@ -1,0 +1,8 @@
+ghz        tail  removed   6 tvd 1.12e-15
+ghz        naive removed  11 tvd 1.86e-01
+qft        tail  removed   6 tvd 1.46e-15
+qft        naive removed  21 tvd 3.15e-15
+brickwork  tail  removed  10 tvd 9.36e-16
+brickwork  naive removed  10 tvd 9.36e-16
+qaoa       tail  removed   6 tvd 2.26e-16
+qaoa       naive removed   6 tvd 2.26e-16
