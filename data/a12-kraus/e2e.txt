@@ -1,0 +1,8 @@
+damp_depol    brickwork  p=0.000242: time  14.63 ->  12.56 s (1.16x)  passes 3208 -> 2603 (1.23x)
+damp_depol    brickwork  p=0.00242: time  84.37 ->  68.41 s (1.23x)  passes 17026 -> 14591 (1.17x)
+damp_depol    qft        p=0.000246: time  10.84 ->   9.65 s (1.12x)  passes 3061 -> 3036 (1.01x)
+damp_depol    qft        p=0.00246: time  64.18 ->  53.45 s (1.20x)  passes 18871 -> 15977 (1.18x)
+depolarizing  brickwork  p=0.000242: time   9.31 ->   6.65 s (1.40x)  passes 2163 -> 1451 (1.49x)
+depolarizing  brickwork  p=0.00242: time  58.65 ->  42.10 s (1.39x)  passes 12860 -> 9814 (1.31x)
+depolarizing  qft        p=0.000246: time   7.20 ->   5.41 s (1.33x)  passes 2480 -> 1736 (1.43x)
+depolarizing  qft        p=0.00246: time  45.09 ->  33.00 s (1.37x)  passes 14238 -> 11036 (1.29x)

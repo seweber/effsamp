@@ -37,7 +37,7 @@ Their ideas were then tested in proportion to their promise:
 
 ### The ideas and how they were judged
 
-All three subagents agreed on one point: the term $BN f(M)$ of the pass model, the propagation of every distinct trajectory through the rest of the circuit, is a floor for any exact state-vector sampler that materialises distinct trajectories. What can still be gained lies in the rejected proposals ($2MN$ in total, of which half are rejected), in the blocks at the circuit's end, and in the time per pass. The ideas, ranked by their estimated gain:
+The subagents on sampling and on mathematics agreed on one point: the term $BN f(M)$ of the pass model, the propagation of every distinct trajectory through the rest of the circuit, is a floor for any exact state-vector sampler that materialises distinct trajectories. What can still be gained lies in the rejected proposals ($2MN$ in total, of which half are rejected), in the blocks at the circuit's end, and in the time per pass. The ideas, ranked by their estimated gain:
 
 | idea | where it saves | status |
 | --- | --- | --- |

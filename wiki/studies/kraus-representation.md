@@ -3,7 +3,7 @@ title: Optimal Kraus representations for noisecirc
 summary: Which Kraus set of a noise channel costs noisecirc the fewest passes, a lower bound, and the set that attains it (A12)
 type: study
 tasks: [A12]
-status: partially verified
+status: verified
 updated: 2026-10-24
 ---
 # Optimal Kraus representations for noisecirc
@@ -30,8 +30,10 @@ The channels are those of `code/bench/noise.py` plus two mixtures, all at streng
 
 ## Runs
 
+- End to end on the GPU: `data/20261024-21*-a12-end-to-end-*-n-28/`, summary `data/a12-kraus/e2e.txt` (`code/bench/a12_e2e.py`).
+- Optimisation over all sets for four weights, one qubit: `data/a12-kraus/weights-p0.01-1q.txt` (`code/bench/a12_weights.py`).
 - Optimisation against the bound, one and two qubits: `data/a12-kraus/compare-p0.01-a.jsonl`, `data/a12-kraus/compare-p0.01-b.jsonl` (two-qubit optimum of `a12_compare.py` superseded by `optimize_residual`, see Results).
-- Dry runs: `data/20261024-193750-a12-dry-run-kraus-sets-depolarizing-dephasing/`, `data/20261024-195050-a12-dry-run-kraus-sets-damp-depol-thermal-gad-rerun/` (LOG.md "A12 dry run Kraus sets …").
+- Dry runs: `data/20261024-*-a12-dry-run-canonical-vs-optimal-kraus-sets-*-tensor-optimum/` (LOG.md "A12 dry run canonical vs optimal Kraus sets … (tensor optimum)"); earlier attempts that timed out are logged in LOG.md.
 
 ## Results
 
@@ -93,7 +95,21 @@ Three conclusions follow:
 
 ### Effect on the passes (dry run)
 
-DRYRUN_TABLE
+The dry run counts the block passes of the five benchmark circuits at 28 qubits with 1000 shots, at the strengths that give amplitude damping $M = 0.1$ and 1 expected errors per shot, once with noisecirc's canonical sets and once with the optimal ones (for two-qubit gates the tensor square of the optimal one-qubit set). The table gives canonical over optimal passes at $M = 0.1$ / $M = 1$, means of three seeds:
+
+| noise | GHZ | brickwork | QFT | QAOA | grid |
+| --- | --- | --- | --- | --- | --- |
+| depolarizing | 1.27 / 2.37 | 1.31 / 1.27 | 1.30 / 1.31 | 1.22 / 1.36 | 1.23 / 1.26 |
+| damping + depolarizing | 1.14 / 1.74 | 1.08 / 1.19 | 1.17 / 1.23 | 1.16 / 1.25 | 1.15 / 1.12 |
+| dephasing | 1.42 / 1.61 | 1.17 / 1.12 | 1.67 / 1.34 | 1.32 / 1.18 | 1.51 / 1.11 |
+| generalized damping | 1.10 / 1.25 | 1.08 / 1.11 | 0.93 / 1.11 | 1.11 / 1.10 | 1.12 / 1.14 |
+| thermal relaxation | 1.12 / 1.11 | 1.09 / 1.03 | 1.11 / 1.12 | 0.96 / 1.05 | 0.96 / 1.04 |
+
+With the optimal sets, noisecirc needs 1.2 to 1.4 times fewer passes for depolarizing noise (GHZ at $M = 1$: 2.4 times), 1.1 to 1.7 times fewer for dephasing and for damping plus depolarizing, and about 1.1 times fewer for generalized damping and thermal relaxation, where the dry run's scatter (single entries of 0.93 to 0.96) is of the same order. For amplitude damping the sets are identical.
+
+### Effect on the run time (verified on the GPU)
+
+Whole runs at 28 qubits on the H100 (`bench/fixes`, 1000 shots, medians of three seeds) confirm the dry run: with the optimal sets, brickwork and QFT run 1.33 to 1.40 times faster with depolarizing noise and 1.12 to 1.23 times faster with damping plus depolarizing, with 1.0 to 1.5 times fewer passes (`data/a12-kraus/e2e.txt`, LOG.md "A12 end-to-end …").
 
 ## Caveats
 
@@ -104,4 +120,6 @@ DRYRUN_TABLE
 
 ## Verdict
 
-VERDICT
+The intuition of PLAN.md task A12 holds and can be made precise. Dominance is the weight $\mathrm{tr}(\rho L_0^\dagger L_0)$ of the operator that all no-error shots share, and choosing the most dominant operator first, then the next, gives exactly the canonical Kraus set, noisecirc's default. What the greedy rule leaves open is the oversampling of the other operators, and there the canonical set can be far from optimal. The optimal set for noisecirc keeps the canonical dominant operator and mixes the others down to the lower bound of Eq. (1); it is optimal for every weighting of error proposals against accepted errors, so there is no trade-off, and for a two-qubit gate the tensor square of the one-qubit optimum is within 0.6% of optimal. Optimality is certified numerically by the lower bound for seven channels (within 0.5%), not proved in general.
+
+For amplitude damping and its coherent variants the canonical set is already optimal, provably. For channels with a mixed-unitary or degenerate part the optimal set needs 1.1 to 2.4 times fewer passes and makes runs 1.1 to 1.4 times faster. noisecirc's `optimize_kraus` reaches nearly the same sets once the residual target is fixed (branch `fix/optimize-kraus-residual-target`). Because $E$ and $\mu$ do not change when an operator is multiplied by a unitary, the optimisation needs to run once per noise channel rather than once per gate, which would remove most of its compile time.

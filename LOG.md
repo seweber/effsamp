@@ -11,6 +11,158 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-24 21:49 UTC  A12 weighted optimization over all Kraus sets (one qubit)
+- **Goal:** Is there a trade-off between error proposals E and accepted errors mu?
+- **Task:** A12
+- **Method:** code/bench/a12_weights.py: minimize E + w mu, w=0,1,5,50, over sets of rank and rank+2 operators (BFGS, analytic gradient) and the lower bound; 7 channels, p=0.01
+- **Outcome:** Same optimum for every w, at the lower bound, keeping the canonical mu: no trade-off
+- **Next:** two-qubit check
+- **Refs:** data/a12-kraus/weights-p0.01-1q.txt, code/bench/a12_weights.py
+
+## 2026-10-24 21:48 UTC  A12 end-to-end summary canonical vs optimal Kraus sets
+- **Goal:** GPU confirmation of the dry-run pass savings
+- **Task:** A12
+- **Method:** code/bench/a2_runs.py --kraus-set optimum (patched sta_sectors, a12_dryrun.optimal_maps), bench/fixes, n=28, brickwork and QFT, depolarizing and damp_depol at p for damping M=0.1/1, 3 seeds; code/bench/a12_e2e.py
+- **Outcome:** depolarizing 1.33-1.40x faster (passes 1.29-1.49x fewer), damp_depol 1.12-1.23x faster (passes 1.01-1.23x)
+- **Next:** wiki verdict
+- **Refs:** data/a12-kraus/e2e.txt, code/bench/a12_e2e.py
+
+## 2026-10-24 21:47 UTC  A12 end-to-end optimum Kraus sets damp_depol qft n=28
+- **Goal:** End-to-end run of qft at n=28 with damp_depol noise (p as for damping M=0.1 and 1), 1000 shots, optimum Kraus sets, bench/fixes
+- **Task:** A12
+- **Method:** code/bench/gpurun -t 590 a2_runs.py --circuits qft --qubits 28 --noise damp_depol --ps 0.000246305,0.00246305 --shots 1000 --reps 3 --budget 450 --kraus-set optimum
+- **Outcome:** exit 0; outputs in data/20261024-214502-a12-end-to-end-optimum-kraus-sets-damp-depol-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-214502-a12-end-to-end-optimum-kraus-sets-damp-depol-qft-n-28, code/bench/a2_runs.py, code/bench/a12_dryrun.py
+
+## 2026-10-24 21:45 UTC  A12 end-to-end canonical Kraus sets damp_depol qft n=28
+- **Goal:** End-to-end run of qft at n=28 with damp_depol noise (p as for damping M=0.1 and 1), 1000 shots, canonical Kraus sets, bench/fixes
+- **Task:** A12
+- **Method:** code/bench/gpurun -t 590 a2_runs.py --circuits qft --qubits 28 --noise damp_depol --ps 0.000246305,0.00246305 --shots 1000 --reps 3 --budget 450 --kraus-set canonical
+- **Outcome:** exit 0; outputs in data/20261024-214151-a12-end-to-end-canonical-kraus-sets-damp-depol-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-214151-a12-end-to-end-canonical-kraus-sets-damp-depol-qft-n-28, code/bench/a2_runs.py, code/bench/a12_dryrun.py
+
+## 2026-10-24 21:41 UTC  A12 end-to-end optimum Kraus sets damp_depol brickwork n=28
+- **Goal:** End-to-end run of brickwork at n=28 with damp_depol noise (p as for damping M=0.1 and 1), 1000 shots, optimum Kraus sets, bench/fixes
+- **Task:** A12
+- **Method:** code/bench/gpurun -t 590 a2_runs.py --circuits brickwork --qubits 28 --noise damp_depol --ps 0.000242131,0.00242131 --shots 1000 --reps 3 --budget 450 --kraus-set optimum
+- **Outcome:** exit 0; outputs in data/20261024-213803-a12-end-to-end-optimum-kraus-sets-damp-depol-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-213803-a12-end-to-end-optimum-kraus-sets-damp-depol-brickwork-n-28, code/bench/a2_runs.py, code/bench/a12_dryrun.py
+
+## 2026-10-24 21:38 UTC  A12 end-to-end canonical Kraus sets damp_depol brickwork n=28
+- **Goal:** End-to-end run of brickwork at n=28 with damp_depol noise (p as for damping M=0.1 and 1), 1000 shots, canonical Kraus sets, bench/fixes
+- **Task:** A12
+- **Method:** code/bench/gpurun -t 590 a2_runs.py --circuits brickwork --qubits 28 --noise damp_depol --ps 0.000242131,0.00242131 --shots 1000 --reps 3 --budget 450 --kraus-set canonical
+- **Outcome:** exit 0; outputs in data/20261024-213356-a12-end-to-end-canonical-kraus-sets-damp-depol-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-213356-a12-end-to-end-canonical-kraus-sets-damp-depol-brickwork-n-28, code/bench/a2_runs.py, code/bench/a12_dryrun.py
+
+## 2026-10-24 21:35 UTC  A15 peeling the last block estimate
+- **Goal:** Saving of sampling outside the last block's tile from the marginal
+- **Task:** A15
+- **Method:** code/bench/a15_peel.py: dry-run passes per block, saving = last block passes - 0.5 x entering checkpoints; n=28, M=0.1/1
+- **Outcome:** GHZ 1.49-1.57x, others 1.03-1.08x
+- **Next:** none
+- **Refs:** data/a15-peel, code/bench/a15_peel.py
+
+## 2026-10-24 21:35 UTC  A15 first-jump exactness check and pass model
+- **Goal:** Verify first-jump sampling is exact; estimate passes at n=28
+- **Task:** A15
+- **Method:** code/bench/a15_firstjump_ref.py --check (n=6, 200000 shots, chi2 vs density matrix, both samplers); code/bench/a15_firstjump.py (pass model with noisecirc block counts, n=28)
+- **Outcome:** chi2 57-70 for 63 dof for both samplers (exact); model: 1.07-2x fewer passes at M<=1, 1.6-4x at M=10 without ceiling
+- **Next:** kernel cost prototype
+- **Refs:** data/a15-firstjump, code/bench/a15_firstjump.py
+
+## 2026-10-24 21:35 UTC  A12 optimal Kraus sets against lower bound
+- **Goal:** Optimal Kraus sets for noisecirc and certificates
+- **Task:** A12
+- **Method:** code/bench/a12_kraus.py (optimize over all sets, optimize_residual with canonical dominant kept, lower_bound), code/bench/a12_compare.py; 7 channels x 1 and 2 qubits, p=1e-2
+- **Outcome:** Optimum = canonical dominant + rest minimized, within 0.5% of the bound for all 14 cases and all weights (no trade-off); tensor square of 1q optimum within 0.6% of 2q bound; optimize_kraus within 1% except dephasing 2q (mu 1.76x) -> fix branch fix/optimize-kraus-residual-target (9236680, worktree code/noisecirc-fix)
+- **Next:** dry runs, GPU confirmation
+- **Refs:** data/a12-kraus, code/bench/a12_kraus.py, code/noisecirc-fix, wiki/studies/kraus-representation.md
+
+## 2026-10-24 21:35 UTC  A14 instruction lower bound per block
+- **Goal:** Lower bound on FP instructions per amplitude, against achieved counts
+- **Task:** A14
+- **Method:** code/bench/a14_bound.py: 2 per non-diagonal 1q gate after merging same-qubit runs (not across multi-qubit diagonals), diagonals free, +4; CPU, n=26
+- **Outcome:** GHZ at bound (38); brickwork/grid/QAOA 2.3-2.6x above; QFT 5x (diagonal phases); random circuit excluded (multi-qubit non-diagonal gates). First version wrongly merged 1q gates across cp: fixed
+- **Next:** none
+- **Refs:** data/a13-static/a14-bound.txt, code/bench/a14_bound.py
+
+## 2026-10-24 21:35 UTC  A13 analysis of block-time sweeps and end-to-end runs
+- **Goal:** Trajectory times per setting and end-to-end ratios
+- **Task:** A13
+- **Method:** code/bench/a13_analyze.py (sweep -> a13.jsonl, a13.svg), code/bench/a14_e2e.py (n=28 runs -> e2e.jsonl, e2e.svg)
+- **Outcome:** complex32 alone: trajectories -4..-15% (GHZ -26%), runs 0.71-0.85; A14 kernels+sq4+complex32: runs 0.53-0.69 (gm 0.63)
+- **Next:** wiki
+- **Refs:** data/a13-analysis, wiki/studies/kernel-regime.md
+
+## 2026-10-24 21:35 UTC  A13 static work model fitted to A7/A8 block times
+- **Goal:** Explain pass times by static work per amplitude
+- **Task:** A13
+- **Method:** code/bench/kernel_ops.py counts FP instructions of generated stages and shared accesses; code/bench/a13_static.py recompiles the A7/A8 runs' circuits (CPU) and pairs counts with measured t_dom (106 blocks)
+- **Outcome:** t_pass/t_bw = max(1.17, 0.90 F/206 + 0.81 S/29) fits within 12% rms (max of terms: 24%): passes are instruction-issue bound
+- **Next:** precision x block-size sweep
+- **Refs:** data/a13-static, code/bench/kernel_ops.py, code/bench/a13_static.py
+
+## 2026-10-24 21:33 UTC  A12 end-to-end optimum Kraus sets depolarizing qft n=28
+- **Goal:** End-to-end run of qft at n=28 with depolarizing noise (p as for damping M=0.1 and 1), 1000 shots, optimum Kraus sets, bench/fixes
+- **Task:** A12
+- **Method:** code/bench/gpurun -t 590 a2_runs.py --circuits qft --qubits 28 --noise depolarizing --ps 0.000246305,0.00246305 --shots 1000 --reps 3 --budget 450 --kraus-set optimum
+- **Outcome:** exit 0; outputs in data/20261024-213047-a12-end-to-end-optimum-kraus-sets-depolarizing-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-213047-a12-end-to-end-optimum-kraus-sets-depolarizing-qft-n-28, code/bench/a2_runs.py, code/bench/a12_dryrun.py
+
+## 2026-10-24 21:30 UTC  A12 end-to-end canonical Kraus sets depolarizing qft n=28
+- **Goal:** End-to-end run of qft at n=28 with depolarizing noise (p as for damping M=0.1 and 1), 1000 shots, canonical Kraus sets, bench/fixes
+- **Task:** A12
+- **Method:** code/bench/gpurun -t 590 a2_runs.py --circuits qft --qubits 28 --noise depolarizing --ps 0.000246305,0.00246305 --shots 1000 --reps 3 --budget 450 --kraus-set canonical
+- **Outcome:** exit 0; outputs in data/20261024-212650-a12-end-to-end-canonical-kraus-sets-depolarizing-qft-n-28
+- **Next:** none
+- **Refs:** data/20261024-212650-a12-end-to-end-canonical-kraus-sets-depolarizing-qft-n-28, code/bench/a2_runs.py, code/bench/a12_dryrun.py
+
+## 2026-10-24 21:26 UTC  A12 end-to-end optimum Kraus sets depolarizing brickwork n=28
+- **Goal:** End-to-end run of brickwork at n=28 with depolarizing noise (p as for damping M=0.1 and 1), 1000 shots, optimum Kraus sets, bench/fixes
+- **Task:** A12
+- **Method:** code/bench/gpurun -t 590 a2_runs.py --circuits brickwork --qubits 28 --noise depolarizing --ps 0.000242131,0.00242131 --shots 1000 --reps 3 --budget 450 --kraus-set optimum
+- **Outcome:** exit 0; outputs in data/20261024-212254-a12-end-to-end-optimum-kraus-sets-depolarizing-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-212254-a12-end-to-end-optimum-kraus-sets-depolarizing-brickwork-n-28, code/bench/a2_runs.py, code/bench/a12_dryrun.py
+
+## 2026-10-24 21:24 UTC  A12 dry run canonical vs optimal Kraus sets damp_depol-thermal (tensor optimum)
+- **Goal:** Block passes with canonical and optimal Kraus sets (two-qubit: tensor square of the one-qubit optimum) for noise damp_depol,thermal on five circuits, n=28, M=0.1 and 1
+- **Task:** A12
+- **Method:** env PYTHONPATH=/itp3/home/sebastian/effsamp/code/noisecirc-bench/src:/itp3/home/sebastian/effsamp/code/noisecirc-bench/packages/svpass/src code/noisecirc/.venv/bin/python code/bench/a12_dryrun.py damp_depol,thermal ghz,brickwork,qft,qaoa,grid
+- **Outcome:** exit 0; outputs in data/20261024-211910-a12-dry-run-canonical-vs-optimal-kraus-sets-damp-depol-thermal-tensor-optimum
+- **Next:** none
+- **Refs:** data/20261024-211910-a12-dry-run-canonical-vs-optimal-kraus-sets-damp-depol-thermal-tensor-optimum, code/bench/a12_dryrun.py, code/bench/a12_kraus.py
+
+## 2026-10-24 21:22 UTC  A12 end-to-end canonical Kraus sets depolarizing brickwork n=28
+- **Goal:** End-to-end run of brickwork at n=28 with depolarizing noise (p as for damping M=0.1 and 1), 1000 shots, canonical Kraus sets, bench/fixes
+- **Task:** A12
+- **Method:** code/bench/gpurun -t 590 a2_runs.py --circuits brickwork --qubits 28 --noise depolarizing --ps 0.000242131,0.00242131 --shots 1000 --reps 3 --budget 450 --kraus-set canonical
+- **Outcome:** exit 0; outputs in data/20261024-211950-a12-end-to-end-canonical-kraus-sets-depolarizing-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261024-211950-a12-end-to-end-canonical-kraus-sets-depolarizing-brickwork-n-28, code/bench/a2_runs.py, code/bench/a12_dryrun.py
+
+## 2026-10-24 21:22 UTC  A12 dry run canonical vs optimal Kraus sets depolarizing-dephasing (tensor optimum)
+- **Goal:** Block passes with canonical and optimal Kraus sets (two-qubit: tensor square of the one-qubit optimum) for noise depolarizing,dephasing on five circuits, n=28, M=0.1 and 1
+- **Task:** A12
+- **Method:** env PYTHONPATH=/itp3/home/sebastian/effsamp/code/noisecirc-bench/src:/itp3/home/sebastian/effsamp/code/noisecirc-bench/packages/svpass/src code/noisecirc/.venv/bin/python code/bench/a12_dryrun.py depolarizing,dephasing ghz,brickwork,qft,qaoa,grid
+- **Outcome:** exit 0; outputs in data/20261024-211908-a12-dry-run-canonical-vs-optimal-kraus-sets-depolarizing-dephasing-tensor-optimum
+- **Next:** none
+- **Refs:** data/20261024-211908-a12-dry-run-canonical-vs-optimal-kraus-sets-depolarizing-dephasing-tensor-optimum, code/bench/a12_dryrun.py, code/bench/a12_kraus.py
+
+## 2026-10-24 21:22 UTC  A12 dry run canonical vs optimal Kraus sets gad (tensor optimum)
+- **Goal:** Block passes with canonical and optimal Kraus sets (two-qubit: tensor square of the one-qubit optimum) for noise gad on five circuits, n=28, M=0.1 and 1
+- **Task:** A12
+- **Method:** env PYTHONPATH=/itp3/home/sebastian/effsamp/code/noisecirc-bench/src:/itp3/home/sebastian/effsamp/code/noisecirc-bench/packages/svpass/src code/noisecirc/.venv/bin/python code/bench/a12_dryrun.py gad ghz,brickwork,qft,qaoa,grid
+- **Outcome:** exit 0; outputs in data/20261024-211912-a12-dry-run-canonical-vs-optimal-kraus-sets-gad-tensor-optimum
+- **Next:** none
+- **Refs:** data/20261024-211912-a12-dry-run-canonical-vs-optimal-kraus-sets-gad-tensor-optimum, code/bench/a12_dryrun.py, code/bench/a12_kraus.py
+
 ## 2026-10-24 21:18 UTC  A12 dry run canonical vs optimal Kraus sets damp_depol-thermal-gad
 - **Goal:** Block passes with canonical and optimal Kraus sets for noise damp_depol,thermal,gad on five circuits, n=28, M=0.1 and 1
 - **Task:** A12

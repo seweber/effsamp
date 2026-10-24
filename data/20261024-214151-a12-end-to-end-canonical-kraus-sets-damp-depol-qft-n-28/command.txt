@@ -1,0 +1,1 @@
+code/bench/gpurun -t 590 a2_runs.py --circuits qft --qubits 28 --noise damp_depol --ps 0.000246305,0.00246305 --shots 1000 --reps 3 --budget 450 --kraus-set canonical
