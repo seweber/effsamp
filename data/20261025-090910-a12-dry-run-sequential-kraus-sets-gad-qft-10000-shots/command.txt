@@ -1,0 +1,1 @@
+code/noisecirc/.venv/bin/python code/bench/a12_dryrun.py gad qft canonical,optimum,sequential 10000

@@ -55,3 +55,11 @@
 - **rotation form** — applying a one-qubit gate as $D_L T D_R$ with a real two-term rotation $T$ and diagonals deferred at generation time (svpass `Config.rotation_form`)
 - **first-jump sampling** — splitting a checkpoint's shots exactly over the first error in a block, with probabilities reduced during the dominant pass, instead of proposing errors from bounds (A15 idea, reference implementation only)
 - **readout map** — moving noise channels in a circuit's diagonal tail out of the simulation into a classical map on the sampled bits
+- **SASS** — the GPU's native instruction set, the code the CUDA compiler actually emits; disassembled with `nvdisasm` to count the instructions a kernel executes
+- **HFMA2** — a GPU instruction that performs two half-precision fused multiply-adds at once
+- **sequential Kraus set** — among the Kraus sets with minimal oversampling, the one whose bounds are concentrated on the first remaining operators (A12 follow-up)
+- **additive addresses** — shared-memory addresses of a stage split into a part of the thread and an immediate offset (svpass `Config.additive_addresses`)
+- **NVRTC** — NVIDIA's runtime compiler for CUDA source, which svpass uses to compile kernels; it compiles for a given architecture without a GPU
+- **FMA** — fused multiply-add, $a \cdot b + c$ in one instruction with one rounding; FFMA, FMUL and FADD are the GPU's single-precision fused multiply-add, multiply and add instructions
+- **FMUL** — see FMA
+- **FP32** — single-precision (32-bit) floating point

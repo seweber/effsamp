@@ -11,6 +11,158 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-25 09:24 UTC  A13 stage estimate free diagonals
+- **Goal:** Mean stages per block with and without diagonal gates counting towards a stage's register qubits, R=3 and 4, five workloads n=26
+- **Task:** A13
+- **Method:** env PYTHONPATH=/itp3/home/sebastian/effsamp/code/noisecirc-bench/src:/itp3/home/sebastian/effsamp/code/noisecirc-bench/packages/svpass/src code/noisecirc/.venv/bin/python code/bench/a13_stage_estimate.py 3 4
+- **Outcome:** exit 0; outputs in data/20261025-092423-a13-stage-estimate-free-diagonals
+- **Next:** none
+- **Refs:** data/20261025-092423-a13-stage-estimate-free-diagonals, code/bench/a13_stage_estimate.py
+
+## 2026-10-25 09:24 UTC  A13 refit of pass-time model with SASS counts
+- **Goal:** Fit models of pass time over t_bw with disassembled FP, shared, integer and control instructions on 1247 timed A13 kernels
+- **Task:** A13
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a13_refit.py
+- **Outcome:** exit 0; outputs in data/20261025-092422-a13-refit-of-pass-time-model-with-sass-counts
+- **Next:** none
+- **Refs:** data/20261025-092422-a13-refit-of-pass-time-model-with-sass-counts, code/bench/a13_refit.py, data/a13-analysis/refit.json
+
+## 2026-10-25 09:22 UTC  A13 half-precision arithmetic and tile accuracy n=16 (fixed)
+- **Goal:** TVD and norm error of complex64, complex32 storage (rounding per block and per stage) and half-precision arithmetic against complex128, unitary circuits, CPU emulation; rerun after a KeyError
+- **Task:** A13
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a13_half_arith.py 16
+- **Outcome:** exit 0; outputs in data/20261025-092209-a13-half-precision-arithmetic-and-tile-accuracy-n-16-fixed
+- **Next:** none
+- **Refs:** data/20261025-092209-a13-half-precision-arithmetic-and-tile-accuracy-n-16-fixed, code/bench/a13_half_arith.py
+
+## 2026-10-25 09:21 UTC  A13 half-precision arithmetic and tile accuracy n=16
+- **Goal:** TVD and norm error of complex64, complex32 storage (rounding per block and per stage) and half-precision arithmetic against complex128, unitary circuits, CPU emulation
+- **Task:** A13
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a13_half_arith.py 16
+- **Outcome:** exit 1; outputs in data/20261025-092155-a13-half-precision-arithmetic-and-tile-accuracy-n-16
+- **Next:** none
+- **Refs:** data/20261025-092155-a13-half-precision-arithmetic-and-tile-accuracy-n-16, code/bench/a13_half_arith.py
+
+## 2026-10-25 09:21 UTC  A13 half-precision arithmetic accuracy n=16
+- **Goal:** TVD and norm error of complex64, complex32 storage and half-precision arithmetic against complex128, unitary circuits, CPU emulation
+- **Task:** A13
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a13_half_arith.py 16
+- **Outcome:** exit 0; outputs in data/20261025-092129-a13-half-precision-arithmetic-accuracy-n-16
+- **Next:** none
+- **Refs:** data/20261025-092129-a13-half-precision-arithmetic-accuracy-n-16, code/bench/a13_half_arith.py
+
+## 2026-10-25 09:20 UTC  A13 predicted kernel designs c32 sq4
+- **Goal:** Predicted trajectory time of additive addresses and diagonal-free stages relative to A14 kernels with 4-qubit stages in complex32 (SASS counts + refitted model)
+- **Task:** A13
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a13_predict.py
+- **Outcome:** exit 0; outputs in data/20261025-091811-a13-predicted-kernel-designs-c32-sq4
+- **Next:** none
+- **Refs:** data/20261025-091811-a13-predicted-kernel-designs-c32-sq4, code/bench/a13_predict.py, data/a13-analysis/refit.json
+
+## 2026-10-25 09:17 UTC  A13 SASS counts of timed blocks part 4 of 4
+- **Goal:** SASS instruction classes per amplitude of every block timed in the A13 sweeps (local NVRTC sm_90 + nvdisasm), for a refit of the pass-time model
+- **Task:** A13
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a13_sass_blocks.py data/20261024-190010-a13-block-times-complex32-max-fused-qudits-11-max-operations-256 data/20261024-190024-a13-block-times-complex32-max-fused-qudits-11-max-operations-1024 data/20261024-191352-a13-block-times-fused-kernels-base data/20261024-191404-a13-block-times-fused-kernels-sq4 data/20261024-191438-a13-block-times-fused-kernels-sq4-reg96 data/20261024-191510-a13-block-times-fused-kernels-c32 data/20261024-191530-a13-block-times-fused-kernels-w10 data/20261024-191550-a13-block-times-fused-kernels-c32-sq4 data/20261024-191623-a13-block-times-fused-kernels-c32-w10
+- **Outcome:** exit 0; outputs in data/20261025-090848-a13-sass-counts-of-timed-blocks-part-4-of-4
+- **Next:** none
+- **Refs:** data/20261025-090848-a13-sass-counts-of-timed-blocks-part-4-of-4, code/bench/a13_sass_blocks.py, code/bench/a13_sass.py
+
+## 2026-10-25 09:13 UTC  A12 dry run sequential Kraus sets gad qft 10000 shots
+- **Goal:** Block passes with canonical, E-optimal and sequential Kraus sets, generalized amplitude damping, n=28, M=0.1 and 1, 10000 shots (more collisions)
+- **Task:** A12
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a12_dryrun.py gad qft canonical,optimum,sequential 10000
+- **Outcome:** exit 0; outputs in data/20261025-090910-a12-dry-run-sequential-kraus-sets-gad-qft-10000-shots
+- **Next:** none
+- **Refs:** data/20261025-090910-a12-dry-run-sequential-kraus-sets-gad-qft-10000-shots, code/bench/a12_dryrun.py
+
+## 2026-10-25 09:10 UTC  A12 dry run sequential Kraus sets gad ghz 10000 shots
+- **Goal:** Block passes with canonical, E-optimal and sequential Kraus sets, generalized amplitude damping, n=28, M=0.1 and 1, 10000 shots (more collisions)
+- **Task:** A12
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a12_dryrun.py gad ghz canonical,optimum,sequential 10000
+- **Outcome:** exit 0; outputs in data/20261025-090908-a12-dry-run-sequential-kraus-sets-gad-ghz-10000-shots
+- **Next:** none
+- **Refs:** data/20261025-090908-a12-dry-run-sequential-kraus-sets-gad-ghz-10000-shots, code/bench/a12_dryrun.py
+
+## 2026-10-25 09:09 UTC  A13 SASS counts of timed blocks part 2 of 4 (rerun)
+- **Goal:** SASS instruction classes per amplitude of every block timed in the A13 sweeps (local NVRTC sm_90 + nvdisasm), for a refit of the pass-time model; part 2 rerun after an assertion on 2**14-amplitude tiles
+- **Task:** A13
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a13_sass_blocks.py data/20261024-185652-a13-block-times-complex64-max-fused-qudits-11-max-operations-64 data/20261024-185709-a13-block-times-complex64-max-fused-qudits-11-max-operations-128 data/20261024-185728-a13-block-times-complex64-max-fused-qudits-11-max-operations-256 data/20261024-185743-a13-block-times-complex64-max-fused-qudits-11-max-operations-1024 data/20261024-185751-a13-block-times-complex32-max-fused-qudits-9-max-operations-64 data/20261024-185808-a13-block-times-complex32-max-fused-qudits-9-max-operations-128 data/20261024-185823-a13-block-times-complex32-max-fused-qudits-9-max-operations-256
+- **Outcome:** exit 0; outputs in data/20261025-090259-a13-sass-counts-of-timed-blocks-part-2-of-4-rerun
+- **Next:** none
+- **Refs:** data/20261025-090259-a13-sass-counts-of-timed-blocks-part-2-of-4-rerun, code/bench/a13_sass_blocks.py, code/bench/a13_sass.py
+
+## 2026-10-25 09:09 UTC  A13 SASS counts of timed blocks part 3 of 4 (rerun)
+- **Goal:** SASS instruction classes per amplitude of every block timed in the A13 sweeps (local NVRTC sm_90 + nvdisasm), for a refit of the pass-time model; part 2 rerun after an assertion on 2**14-amplitude tiles
+- **Task:** A13
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a13_sass_blocks.py data/20261024-185832-a13-block-times-complex32-max-fused-qudits-9-max-operations-1024 data/20261024-185841-a13-block-times-complex32-max-fused-qudits-10-max-operations-64 data/20261024-185857-a13-block-times-complex32-max-fused-qudits-10-max-operations-128 data/20261024-185916-a13-block-times-complex32-max-fused-qudits-10-max-operations-256 data/20261024-185927-a13-block-times-complex32-max-fused-qudits-10-max-operations-1024 data/20261024-185935-a13-block-times-complex32-max-fused-qudits-11-max-operations-64 data/20261024-185952-a13-block-times-complex32-max-fused-qudits-11-max-operations-128
+- **Outcome:** exit 0; outputs in data/20261025-090301-a13-sass-counts-of-timed-blocks-part-3-of-4-rerun
+- **Next:** none
+- **Refs:** data/20261025-090301-a13-sass-counts-of-timed-blocks-part-3-of-4-rerun, code/bench/a13_sass_blocks.py, code/bench/a13_sass.py
+
+## 2026-10-25 09:07 UTC  A12 dry run sequential Kraus sets gad ghz,brickwork,qft
+- **Goal:** Block passes with canonical, E-optimal and sequential (collision-optimal) Kraus sets, generalized amplitude damping, n=28, M=0.1 and 1, 1000 shots
+- **Task:** A12
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a12_dryrun.py gad ghz,brickwork,qft canonical,optimum,sequential 1000
+- **Outcome:** exit 0; outputs in data/20261025-090333-a12-dry-run-sequential-kraus-sets-gad-ghz-brickwork-qft
+- **Next:** none
+- **Refs:** data/20261025-090333-a12-dry-run-sequential-kraus-sets-gad-ghz-brickwork-qft, code/bench/a12_dryrun.py, code/bench/a12_collisions.py
+
+## 2026-10-25 09:07 UTC  A12 dry run sequential Kraus sets gad qaoa,grid
+- **Goal:** Block passes with canonical, E-optimal and sequential (collision-optimal) Kraus sets, generalized amplitude damping, n=28, M=0.1 and 1, 1000 shots
+- **Task:** A12
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a12_dryrun.py gad qaoa,grid canonical,optimum,sequential 1000
+- **Outcome:** exit 0; outputs in data/20261025-090335-a12-dry-run-sequential-kraus-sets-gad-qaoa-grid
+- **Next:** none
+- **Refs:** data/20261025-090335-a12-dry-run-sequential-kraus-sets-gad-qaoa-grid, code/bench/a12_dryrun.py, code/bench/a12_collisions.py
+
+## 2026-10-25 09:04 UTC  A13 SASS counts of timed blocks part 1 of 4
+- **Goal:** SASS instruction classes per amplitude of every block timed in the A13 sweeps (local NVRTC sm_90 + nvdisasm), for a refit of the pass-time model
+- **Task:** A13
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a13_sass_blocks.py data/20261024-185525-a13-block-times-complex64-max-fused-qudits-9-max-operations-64 data/20261024-185533-a13-block-times-complex64-max-fused-qudits-9-max-operations-128 data/20261024-185541-a13-block-times-complex64-max-fused-qudits-9-max-operations-256 data/20261024-185550-a13-block-times-complex64-max-fused-qudits-9-max-operations-1024 data/20261024-185558-a13-block-times-complex64-max-fused-qudits-10-max-operations-64 data/20261024-185614-a13-block-times-complex64-max-fused-qudits-10-max-operations-128 data/20261024-185633-a13-block-times-complex64-max-fused-qudits-10-max-operations-256 data/20261024-185644-a13-block-times-complex64-max-fused-qudits-10-max-operations-1024
+- **Outcome:** exit 0; outputs in data/20261025-085723-a13-sass-counts-of-timed-blocks-part-1-of-4
+- **Next:** none
+- **Refs:** data/20261025-085723-a13-sass-counts-of-timed-blocks-part-1-of-4, code/bench/a13_sass_blocks.py, code/bench/a13_sass.py
+
+## 2026-10-25 09:01 UTC  A12 dry run sequential Kraus sets damp_depol ghz,brickwork,qft
+- **Goal:** Block passes with canonical, E-optimal and sequential (collision-optimal) Kraus sets, damp_depol, n=28, M=0.1 and 1, 1000 shots
+- **Task:** A12
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a12_dryrun.py damp_depol ghz,brickwork,qft canonical,optimum,sequential 1000
+- **Outcome:** exit 0; outputs in data/20261025-085809-a12-dry-run-sequential-kraus-sets-damp-depol-ghz-brickwork-qft
+- **Next:** none
+- **Refs:** data/20261025-085809-a12-dry-run-sequential-kraus-sets-damp-depol-ghz-brickwork-qft, code/bench/a12_dryrun.py, code/bench/a12_collisions.py
+
+## 2026-10-25 09:01 UTC  A12 dry run sequential Kraus sets damp_depol qaoa,grid
+- **Goal:** Block passes with canonical, E-optimal and sequential (collision-optimal) Kraus sets, damp_depol, n=28, M=0.1 and 1, 1000 shots
+- **Task:** A12
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a12_dryrun.py damp_depol qaoa,grid canonical,optimum,sequential 1000
+- **Outcome:** exit 0; outputs in data/20261025-085811-a12-dry-run-sequential-kraus-sets-damp-depol-qaoa-grid
+- **Next:** none
+- **Refs:** data/20261025-085811-a12-dry-run-sequential-kraus-sets-damp-depol-qaoa-grid, code/bench/a12_dryrun.py, code/bench/a12_collisions.py
+
+## 2026-10-25 08:57 UTC  A13 SASS counts of timed blocks part 2 of 4
+- **Goal:** SASS instruction classes per amplitude of every block timed in the A13 sweeps (local NVRTC sm_90 + nvdisasm), for a refit of the pass-time model
+- **Task:** A13
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a13_sass_blocks.py data/20261024-185652-a13-block-times-complex64-max-fused-qudits-11-max-operations-64 data/20261024-185709-a13-block-times-complex64-max-fused-qudits-11-max-operations-128 data/20261024-185728-a13-block-times-complex64-max-fused-qudits-11-max-operations-256 data/20261024-185743-a13-block-times-complex64-max-fused-qudits-11-max-operations-1024 data/20261024-185751-a13-block-times-complex32-max-fused-qudits-9-max-operations-64 data/20261024-185808-a13-block-times-complex32-max-fused-qudits-9-max-operations-128 data/20261024-185823-a13-block-times-complex32-max-fused-qudits-9-max-operations-256
+- **Outcome:** exit 1; outputs in data/20261025-085725-a13-sass-counts-of-timed-blocks-part-2-of-4
+- **Next:** none
+- **Refs:** data/20261025-085725-a13-sass-counts-of-timed-blocks-part-2-of-4, code/bench/a13_sass_blocks.py, code/bench/a13_sass.py
+
+## 2026-10-25 08:52 UTC  A12 collision-aware Kraus sets damp_depol,gad
+- **Goal:** Distinct proposals and accepted errors per gate (P_n, A_n) of canonical, greedy, E-optimal and collision-optimal Kraus sets, p=0.01, one qubit and tensor square
+- **Task:** A12
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a12_collisions.py damp_depol,gad
+- **Outcome:** exit 0; outputs in data/20261025-085157-a12-collision-aware-kraus-sets-damp-depol-gad
+- **Next:** none
+- **Refs:** data/20261025-085157-a12-collision-aware-kraus-sets-damp-depol-gad, code/bench/a12_collisions.py
+
+## 2026-10-25 08:52 UTC  A12 collision-aware Kraus sets depolarizing,dephasing,thermal
+- **Goal:** Distinct proposals and accepted errors per gate (P_n, A_n) of canonical, greedy, E-optimal and collision-optimal Kraus sets, p=0.01, one qubit and tensor square
+- **Task:** A12
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a12_collisions.py depolarizing,dephasing,thermal
+- **Outcome:** exit 0; outputs in data/20261025-085155-a12-collision-aware-kraus-sets-depolarizing-dephasing-thermal
+- **Next:** none
+- **Refs:** data/20261025-085155-a12-collision-aware-kraus-sets-depolarizing-dephasing-thermal, code/bench/a12_collisions.py
+
 ## 2026-10-24 21:49 UTC  A12 weighted optimization over all Kraus sets (one qubit)
 - **Goal:** Is there a trade-off between error proposals E and accepted errors mu?
 - **Task:** A12

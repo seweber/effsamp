@@ -219,6 +219,7 @@ def compile_like_simulator(circuit, simulator: Simulator) -> tuple[CompiledCircu
         optimize_kraus=simulator.optimize_kraus,
         max_operations=simulator.max_operations,
         pinned_bytes=simulator.pinned_bytes,
+        stage_qubits=simulator.stage_qubits,
     )
     max_oversampling = simulator.max_oversampling if (simulator.blocks_per_segment or 1) < 2 else math.inf
     compiled = compile_with(max_oversampling=max_oversampling)

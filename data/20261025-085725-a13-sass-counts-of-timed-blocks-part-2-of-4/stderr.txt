@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/itp3/home/sebastian/effsamp/code/bench/a13_sass_blocks.py", line 56, in <module>
+    main()
+    ~~~~^^
+  File "/itp3/home/sebastian/effsamp/code/bench/a13_sass_blocks.py", line 47, in main
+    counts[block] = per_amplitude(opcodes(sass(cubin(dom, cfg))), cfg, len(dom.tile(cfg)))
+                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/itp3/home/sebastian/effsamp/code/bench/a13_sass.py", line 110, in per_amplitude
+    assert group // codegen.threads(config, group, k) == per_thread, "set threads so that group / threads = 2**R"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: set threads so that group / threads = 2**R

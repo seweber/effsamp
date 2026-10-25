@@ -1,0 +1,12 @@
+{"circuit": "qaoa", "noise": "gad", "load": 0.1, "p": 0.0004761904761904762, "set": "canonical", "shots": 1000, "passes": 728.0, "general": 179.33333333333334, "blocks": 9}
+{"circuit": "qaoa", "noise": "gad", "load": 0.1, "p": 0.0004761904761904762, "set": "optimum", "shots": 1000, "passes": 654.0, "general": 142.0, "blocks": 9}
+{"circuit": "qaoa", "noise": "gad", "load": 0.1, "p": 0.0004761904761904762, "set": "sequential", "shots": 1000, "passes": 768.0, "general": 157.0, "blocks": 9}
+{"circuit": "qaoa", "noise": "gad", "load": 1.0, "p": 0.004761904761904762, "set": "canonical", "shots": 1000, "passes": 5577.0, "general": 1767.3333333333333, "blocks": 9}
+{"circuit": "qaoa", "noise": "gad", "load": 1.0, "p": 0.004761904761904762, "set": "optimum", "shots": 1000, "passes": 5061.666666666667, "general": 1411.6666666666667, "blocks": 9}
+{"circuit": "qaoa", "noise": "gad", "load": 1.0, "p": 0.004761904761904762, "set": "sequential", "shots": 1000, "passes": 5080.333333333333, "general": 1389.6666666666667, "blocks": 9}
+{"circuit": "grid", "noise": "gad", "load": 0.1, "p": 0.00014144271570014146, "set": "canonical", "shots": 1000, "passes": 2332.3333333333335, "general": 203.33333333333334, "blocks": 30}
+{"circuit": "grid", "noise": "gad", "load": 0.1, "p": 0.00014144271570014146, "set": "optimum", "shots": 1000, "passes": 2079.6666666666665, "general": 156.33333333333334, "blocks": 30}
+{"circuit": "grid", "noise": "gad", "load": 0.1, "p": 0.00014144271570014146, "set": "sequential", "shots": 1000, "passes": 1922.0, "general": 134.33333333333334, "blocks": 30}
+{"circuit": "grid", "noise": "gad", "load": 1.0, "p": 0.0014144271570014145, "set": "canonical", "shots": 1000, "passes": 16326.0, "general": 1922.0, "blocks": 30}
+{"circuit": "grid", "noise": "gad", "load": 1.0, "p": 0.0014144271570014145, "set": "optimum", "shots": 1000, "passes": 14271.333333333334, "general": 1466.0, "blocks": 30}
+{"circuit": "grid", "noise": "gad", "load": 1.0, "p": 0.0014144271570014145, "set": "sequential", "shots": 1000, "passes": 14766.0, "general": 1519.0, "blocks": 30}

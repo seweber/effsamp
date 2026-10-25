@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/itp3/home/sebastian/effsamp/code/bench/a13_half_arith.py", line 95, in <module>
+    main()
+    ~~~~^^
+  File "/itp3/home/sebastian/effsamp/code/bench/a13_half_arith.py", line 87, in main
+    psi = run(qc, n, mode, GATES_PER_BLOCK[name])
+  File "/itp3/home/sebastian/effsamp/code/bench/a13_half_arith.py", line 64, in run
+    dtype = {"complex128": np.float64, "complex64": np.float32, "complex32": np.float32, "half": np.float16}[mode]
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'complex32 tile'

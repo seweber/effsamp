@@ -1,0 +1,6 @@
+{"circuit": "ghz", "noise": "gad", "load": 0.1, "p": 0.001834862385321101, "set": "canonical", "shots": 10000, "passes": 831.6666666666666, "general": 473.0, "blocks": 3}
+{"circuit": "ghz", "noise": "gad", "load": 0.1, "p": 0.001834862385321101, "set": "optimum", "shots": 10000, "passes": 772.3333333333334, "general": 398.3333333333333, "blocks": 3}
+{"circuit": "ghz", "noise": "gad", "load": 0.1, "p": 0.001834862385321101, "set": "sequential", "shots": 10000, "passes": 736.6666666666666, "general": 381.6666666666667, "blocks": 3}
+{"circuit": "ghz", "noise": "gad", "load": 1.0, "p": 0.01834862385321101, "set": "canonical", "shots": 10000, "passes": 16287.666666666666, "general": 12430.0, "blocks": 3}
+{"circuit": "ghz", "noise": "gad", "load": 1.0, "p": 0.01834862385321101, "set": "optimum", "shots": 10000, "passes": 12994.666666666666, "general": 9266.333333333334, "blocks": 3}
+{"circuit": "ghz", "noise": "gad", "load": 1.0, "p": 0.01834862385321101, "set": "sequential", "shots": 10000, "passes": 12657.333333333334, "general": 8905.666666666666, "blocks": 3}

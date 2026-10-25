@@ -1,0 +1,1 @@
+code/noisecirc/.venv/bin/python code/bench/a12_dryrun.py damp_depol qaoa,grid canonical,optimum,sequential 1000

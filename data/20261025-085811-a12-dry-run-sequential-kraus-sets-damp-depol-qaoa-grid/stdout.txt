@@ -1,0 +1,12 @@
+{"circuit": "qaoa", "noise": "damp_depol", "load": 0.1, "p": 0.0004761904761904762, "set": "canonical", "shots": 1000, "passes": 2027.0, "general": 496.0, "blocks": 9}
+{"circuit": "qaoa", "noise": "damp_depol", "load": 0.1, "p": 0.0004761904761904762, "set": "optimum", "shots": 1000, "passes": 1749.3333333333333, "general": 358.0, "blocks": 9}
+{"circuit": "qaoa", "noise": "damp_depol", "load": 0.1, "p": 0.0004761904761904762, "set": "sequential", "shots": 1000, "passes": 1791.6666666666667, "general": 359.0, "blocks": 9}
+{"circuit": "qaoa", "noise": "damp_depol", "load": 1.0, "p": 0.004761904761904762, "set": "canonical", "shots": 1000, "passes": 11674.333333333334, "general": 5923.666666666667, "blocks": 9}
+{"circuit": "qaoa", "noise": "damp_depol", "load": 1.0, "p": 0.004761904761904762, "set": "optimum", "shots": 1000, "passes": 9326.666666666666, "general": 3713.6666666666665, "blocks": 9}
+{"circuit": "qaoa", "noise": "damp_depol", "load": 1.0, "p": 0.004761904761904762, "set": "sequential", "shots": 1000, "passes": 9388.333333333334, "general": 3761.0, "blocks": 9}
+{"circuit": "grid", "noise": "damp_depol", "load": 0.1, "p": 0.00014144271570014146, "set": "canonical", "shots": 1000, "passes": 5719.333333333333, "general": 550.6666666666666, "blocks": 30}
+{"circuit": "grid", "noise": "damp_depol", "load": 0.1, "p": 0.00014144271570014146, "set": "optimum", "shots": 1000, "passes": 4988.333333333333, "general": 378.0, "blocks": 30}
+{"circuit": "grid", "noise": "damp_depol", "load": 0.1, "p": 0.00014144271570014146, "set": "sequential", "shots": 1000, "passes": 4972.666666666667, "general": 382.0, "blocks": 30}
+{"circuit": "grid", "noise": "damp_depol", "load": 1.0, "p": 0.0014144271570014145, "set": "canonical", "shots": 1000, "passes": 27112.0, "general": 5532.333333333333, "blocks": 30}
+{"circuit": "grid", "noise": "damp_depol", "load": 1.0, "p": 0.0014144271570014145, "set": "optimum", "shots": 1000, "passes": 24306.666666666668, "general": 3821.3333333333335, "blocks": 30}
+{"circuit": "grid", "noise": "damp_depol", "load": 1.0, "p": 0.0014144271570014145, "set": "sequential", "shots": 1000, "passes": 24482.333333333332, "general": 3852.6666666666665, "blocks": 30}
