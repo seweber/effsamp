@@ -11,6 +11,38 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-25 19:52 UTC  A13 stage contraction: results, implementation, GPU 0 check
+- **Goal:** Answer whether a stage's contraction order can lower arithmetic, and whether the optimum is provable and easy
+- **Task:** A13
+- **Method:** Exact shortest path over down-sets (code/bench/a13_contraction.py); svpass Config.stage_contraction on noisecirc branch feature/stage-contraction 1556408; CPU tests + all 772 workload stages executed in Python; SASS + refit prediction (a13_contraction_predict.py)
+- **Outcome:** R=4 FP/amp vs A14: brickwork -11%, grid -18%, QAOA -8%, GHZ/QFT 0; heuristics reach only part; lower bound 3-12x below; SASS FP -10/-11%, predicted passes -4% brickwork/grid. GPU 0 still fails cuInit (3) at 20:27 CET; not timed. Wiki kernel-regime corrected (min 4 per rotation only one at a time; dense 4*2^k).
+- **Next:** Time stage_contraction and additive_addresses when GPU 0 works
+- **Refs:** wiki/studies/kernel-regime.md, memory/tasks/A13.md, data/20261025-194446-contraction-order-of-stages-r4
+
+## 2026-10-25 19:48 UTC  SASS and predicted passes with stage contraction c32 sq4
+- **Goal:** Compile A14 kernels with and without stage_contraction (branch feature/stage-contraction) for sm_90, count SASS, predict pass time with refit
+- **Task:** A13
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a13_contraction_predict.py
+- **Outcome:** exit 0; outputs in data/20261025-194446-sass-and-predicted-passes-with-stage-contraction-c32-sq4
+- **Next:** none
+- **Refs:** data/20261025-194446-sass-and-predicted-passes-with-stage-contraction-c32-sq4
+
+## 2026-10-25 19:47 UTC  Contraction order of stages R4
+- **Goal:** Exact cheapest contraction order of each stage vs gate-by-gate, A14 runs/rotation form, heuristics and bounds (FP per amplitude, CPU)
+- **Task:** A13
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a13_contraction.py 4
+- **Outcome:** exit 0; outputs in data/20261025-194446-contraction-order-of-stages-r4
+- **Next:** none
+- **Refs:** data/20261025-194446-contraction-order-of-stages-r4
+
+## 2026-10-25 19:45 UTC  Contraction order of stages R3
+- **Goal:** Exact cheapest contraction order of each stage vs gate-by-gate, A14 runs/rotation form, heuristics and bounds (FP per amplitude, CPU)
+- **Task:** A13
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a13_contraction.py 3
+- **Outcome:** exit 0; outputs in data/20261025-194446-contraction-order-of-stages-r3
+- **Next:** none
+- **Refs:** data/20261025-194446-contraction-order-of-stages-r3
+
 ## 2026-10-25 09:24 UTC  A13 stage estimate free diagonals
 - **Goal:** Mean stages per block with and without diagonal gates counting towards a stage's register qubits, R=3 and 4, five workloads n=26
 - **Task:** A13

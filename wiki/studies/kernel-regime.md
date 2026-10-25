@@ -29,6 +29,7 @@ The study has four steps, all on GPU 0 of bux (H100 PCIe) at 26 or 28 qubits wit
 - Accuracy: `data/20261024-*-a13-complex32-accuracy-n-24/` (LOG.md "A13 complex32 accuracy n=24").
 - Disassembled instruction counts of the timed kernels: `data/20261025-*-a13-sass-counts-of-timed-blocks-part-*` (LOG.md "A13 SASS counts of timed blocks …"; part 2 failed and was rerun); refit `data/a13-analysis/refit.json` (LOG.md "A13 refit of pass-time model with SASS counts").
 - Stages without diagonal gates: `data/*-a13-stage-estimate-free-diagonals/`; predicted designs: `data/*-a13-predicted-kernel-designs-c32-sq4/`; accuracy of half precision: `data/*-a13-half-precision-arithmetic-and-tile-accuracy-n-16-fixed/` (LOG.md entries of the same titles).
+- Contraction order of the stages: `data/20261025-194446-contraction-order-of-stages-r3/` and `-r4/`; SASS counts and predictions with `stage_contraction`: `data/20261025-194446-sass-and-predicted-passes-with-stage-contraction-c32-sq4/` (LOG.md entries of the same titles).
 - End to end: `data/20261024-*-a13-a14-end-to-end-*-n-28/` (LOG.md "A13 A14 end-to-end …"), summary `data/a13-analysis/e2e.jsonl` and figure `data/a13-analysis/e2e.svg` (`code/bench/a14_e2e.py`).
 
 ## Results
@@ -151,15 +152,73 @@ GPU 0 of bux failed to initialise CUDA during this follow-up (`cuInit` returns 3
 3. **A tile in half precision.** svpass's `complex32` keeps its tile in shared memory in single precision (8 bytes per amplitude) and rounds to half precision only when it stores to global memory. Keeping the tile itself in half precision would halve the bytes per shared access, at three conversions per amplitude and stage. The model predicts about 5% shorter passes, and tiles of 11 qubits would fit into 64 KB. The price is accuracy: a CPU emulation that rounds once per stage instead of once per pass (`code/bench/a13_half_arith.py`, 16 qubits) doubles the total variation distance, to $4$ to $7\times10^{-4}$, with norm errors up to $3\times10^{-4}$.
 4. **Arithmetic in half precision.** Packed half-precision instructions (HFMA2) do two operations per instruction and would halve $F$, the limit of brickwork and grid. The emulation shows that this is not accurate enough: the total variation distance grows to $2$ to $3\times10^{-3}$, and the squared norm drifts by $0.5$ to $4\%$ (grid). noisecirc's acceptance probabilities are such norms, so it would bias the sampling at the percent level.
 
-The floating-point instructions themselves are close to their minimum for these circuits. The A14 kernels spend 3.9 (grid) to 4.8 (brickwork) instructions per amplitude for each non-diagonal gate. A one-qubit rotation that follows a phase which differs between amplitudes, as every rotation after a controlled phase does, needs at least 4: 2 for the real rotation and 2 for the phase. This is tighter than the bound of 2 in [Fewer instructions per block pass](block-instructions.md), which counted diagonal gates as free.
+The A14 kernels spend 3.9 (grid) to 4.8 (brickwork) floating-point instructions per amplitude for each non-diagonal gate. Applied one at a time, a one-qubit rotation that follows a phase which differs between amplitudes, as every rotation after a controlled phase does, needs at least 4: 2 for the real rotation and 2 for the phase. This is tighter than the bound of 2 in [Fewer instructions per block pass](block-instructions.md), which counted diagonal gates as free. It is not a bound for the stage as a whole, though: applying several rotations together as one matrix can cost less than 4 per rotation, as the next section shows.
 
-What remains for the design is therefore bounded. GHZ, QFT and QAOA already run at 1.23 to 1.33 times the bandwidth time with the A14 kernels, 4-qubit stages and `complex32` (measured), against a floor of about 1.17, so no kernel design can make their passes more than about 15% faster. Brickwork and grid run at 1.6 to 2.0 times the floor (measured) and are bound by floating-point arithmetic at its minimum in single precision. For them the designs above predict up to 13%, while half-precision arithmetic, which would give up to about 1.5 times, is too inaccurate.
+What remains for the design is bounded. GHZ, QFT and QAOA already run at 1.23 to 1.33 times the bandwidth time with the A14 kernels, 4-qubit stages and `complex32` (measured), against a floor of about 1.17, so no kernel design can make their passes more than about 15% faster. Brickwork and grid run at 1.6 to 2.0 times the floor (measured) and are bound by floating-point arithmetic. For them the designs above predict up to 13%, while half-precision arithmetic, which would give up to about 1.5 times, is too inaccurate.
+
+### The contraction order of a stage's gates (exact search; static, GPU unavailable)
+
+A stage applies its gates to the $2^R$ amplitudes a thread holds in registers. Instead of applying them one by one, a kernel may first multiply some of them into one matrix and apply that product. The choice of which gates to multiply is the stage's contraction order: in tensor-network terms, the order in which the state and the gates are contracted.
+
+**Only applying a matrix costs time; multiplying gates is free.** svpass writes the gates' matrices into the generated kernel as constants. Any product of gates is therefore computed once, when the kernel is generated, and costs nothing per amplitude. A contraction order thus amounts to a sequence of clusters of gates, each applied to the registers as its product. The cost of an order is the sum of its clusters' costs:
+
+$$
+F_{\text{stage}} = \sum_{\text{clusters } C} \min\bigl(F_{\text{product}}(C),\ F_{\text{rotation}}(C)\bigr). \tag{2}
+$$
+
+Here $F_{\text{product}}(C)$ counts the instructions per amplitude of the cluster's product, as svpass lowers it: each FMA counts once, and entries 0, ±1 and ±i are free. $F_{\text{rotation}}(C)$ counts the same for the rotation form of task A14: real rotations between deferred diagonals.
+
+**The cheapest order can be found exactly.** A gate depends on the earlier gates that share a qubit with it. The gates applied before a cluster are then closed under this dependence, a down-set of the stage's dependency graph, and every cluster is the difference of two nested down-sets. Conversely, every chain of nested down-sets is a valid order. The cheapest order of Eq. (2) is thus a shortest path from the empty down-set to the whole stage, which a dynamic program finds exactly. The result is provably optimal among all contraction orders whose clusters are lowered in one of these two ways.
+
+**Allowing diagonal gates to commute adds nothing.** Diagonal gates commute with each other, which enlarges the dependency graph's set of down-sets. The search found the same optimum with and without this freedom, within 0.1 instructions per amplitude.
+
+The search was run on every stage of the five A13 workloads at 26 qubits (`code/bench/a13_contraction.py`). It visited at most a few hundred down-sets per stage at $R = 4$ and never reached the cap of 2000. The table compares the floating-point instructions per amplitude, summed over a block's stages and averaged over the blocks, for 4-qubit stages:
+
+| circuit | gate by gate | A14 kernels | cheapest order, products only | cheapest order, Eq. (2) | greedy merging | runs in a qubit-local order | lower bound |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| GHZ | 80.5 | 34.7 | 34.7 | 34.7 | 39.7 | 34.7 | 6.0 |
+| brickwork | 211.2 | 139.0 | 126.0 | 123.7 | 137.9 | 136.9 | 9.8 |
+| QFT | 59.0 | 26.0 | 26.0 | 26.0 | 26.0 | 26.0 | 12.4 |
+| QAOA | 156.0 | 50.4 | 60.3 | 46.2 | 46.6 | 47.5 | 8.3 |
+| grid | 202.7 | 143.0 | 127.1 | 117.1 | 125.9 | 130.1 | 11.0 |
+
+The columns are:
+
+- *A14 kernels*: runs of consecutive gates in program order, or the whole stage in rotation form, whichever is cheaper (`stage_fusion` and `rotation_form`).
+- *greedy merging*: starts from single gates and repeatedly merges the two clusters that save the most.
+- *runs in a qubit-local order*: the A14 dynamic program with both lowerings, applied to the program order and to an order that keeps working on the same qubits; the better of the two.
+- *lower bound*: valid for any program of FMAs. Each instruction yields one real number, so every real output component that is not ± one input needs its own instruction.
+
+Four findings follow from the table:
+
+1. **The cheapest order saves 8 to 18% of the arithmetic where it matters.** Against the A14 kernels it saves 11% for brickwork, 18% for grid and 8% for QAOA; GHZ and QFT gain nothing. With 3-qubit stages the savings are 4%, 13% and 3%.
+2. **The saving comes from multiplying several rotations on two qubits into one dense matrix.** A dense two-qubit matrix costs 16 instructions per amplitude, $4\cdot 2^k$ for $k$ qubits. Five rotations and two controlled phases on two qubits cost 23.5 in rotation form, so their product is cheaper. The A14 dynamic program misses this because those gates are interleaved in program order with gates on other qubits. With the cheapest order, grid spends 3.1 instructions per amplitude and rotation, below the 4 of one-at-a-time application.
+3. **The exact search is the easy way to the optimum.** The heuristics recover only part of the saving: greedy merging gets stuck, because a merge of rotations pays only once about four of them are merged, and reordering helps little. The search itself takes 0.04 to 1.25 s per block in Python, against kernel compilations of comparable length.
+4. **Optimality among all programs is out of reach.** The provable lower bound is 3 to 12 times below what is achieved. This study has no efficient method to find the shortest program for a general linear map. The optimum is therefore certified only within the contraction orders of Eq. (2).
+
+The search is implemented as svpass `Config.stage_contraction` (noisecirc branch `feature/stage-contraction`, commit `1556408`, off by default). It applies to stages whose gates read no choice, as in all dominant kernels. The implementation was checked without a GPU:
+
+- New code-generation tests run the generated statements of contracted, fused and rotated stages in Python against the reference. The rotation form of A14 had no such test before.
+- The generated statements of all 772 stages of the five workloads, at 3 and 4 qubits, reproduce the stages' products, with a largest error of $7\times10^{-10}$ from the printed literals.
+- svpass's CPU tests pass: 265 tests, 85 skipped for lack of a GPU.
+
+Compiled with NVRTC for sm_90 and disassembled, the kernels confirm the saving in floating-point instructions (`code/bench/a13_contraction_predict.py`). Integer instructions grow by at most 2.7 per amplitude. The refitted model predicts the passes with 4-qubit stages and `complex32`:
+
+| circuit | floating-point instructions per amplitude, A14 → contraction | predicted $t/t_{bw}$, A14 → contraction | change |
+| --- | --- | --- | --- |
+| GHZ | 39.1 → 39.1 | 1.135 → 1.135 | 0% |
+| brickwork | 143.5 → 128.1 | 1.685 → 1.617 | −4% |
+| QFT | 30.2 → 29.3 | 1.189 → 1.185 | 0% |
+| QAOA | 54.9 → 50.8 | 1.147 → 1.147 | 0% (at the model's floor) |
+| grid | 127.6 → 115.3 | 1.609 → 1.540 | −4% |
+
+The pass gains less than the arithmetic: arithmetic is about half of the issued instructions, and QAOA's passes are already at the memory floor in the model. The cheapest contraction order composes with the other designs of this page, for example with stages that ignore diagonal gates.
 
 ## How a kernel should be designed in this regime
 
 The measurements give a clear rule for the design of a block's kernel on a device like the H100: **minimise the instructions issued per amplitude, arithmetic and shared accesses together, until the pass reaches the memory floor; then, and only then, shrink the bytes.** Applied to noisecirc:
 
-1. Exploit the structure of the gates before fusing them into dense matrices. A dense matrix on $k$ qubits costs $8\cdot 2^k$ instructions per amplitude, so fusing pays only where the product is cheaper than its factors; real rotations between deferred diagonals cost 4 instead of 6 to 8 per one-qubit gate (task A14).
+1. Exploit the structure of the gates before fusing them into dense matrices. A dense matrix on $k$ qubits costs $4\cdot 2^k$ instructions per amplitude, so fusing pays only where the product is cheaper than its factors; real rotations between deferred diagonals cost 4 instead of 6 to 8 per one-qubit gate (task A14). Which gates to multiply is best found exactly, by a shortest path over the down-sets of each stage's dependency graph (section *The contraction order of a stage's gates*): it saves 8 to 18% of the arithmetic of brickwork, grid and QAOA over the A14 kernels, and cheap heuristics do not reach it.
 2. Use as few stages as the registers allow: every stage costs 2 shared accesses per amplitude, the price of about 13 floating-point instructions, plus a fixed setup of about 20 integer instructions per thread. With cheap arithmetic, 4-qubit stages pay; with today's arithmetic they did not (A7). Stages that ignore diagonal gates would need 30 to 90% fewer stages (section *Kernel designs that issue fewer instructions*).
 3. Count all issued instructions, not only the arithmetic: address computations and per-stage setup cost about as much as floating-point instructions each, and the shared-memory addresses can be immediate offsets (`additive_addresses`).
 4. Shrink the stored type last: `complex32` shortens a pass only as far as it sits at the memory floor.
@@ -174,9 +233,12 @@ Tensor cores, the obvious hardware for arithmetic-bound kernels, do not fit thes
 - The designs of the section *Kernel designs that issue fewer instructions* are predictions of the refitted model, which fits measured passes within 6.5% but underestimates the slowest ones (brickwork and grid with `complex32`: predicted 1.6 to 1.7, measured 1.8 to 2.0 times $t_{bw}$). They were not timed, because GPU 0 was unavailable.
 - `complex32` is outside PLAN.md's general restriction to `complex64`; its accuracy is about $10^{-3}$ and its effect on sampling was checked for the no-error trajectory only.
 - The A14 kernels are opt-in flags on the noisecirc branch `feature/stage-fusion` and need review before becoming defaults.
+- `stage_contraction` (branch `feature/stage-contraction`) is verified on the CPU only; its pass times are predictions. Its optimum holds for the stages as noisecirc partitions them: a partition chosen together with the contraction order might do better.
 
 ## Verdict
 
 On the H100, noisecirc's passes are bound by issued instructions, the sum of arithmetic and shared-memory accesses, not by bandwidth. Therefore `complex32` shortens today's passes by at most 15% (GHZ 26%) and whole runs by 15 to 29%, larger blocks gain at most 15%, and width-11 tiles are slower. Once the kernels issue fewer instructions (task A14) and use 4-qubit stages, `complex32` makes whole runs 1.45 to 1.9 times faster than today's `complex64` defaults (geometric mean 1.6, against 1.28 for `complex32` alone), at an accuracy of about $10^{-3}$ instead of $10^{-6}$. The kernel design that pays in this regime is structure first, fewer stages second, fewer bytes last; dense fusion, larger tiles and tensor cores do not.
 
-The number of instructions does depend on the implementation, beyond the arithmetic: the compiled kernels issue 35 to 90 integer instructions per amplitude for addressing and per-stage setup, which cost about as much as floating-point instructions each. The A14 kernels with 4-qubit stages already halve them. Immediate shared-memory offsets and stages that ignore diagonal gates would remove most of the rest, predicted 1 to 13% on top of the best configuration so far (not yet timed). The floating-point instructions are within about 20% of the minimum of 4 per amplitude and rotation. Beyond that, a pass would only get much shorter with half-precision arithmetic, which biases the norms by up to 4% and is therefore not an option. With today's design choices, the per-pass headroom is about 15% for GHZ, QFT and QAOA and about 1.6 times for brickwork and grid, of which the designs found recover up to 13%.
+The number of instructions does depend on the implementation, beyond the arithmetic: the compiled kernels issue 35 to 90 integer instructions per amplitude for addressing and per-stage setup, which cost about as much as floating-point instructions each. The A14 kernels with 4-qubit stages already halve them. Immediate shared-memory offsets and stages that ignore diagonal gates would remove most of the rest, predicted 1 to 13% on top of the best configuration so far (not yet timed). The floating-point instructions are within about 20% of 4 per amplitude and rotation, the minimum when rotations are applied one at a time. Beyond that, a pass would only get much shorter with half-precision arithmetic, which biases the norms by up to 4% and is therefore not an option. With today's design choices, the per-pass headroom is about 15% for GHZ, QFT and QAOA and about 1.6 times for brickwork and grid, of which the designs found recover up to 13%.
+
+The contraction order of a stage's gates matters too, and its optimum can be found exactly and cheaply: since the gates' products are constants of the kernel, the cheapest order is a shortest path over the down-sets of the stage's dependency graph. It saves 8 to 18% of the arithmetic of brickwork, grid and QAOA against the A14 kernels, mainly by multiplying several rotations on two qubits into one matrix, which brings grid to 3.1 instructions per amplitude and rotation, below the 4 of one-at-a-time application. The predicted passes are 4% shorter for brickwork and grid. Optimality is proved only among contraction orders; the lower bound for arbitrary programs is too weak to certify more.

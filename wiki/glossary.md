@@ -59,6 +59,8 @@
 - **HFMA2** — a GPU instruction that performs two half-precision fused multiply-adds at once
 - **sequential Kraus set** — among the Kraus sets with minimal oversampling, the one whose bounds are concentrated on the first remaining operators (A12 follow-up)
 - **additive addresses** — shared-memory addresses of a stage split into a part of the thread and an immediate offset (svpass `Config.additive_addresses`)
+- **contraction order** — which of a stage's gates are multiplied into one matrix before being applied to the registers, and in which sequence (svpass `Config.stage_contraction` applies the cheapest)
+- **down-set** — a set of a stage's gates that contains, with every gate, all earlier gates it depends on (those sharing a qubit with it); the gates applied before any point of a contraction order
 - **NVRTC** — NVIDIA's runtime compiler for CUDA source, which svpass uses to compile kernels; it compiles for a given architecture without a GPU
 - **FMA** — fused multiply-add, $a \cdot b + c$ in one instruction with one rounding; FFMA, FMUL and FADD are the GPU's single-precision fused multiply-add, multiply and add instructions
 - **FMUL** — see FMA
