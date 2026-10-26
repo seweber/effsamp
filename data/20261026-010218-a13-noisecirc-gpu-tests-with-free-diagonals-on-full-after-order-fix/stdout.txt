@@ -1,0 +1,10 @@
+pytest -q -rf packages/svpass/tests -> 1
+FAILED packages/svpass/tests/test_block.py::test_a_stage_acts_on_at_most_stage_qubits
+=========================== short test summary info ============================
+FAILED packages/svpass/tests/test_block.py::test_a_stage_acts_on_at_most_stage_qubits
+1 failed, 351 passed in 12.65s 
+pytest -q -rf tests -> 0
+
+........................................................................ [ 78%]
+.......................................                                  [100%]
+183 passed, 2 deselected in 11.95s 

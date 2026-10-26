@@ -1,0 +1,2 @@
+/work/bench/a13_free_errors_check.py:69: RuntimeWarning: invalid value encountered in scalar divide
+  worst[label] = max(worst[label], float(np.linalg.norm(out - expected) / np.linalg.norm(expected)))

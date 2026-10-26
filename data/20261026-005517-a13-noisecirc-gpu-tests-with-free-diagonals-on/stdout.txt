@@ -1,0 +1,41 @@
+pytest -q -x packages/svpass/tests -> 1
+.............F
+=================================== FAILURES ===================================
+__________________ test_a_stage_acts_on_at_most_stage_qubits ___________________
+
+    def test_a_stage_acts_on_at_most_stage_qubits() -> None:
+        """A stage may act on as many qubits as the config allows, and the check names the first wider one."""
+        block = Block([_operation(0, 1, 2), _operation(3)], np.array([0, 0]), 5)
+        block.check(Config(stage_qubits=4))
+>       with pytest.raises(ValueError, match=r"operations 0 to 1 .* 4 qubits"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+packages/svpass/tests/test_block.py:125: Failed
+=========================== short test summary info ============================
+FAILED packages/svpass/tests/test_block.py::test_a_stage_acts_on_at_most_stage_qubits
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 13 passed in 0.24s
+ 
+pytest -q -x tests -> 1
+rations]
+            assert len(circuit) == len(operations) == len(expected)
+            pinned = set(range(circuit.config.pinned_qubits))
+            assert pinned == (set(range(Config(dtype=circuit.dtype).pinned_qubits)) if max_fused_qudits else set())
+            for block in circuit.blocks:
+                tile = set(block.engine_block.tile(circuit.config))
+                assert pinned <= tile
+                assert len(block.operations) == 1 or len(tile - pinned) <= max_fused_qudits
+            for qubit in range(circuit.n):
+>               assert [op for op in operations if qubit in op.targets] == [op for op in expected if qubit in op.targets]
+E               assert [OperationWit...kraus=False))] == [OperationWit...kraus=False))]
+E                 
+E                 At index 1 diff: OperationWithinCircuit(targets=(2, 3), operation=Operation(quantum_map=<noisecirc.maps.base.QuantumMap object at 0x7f36410eec10>, params=(1.1,), optimize_kraus=False)) != OperationWithinCircuit(targets=(3, 2, 0), operation=Operation(quantum_map=<noisecirc.maps.base.QuantumMap object at 0x7f36410f2ea0>, params=(0.9,), optimize_kraus=False))
+E                 Use -v to get more diff
+
+tests/test_block.py:94: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_block.py::test_blocks_partition_the_circuit_in_order - asse...
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 2 deselected in 0.31s
+ 

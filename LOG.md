@@ -11,6 +11,398 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-26 01:15 UTC  A13 pending GPU work: additive addresses, contraction order, free diagonals timed
+- **Goal:** Time the A13 designs that were only predicted while GPU 0 was down; implement and time stages that ignore diagonal gates
+- **Task:** A13
+- **Method:** a16_time.py (n=26, sq3/sq4, c32/c64), a2_runs.py end to end (n=28, 3 seeds), free_diagonals in noisecirc feature/tensor-cores (fusion partition + codegen outside factors + sub-stages), checks a13_free_check.py, a13_free_errors_check.py, noisecirc GPU and statistical tests
+- **Outcome:** additive+contraction: passes -6..-15% c32, -4..-9% c64; runs gm 0.585 (c32) / 0.891 (c64) vs defaults. free_diagonals correct but slower at sq4 (+3..+24%), faster only QFT sq3. Predictions: too low for additive/contraction, wrong sign for free diagonals
+- **Next:** A17
+- **Refs:** wiki/studies/kernel-regime.md, data/a13-analysis/e2e.svg, memory/tasks/A13.md, code/bench/a13_free_check.py, code/bench/a13_free_errors_check.py
+
+## 2026-10-26 01:13 UTC  A13 free diagonals timing complex64 sq4 free 1 n=26
+- **Goal:** Mean dominant pass time over t_bw with stage_contraction and additive_addresses, free_diagonals=1, complex64, 4-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex64 --set stage_qubits=4 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=1 --variant base
+- **Outcome:** exit 0; outputs in data/20261026-011240-a13-free-diagonals-timing-complex64-sq4-free-1-n-26
+- **Next:** none
+- **Refs:** data/20261026-011240-a13-free-diagonals-timing-complex64-sq4-free-1-n-26
+
+## 2026-10-26 01:12 UTC  A13 free diagonals timing complex64 sq4 free 0 n=26
+- **Goal:** Mean dominant pass time over t_bw with stage_contraction and additive_addresses, free_diagonals=0, complex64, 4-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex64 --set stage_qubits=4 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=0 --variant base
+- **Outcome:** exit 0; outputs in data/20261026-011148-a13-free-diagonals-timing-complex64-sq4-free-0-n-26
+- **Next:** none
+- **Refs:** data/20261026-011148-a13-free-diagonals-timing-complex64-sq4-free-0-n-26
+
+## 2026-10-26 01:11 UTC  A13 free diagonals timing complex64 sq3 free 1 n=26
+- **Goal:** Mean dominant pass time over t_bw with stage_contraction and additive_addresses, free_diagonals=1, complex64, 3-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex64 --set stage_qubits=3 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=1 --variant base
+- **Outcome:** exit 0; outputs in data/20261026-011137-a13-free-diagonals-timing-complex64-sq3-free-1-n-26
+- **Next:** none
+- **Refs:** data/20261026-011137-a13-free-diagonals-timing-complex64-sq3-free-1-n-26
+
+## 2026-10-26 01:11 UTC  A13 free diagonals timing complex64 sq3 free 0 n=26
+- **Goal:** Mean dominant pass time over t_bw with stage_contraction and additive_addresses, free_diagonals=0, complex64, 3-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex64 --set stage_qubits=3 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=0 --variant base
+- **Outcome:** exit 0; outputs in data/20261026-011123-a13-free-diagonals-timing-complex64-sq3-free-0-n-26
+- **Next:** none
+- **Refs:** data/20261026-011123-a13-free-diagonals-timing-complex64-sq3-free-0-n-26
+
+## 2026-10-26 01:11 UTC  A13 free diagonals timing complex32 sq4 free 1 n=26
+- **Goal:** Mean dominant pass time over t_bw with stage_contraction and additive_addresses, free_diagonals=1, complex32, 4-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex32 --set stage_qubits=4 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=1 --variant base
+- **Outcome:** exit 0; outputs in data/20261026-011055-a13-free-diagonals-timing-complex32-sq4-free-1-n-26
+- **Next:** none
+- **Refs:** data/20261026-011055-a13-free-diagonals-timing-complex32-sq4-free-1-n-26
+
+## 2026-10-26 01:10 UTC  A13 free diagonals timing complex32 sq4 free 0 n=26
+- **Goal:** Mean dominant pass time over t_bw with stage_contraction and additive_addresses, free_diagonals=0, complex32, 4-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex32 --set stage_qubits=4 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=0 --variant base
+- **Outcome:** exit 0; outputs in data/20261026-011004-a13-free-diagonals-timing-complex32-sq4-free-0-n-26
+- **Next:** none
+- **Refs:** data/20261026-011004-a13-free-diagonals-timing-complex32-sq4-free-0-n-26
+
+## 2026-10-26 01:10 UTC  A13 free diagonals timing complex32 sq3 free 1 n=26
+- **Goal:** Mean dominant pass time over t_bw with stage_contraction and additive_addresses, free_diagonals=1, complex32, 3-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex32 --set stage_qubits=3 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=1 --variant base
+- **Outcome:** exit 0; outputs in data/20261026-010954-a13-free-diagonals-timing-complex32-sq3-free-1-n-26
+- **Next:** none
+- **Refs:** data/20261026-010954-a13-free-diagonals-timing-complex32-sq3-free-1-n-26
+
+## 2026-10-26 01:09 UTC  A13 free diagonals timing complex32 sq3 free 0 n=26
+- **Goal:** Mean dominant pass time over t_bw with stage_contraction and additive_addresses, free_diagonals=0, complex32, 3-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex32 --set stage_qubits=3 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=0 --variant base
+- **Outcome:** exit 0; outputs in data/20261026-010941-a13-free-diagonals-timing-complex32-sq3-free-0-n-26
+- **Next:** none
+- **Refs:** data/20261026-010941-a13-free-diagonals-timing-complex32-sq3-free-0-n-26
+
+## 2026-10-26 01:09 UTC  A13 error kernels input-relative free diagonals 1 sq4 n=10
+- **Goal:** Masked and general kernels with 1-3 errors per block against svpass's NumPy device, deviation relative to the input norm, free_diagonals=1, 4-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --draws 8 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=1 --set stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261026-010920-a13-error-kernels-input-relative-free-diagonals-1-sq4-n-10
+- **Next:** none
+- **Refs:** data/20261026-010920-a13-error-kernels-input-relative-free-diagonals-1-sq4-n-10
+
+## 2026-10-26 01:09 UTC  A13 error kernels input-relative free diagonals 1 sq3 n=10
+- **Goal:** Masked and general kernels with 1-3 errors per block against svpass's NumPy device, deviation relative to the input norm, free_diagonals=1, 3-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --draws 8 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=1 --set stage_qubits=3
+- **Outcome:** exit 0; outputs in data/20261026-010915-a13-error-kernels-input-relative-free-diagonals-1-sq3-n-10
+- **Next:** none
+- **Refs:** data/20261026-010915-a13-error-kernels-input-relative-free-diagonals-1-sq3-n-10
+
+## 2026-10-26 01:09 UTC  A13 error kernels input-relative free diagonals 0 sq4 n=10
+- **Goal:** Masked and general kernels with 1-3 errors per block against svpass's NumPy device, deviation relative to the input norm, free_diagonals=0, 4-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --draws 8 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=0 --set stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261026-010906-a13-error-kernels-input-relative-free-diagonals-0-sq4-n-10
+- **Next:** none
+- **Refs:** data/20261026-010906-a13-error-kernels-input-relative-free-diagonals-0-sq4-n-10
+
+## 2026-10-26 01:09 UTC  A13 error kernels input-relative free diagonals 0 sq3 n=10
+- **Goal:** Masked and general kernels with 1-3 errors per block against svpass's NumPy device, deviation relative to the input norm, free_diagonals=0, 3-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --draws 8 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=0 --set stage_qubits=3
+- **Outcome:** exit 0; outputs in data/20261026-010900-a13-error-kernels-input-relative-free-diagonals-0-sq3-n-10
+- **Next:** none
+- **Refs:** data/20261026-010900-a13-error-kernels-input-relative-free-diagonals-0-sq3-n-10
+
+## 2026-10-26 01:08 UTC  A13 error kernels few errors free diagonals 1 sq4 n=10
+- **Goal:** Masked and general kernels with 1-3 errors per block against svpass's NumPy device, free_diagonals=1, 4-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --draws 8 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=1 --set stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261026-010834-a13-error-kernels-few-errors-free-diagonals-1-sq4-n-10
+- **Next:** none
+- **Refs:** data/20261026-010834-a13-error-kernels-few-errors-free-diagonals-1-sq4-n-10
+
+## 2026-10-26 01:08 UTC  A13 error kernels few errors free diagonals 1 sq3 n=10
+- **Goal:** Masked and general kernels with 1-3 errors per block against svpass's NumPy device, free_diagonals=1, 3-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --draws 8 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=1 --set stage_qubits=3
+- **Outcome:** exit 0; outputs in data/20261026-010829-a13-error-kernels-few-errors-free-diagonals-1-sq3-n-10
+- **Next:** none
+- **Refs:** data/20261026-010829-a13-error-kernels-few-errors-free-diagonals-1-sq3-n-10
+
+## 2026-10-26 01:08 UTC  A13 error kernels few errors free diagonals 0 sq4 n=10
+- **Goal:** Masked and general kernels with 1-3 errors per block against svpass's NumPy device, free_diagonals=0, 4-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --draws 8 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=0 --set stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261026-010821-a13-error-kernels-few-errors-free-diagonals-0-sq4-n-10
+- **Next:** none
+- **Refs:** data/20261026-010821-a13-error-kernels-few-errors-free-diagonals-0-sq4-n-10
+
+## 2026-10-26 01:08 UTC  A13 error kernels few errors free diagonals 0 sq3 n=10
+- **Goal:** Masked and general kernels with 1-3 errors per block against svpass's NumPy device, free_diagonals=0, 3-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --draws 8 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=0 --set stage_qubits=3
+- **Outcome:** exit 0; outputs in data/20261026-010815-a13-error-kernels-few-errors-free-diagonals-0-sq3-n-10
+- **Next:** none
+- **Refs:** data/20261026-010815-a13-error-kernels-few-errors-free-diagonals-0-sq3-n-10
+
+## 2026-10-26 01:08 UTC  A13 error-kernel checks with uniform random choices invalid
+- **Goal:** Check masked/general kernels against NumPy
+- **Task:** A13
+- **Method:** a13_free_errors_check.py with uniformly random choices per operation
+- **Outcome:** Relative errors 1.0 also without free diagonals (control): chained damping jumps drive the expected state to (nearly) zero, so complex64 relative errors are meaningless; single-error debug (code/bench/a13_free_debug.py) matches to 2e-7. Runs 'A13 error kernels vs numpy ...' and '... vs svpass numpy device ...' invalid as tests
+- **Next:** Rerun with dominant choices plus 1-3 errors
+- **Refs:** code/bench/a13_free_errors_check.py
+
+## 2026-10-26 01:07 UTC  A13 error kernels vs svpass numpy device free diagonals 1 sq4 n=10
+- **Goal:** Masked and general kernels with random choices against svpass's NumPy device (complex128), free_diagonals=1, 4-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=1 --set stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261026-010709-a13-error-kernels-vs-svpass-numpy-device-free-diagonals-1-sq4-n-10
+- **Next:** none
+- **Refs:** data/20261026-010709-a13-error-kernels-vs-svpass-numpy-device-free-diagonals-1-sq4-n-10
+
+## 2026-10-26 01:07 UTC  A13 error kernels vs svpass numpy device free diagonals 1 sq3 n=10
+- **Goal:** Masked and general kernels with random choices against svpass's NumPy device (complex128), free_diagonals=1, 3-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=1 --set stage_qubits=3
+- **Outcome:** exit 0; outputs in data/20261026-010703-a13-error-kernels-vs-svpass-numpy-device-free-diagonals-1-sq3-n-10
+- **Next:** none
+- **Refs:** data/20261026-010703-a13-error-kernels-vs-svpass-numpy-device-free-diagonals-1-sq3-n-10
+
+## 2026-10-26 01:07 UTC  A13 error kernels vs svpass numpy device free diagonals 0 sq4 n=10
+- **Goal:** Masked and general kernels with random choices against svpass's NumPy device (complex128), free_diagonals=0, 4-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=0 --set stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261026-010655-a13-error-kernels-vs-svpass-numpy-device-free-diagonals-0-sq4-n-10
+- **Next:** none
+- **Refs:** data/20261026-010655-a13-error-kernels-vs-svpass-numpy-device-free-diagonals-0-sq4-n-10
+
+## 2026-10-26 01:06 UTC  A13 error kernels vs svpass numpy device free diagonals 0 sq3 n=10
+- **Goal:** Masked and general kernels with random choices against svpass's NumPy device (complex128), free_diagonals=0, 3-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=0 --set stage_qubits=3
+- **Outcome:** exit 0; outputs in data/20261026-010649-a13-error-kernels-vs-svpass-numpy-device-free-diagonals-0-sq3-n-10
+- **Next:** none
+- **Refs:** data/20261026-010649-a13-error-kernels-vs-svpass-numpy-device-free-diagonals-0-sq3-n-10
+
+## 2026-10-26 01:06 UTC  A13 error kernels vs numpy free diagonals 1 sq4 n=10 rerun
+- **Goal:** Masked and general kernels with random non-dominant choices against NumPy, free_diagonals=1, 4-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=1 --set stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261026-010542-a13-error-kernels-vs-numpy-free-diagonals-1-sq4-n-10-rerun
+- **Next:** none
+- **Refs:** data/20261026-010542-a13-error-kernels-vs-numpy-free-diagonals-1-sq4-n-10-rerun
+
+## 2026-10-26 01:05 UTC  A13 error kernels vs numpy free diagonals 1 sq3 n=10 rerun
+- **Goal:** Masked and general kernels with random non-dominant choices against NumPy, free_diagonals=1, 3-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=1 --set stage_qubits=3
+- **Outcome:** exit 0; outputs in data/20261026-010525-a13-error-kernels-vs-numpy-free-diagonals-1-sq3-n-10-rerun
+- **Next:** none
+- **Refs:** data/20261026-010525-a13-error-kernels-vs-numpy-free-diagonals-1-sq3-n-10-rerun
+
+## 2026-10-26 01:05 UTC  A13 error kernels vs numpy free diagonals 0 sq4 n=10 rerun
+- **Goal:** Masked and general kernels with random non-dominant choices against NumPy, free_diagonals=0, 4-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=0 --set stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261026-010456-a13-error-kernels-vs-numpy-free-diagonals-0-sq4-n-10-rerun
+- **Next:** none
+- **Refs:** data/20261026-010456-a13-error-kernels-vs-numpy-free-diagonals-0-sq4-n-10-rerun
+
+## 2026-10-26 01:04 UTC  A13 error kernels vs numpy free diagonals 0 sq3 n=10 rerun
+- **Goal:** Masked and general kernels with random non-dominant choices against NumPy, free_diagonals=0, 3-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=0 --set stage_qubits=3
+- **Outcome:** exit 0; outputs in data/20261026-010438-a13-error-kernels-vs-numpy-free-diagonals-0-sq3-n-10-rerun
+- **Next:** none
+- **Refs:** data/20261026-010438-a13-error-kernels-vs-numpy-free-diagonals-0-sq3-n-10-rerun
+
+## 2026-10-26 01:04 UTC  A13 error-kernel check runs failed (configpatch)
+- **Goal:** Check masked/general kernels with free diagonals against NumPy
+- **Task:** A13
+- **Method:** a13_free_errors_check.py, four runs
+- **Outcome:** All four runs failed at start: free_diagonals not in configpatch's Config fields (TypeError in Simulator); fixed
+- **Next:** Rerun
+- **Refs:** code/bench/configpatch.py
+
+## 2026-10-26 01:04 UTC  A13 error kernels vs numpy free diagonals 1 sq4 n=10
+- **Goal:** Masked and general kernels with random non-dominant choices against NumPy, free_diagonals=1, 4-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=1 --set stage_qubits=4
+- **Outcome:** exit 1; outputs in data/20261026-010418-a13-error-kernels-vs-numpy-free-diagonals-1-sq4-n-10
+- **Next:** none
+- **Refs:** data/20261026-010418-a13-error-kernels-vs-numpy-free-diagonals-1-sq4-n-10
+
+## 2026-10-26 01:04 UTC  A13 error kernels vs numpy free diagonals 1 sq3 n=10
+- **Goal:** Masked and general kernels with random non-dominant choices against NumPy, free_diagonals=1, 3-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=1 --set stage_qubits=3
+- **Outcome:** exit 1; outputs in data/20261026-010416-a13-error-kernels-vs-numpy-free-diagonals-1-sq3-n-10
+- **Next:** none
+- **Refs:** data/20261026-010416-a13-error-kernels-vs-numpy-free-diagonals-1-sq3-n-10
+
+## 2026-10-26 01:04 UTC  A13 error kernels vs numpy free diagonals 0 sq4 n=10
+- **Goal:** Masked and general kernels with random non-dominant choices against NumPy, free_diagonals=0, 4-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=0 --set stage_qubits=4
+- **Outcome:** exit 1; outputs in data/20261026-010414-a13-error-kernels-vs-numpy-free-diagonals-0-sq4-n-10
+- **Next:** none
+- **Refs:** data/20261026-010414-a13-error-kernels-vs-numpy-free-diagonals-0-sq4-n-10
+
+## 2026-10-26 01:04 UTC  A13 error kernels vs numpy free diagonals 0 sq3 n=10
+- **Goal:** Masked and general kernels with random non-dominant choices against NumPy, free_diagonals=0, 3-qubit stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=0 --set stage_qubits=3
+- **Outcome:** exit 1; outputs in data/20261026-010412-a13-error-kernels-vs-numpy-free-diagonals-0-sq3-n-10
+- **Next:** none
+- **Refs:** data/20261026-010412-a13-error-kernels-vs-numpy-free-diagonals-0-sq3-n-10
+
+## 2026-10-26 01:03 UTC  A13 noisecirc statistical tests with free diagonals on
+- **Goal:** noisecirc statistical tests (sampling vs ground truth) on GPU 0 with free_diagonals defaulted on (temporary)
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc run_stat_tests.py
+- **Outcome:** exit 0; outputs in data/20261026-010247-a13-noisecirc-statistical-tests-with-free-diagonals-on
+- **Next:** none
+- **Refs:** data/20261026-010247-a13-noisecirc-statistical-tests-with-free-diagonals-on
+
+## 2026-10-26 01:02 UTC  A13 noisecirc GPU tests with free diagonals on full after order fix
+- **Goal:** All svpass and noisecirc tests on GPU 0 with free_diagonals defaulted on (temporary), after keeping the order of free operations
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc run_tests_full.py
+- **Outcome:** exit 0; outputs in data/20261026-010218-a13-noisecirc-gpu-tests-with-free-diagonals-on-full-after-order-fix
+- **Next:** none
+- **Refs:** data/20261026-010218-a13-noisecirc-gpu-tests-with-free-diagonals-on-full-after-order-fix
+
+## 2026-10-26 00:56 UTC  A13 noisecirc GPU tests with free diagonals on full
+- **Goal:** All svpass and noisecirc tests on GPU 0 with free_diagonals defaulted on (temporary), listing failures
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc run_tests_full.py
+- **Outcome:** exit 0; outputs in data/20261026-005530-a13-noisecirc-gpu-tests-with-free-diagonals-on-full
+- **Next:** none
+- **Refs:** data/20261026-005530-a13-noisecirc-gpu-tests-with-free-diagonals-on-full
+
+## 2026-10-26 00:55 UTC  A13 noisecirc GPU tests with free diagonals on
+- **Goal:** svpass and noisecirc test suites on GPU 0 with free_diagonals defaulted on (temporary, uncommitted), to check masked and general kernels with sub-stages
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc run_tests.py
+- **Outcome:** exit 0; outputs in data/20261026-005517-a13-noisecirc-gpu-tests-with-free-diagonals-on
+- **Next:** none
+- **Refs:** data/20261026-005517-a13-noisecirc-gpu-tests-with-free-diagonals-on
+
+## 2026-10-26 00:55 UTC  A13 free diagonals whole-circuit check sq4 n=24
+- **Goal:** No-error trajectory with free_diagonals (complex64) against an independent complex128 compilation without it; stages per block
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_check.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 24 --set stage_contraction=1 --set additive_addresses=1 --set stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261026-005402-a13-free-diagonals-whole-circuit-check-sq4-n-24
+- **Next:** none
+- **Refs:** data/20261026-005402-a13-free-diagonals-whole-circuit-check-sq4-n-24
+
+## 2026-10-26 00:54 UTC  A13 free diagonals whole-circuit check sq3 n=24
+- **Goal:** No-error trajectory with free_diagonals (complex64) against an independent complex128 compilation without it; stages per block
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a13_free_check.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 24 --set stage_contraction=1 --set additive_addresses=1 --set stage_qubits=3
+- **Outcome:** exit 0; outputs in data/20261026-005332-a13-free-diagonals-whole-circuit-check-sq3-n-24
+- **Next:** none
+- **Refs:** data/20261026-005332-a13-free-diagonals-whole-circuit-check-sq3-n-24
+
+## 2026-10-26 00:53 UTC  A13 A14 end-to-end contract-add-sq4 grid n=28
+- **Goal:** End-to-end time of stage_contraction + additive_addresses with 4-qubit stages (contract-add-sq4), damping M=0.1 and 1, 1000 shots, 3 seeds
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits grid --qubits 28 --noise damping --ps 0.000141443,0.00141443 --shots 1000 --reps 3 --budget 450 --config stage_contraction=1 --config additive_addresses=1 --config stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261026-004914-a13-a14-end-to-end-contract-add-sq4-grid-n-28
+- **Next:** none
+- **Refs:** data/20261026-004914-a13-a14-end-to-end-contract-add-sq4-grid-n-28
+
+## 2026-10-26 00:49 UTC  A13 A14 end-to-end contract-add-sq4 qaoa n=28
+- **Goal:** End-to-end time of stage_contraction + additive_addresses with 4-qubit stages (contract-add-sq4), damping M=0.1 and 1, 1000 shots, 3 seeds
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits qaoa --qubits 28 --noise damping --ps 0.00047619,0.0047619 --shots 1000 --reps 3 --budget 450 --config stage_contraction=1 --config additive_addresses=1 --config stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261026-004721-a13-a14-end-to-end-contract-add-sq4-qaoa-n-28
+- **Next:** none
+- **Refs:** data/20261026-004721-a13-a14-end-to-end-contract-add-sq4-qaoa-n-28
+
+## 2026-10-26 00:47 UTC  A13 A14 end-to-end contract-add-sq4 qft n=28
+- **Goal:** End-to-end time of stage_contraction + additive_addresses with 4-qubit stages (contract-add-sq4), damping M=0.1 and 1, 1000 shots, 3 seeds
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits qft --qubits 28 --noise damping --ps 0.000246305,0.00246305 --shots 1000 --reps 3 --budget 450 --config stage_contraction=1 --config additive_addresses=1 --config stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261026-004513-a13-a14-end-to-end-contract-add-sq4-qft-n-28
+- **Next:** none
+- **Refs:** data/20261026-004513-a13-a14-end-to-end-contract-add-sq4-qft-n-28
+
+## 2026-10-26 00:45 UTC  A13 A14 end-to-end contract-add-sq4 brickwork n=28
+- **Goal:** End-to-end time of stage_contraction + additive_addresses with 4-qubit stages (contract-add-sq4), damping M=0.1 and 1, 1000 shots, 3 seeds
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits brickwork --qubits 28 --noise damping --ps 0.000242131,0.00242131 --shots 1000 --reps 3 --budget 450 --config stage_contraction=1 --config additive_addresses=1 --config stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261026-004148-a13-a14-end-to-end-contract-add-sq4-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261026-004148-a13-a14-end-to-end-contract-add-sq4-brickwork-n-28
+
+## 2026-10-26 00:41 UTC  A13 A14 end-to-end contract-add-sq4 ghz n=28
+- **Goal:** End-to-end time of stage_contraction + additive_addresses with 4-qubit stages (contract-add-sq4), damping M=0.1 and 1, 1000 shots, 3 seeds
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits ghz --qubits 28 --noise damping --ps 0.00183486,0.0183486 --shots 1000 --reps 3 --budget 450 --config stage_contraction=1 --config additive_addresses=1 --config stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261026-004108-a13-a14-end-to-end-contract-add-sq4-ghz-n-28
+- **Next:** none
+- **Refs:** data/20261026-004108-a13-a14-end-to-end-contract-add-sq4-ghz-n-28
+
+## 2026-10-26 00:41 UTC  A13 A14 end-to-end contract-add-sq4-c32 grid n=28
+- **Goal:** End-to-end time of stage_contraction + additive_addresses with 4-qubit stages (contract-add-sq4-c32), damping M=0.1 and 1, 1000 shots, 3 seeds
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits grid --qubits 28 --noise damping --ps 0.000141443,0.00141443 --shots 1000 --reps 3 --budget 450 --config stage_contraction=1 --config additive_addresses=1 --config stage_qubits=4 --config dtype=complex32
+- **Outcome:** exit 0; outputs in data/20261026-003749-a13-a14-end-to-end-contract-add-sq4-c32-grid-n-28
+- **Next:** none
+- **Refs:** data/20261026-003749-a13-a14-end-to-end-contract-add-sq4-c32-grid-n-28
+
+## 2026-10-26 00:37 UTC  A13 A14 end-to-end contract-add-sq4-c32 qaoa n=28
+- **Goal:** End-to-end time of stage_contraction + additive_addresses with 4-qubit stages (contract-add-sq4-c32), damping M=0.1 and 1, 1000 shots, 3 seeds
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits qaoa --qubits 28 --noise damping --ps 0.00047619,0.0047619 --shots 1000 --reps 3 --budget 450 --config stage_contraction=1 --config additive_addresses=1 --config stage_qubits=4 --config dtype=complex32
+- **Outcome:** exit 0; outputs in data/20261026-003618-a13-a14-end-to-end-contract-add-sq4-c32-qaoa-n-28
+- **Next:** none
+- **Refs:** data/20261026-003618-a13-a14-end-to-end-contract-add-sq4-c32-qaoa-n-28
+
+## 2026-10-26 00:36 UTC  A13 A14 end-to-end contract-add-sq4-c32 qft n=28
+- **Goal:** End-to-end time of stage_contraction + additive_addresses with 4-qubit stages (contract-add-sq4-c32), damping M=0.1 and 1, 1000 shots, 3 seeds
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits qft --qubits 28 --noise damping --ps 0.000246305,0.00246305 --shots 1000 --reps 3 --budget 450 --config stage_contraction=1 --config additive_addresses=1 --config stage_qubits=4 --config dtype=complex32
+- **Outcome:** exit 0; outputs in data/20261026-003501-a13-a14-end-to-end-contract-add-sq4-c32-qft-n-28
+- **Next:** none
+- **Refs:** data/20261026-003501-a13-a14-end-to-end-contract-add-sq4-c32-qft-n-28
+
+## 2026-10-26 00:35 UTC  A13 A14 end-to-end contract-add-sq4-c32 brickwork n=28
+- **Goal:** End-to-end time of stage_contraction + additive_addresses with 4-qubit stages (contract-add-sq4-c32), damping M=0.1 and 1, 1000 shots, 3 seeds
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits brickwork --qubits 28 --noise damping --ps 0.000242131,0.00242131 --shots 1000 --reps 3 --budget 450 --config stage_contraction=1 --config additive_addresses=1 --config stage_qubits=4 --config dtype=complex32
+- **Outcome:** exit 0; outputs in data/20261026-003222-a13-a14-end-to-end-contract-add-sq4-c32-brickwork-n-28
+- **Next:** none
+- **Refs:** data/20261026-003222-a13-a14-end-to-end-contract-add-sq4-c32-brickwork-n-28
+
+## 2026-10-26 00:32 UTC  A13 A14 end-to-end contract-add-sq4-c32 ghz n=28
+- **Goal:** End-to-end time of stage_contraction + additive_addresses with 4-qubit stages (contract-add-sq4-c32), damping M=0.1 and 1, 1000 shots, 3 seeds
+- **Task:** A13
+- **Method:** code/bench/gpurun -t 590 -s noisecirc a2_runs.py --circuits ghz --qubits 28 --noise damping --ps 0.00183486,0.0183486 --shots 1000 --reps 3 --budget 450 --config stage_contraction=1 --config additive_addresses=1 --config stage_qubits=4 --config dtype=complex32
+- **Outcome:** exit 0; outputs in data/20261026-003149-a13-a14-end-to-end-contract-add-sq4-c32-ghz-n-28
+- **Next:** none
+- **Refs:** data/20261026-003149-a13-a14-end-to-end-contract-add-sq4-c32-ghz-n-28
+
+## 2026-10-26 00:31 UTC  A13 timing additive addresses and stage contraction complex64 sq4 n=26
+- **Goal:** Measure predicted gains (GPU 0 was down): A14 kernels vs +additive_addresses, stage_contraction, both, and with 96 registers; complex64, 4-qubit stages, five workloads
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex64 --set stage_qubits=4 --set stage_fusion=1 --set rotation_form=1 --variant base --variant additive_addresses=1 --variant stage_contraction=1 --variant stage_contraction=1,additive_addresses=1 --variant stage_contraction=1,additive_addresses=1,min_registers=96 --variant min_registers=96
+- **Outcome:** exit 0; outputs in data/20261026-002817-a13-timing-additive-addresses-and-stage-contraction-complex64-sq4-n-26
+- **Next:** none
+- **Refs:** data/20261026-002817-a13-timing-additive-addresses-and-stage-contraction-complex64-sq4-n-26
+
+## 2026-10-26 00:28 UTC  A13 timing additive addresses and stage contraction complex32 sq4 n=26
+- **Goal:** Measure predicted gains (GPU 0 was down): A14 kernels vs +additive_addresses, stage_contraction, both, and with 96 registers; complex32, 4-qubit stages, five workloads
+- **Task:** A13
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set dtype=complex32 --set stage_qubits=4 --set stage_fusion=1 --set rotation_form=1 --variant base --variant additive_addresses=1 --variant stage_contraction=1 --variant stage_contraction=1,additive_addresses=1 --variant stage_contraction=1,additive_addresses=1,min_registers=96 --variant min_registers=96
+- **Outcome:** exit 0; outputs in data/20261026-002525-a13-timing-additive-addresses-and-stage-contraction-complex32-sq4-n-26
+- **Next:** none
+- **Refs:** data/20261026-002525-a13-timing-additive-addresses-and-stage-contraction-complex32-sq4-n-26
+
 ## 2026-10-26 00:24 UTC  A16 tensor cores for block passes: implementation, timing, verdict
 - **Goal:** Answer whether tensor cores speed up noisecirc's block passes
 - **Task:** A16

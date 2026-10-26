@@ -1,0 +1,1 @@
+code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads ghz:damping:0.05,brickwork:damping:0.05,qft:damping:0.05,qaoa:damping:0.05,grid:damping:0.05 --qubits 10 --set stage_contraction=1 --set additive_addresses=1 --set free_diagonals=0 --set stage_qubits=3

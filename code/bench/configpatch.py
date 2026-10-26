@@ -25,7 +25,7 @@ def parse(items: list[str]) -> tuple[dict, dict]:
     # stage_qubits is a Simulator option since noisecirc's feature/autotune (CompiledCircuit passes it
     # explicitly, which would override a patched default), so it goes to the options.
     config_fields = {"group_amplitudes", "threads", "min_registers", "stage_fusion", "rotation_form", "stage_populations",
-                     "additive_addresses", "stage_contraction", "tensor_cores", "tensor_unroll", "tensor_threshold"}
+                     "additive_addresses", "stage_contraction", "tensor_cores", "tensor_unroll", "tensor_threshold", "free_diagonals"}
     options, config = {}, {}
     for item in items:
         key, value = item.split("=")

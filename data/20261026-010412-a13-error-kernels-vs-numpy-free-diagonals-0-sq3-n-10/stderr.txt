@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/work/bench/a13_free_errors_check.py", line 89, in <module>
+    main()
+    ~~~~^^
+  File "/work/bench/a13_free_errors_check.py", line 53, in main
+    sim = Simulator(maps=noise.maps(kind, float(p)), **options)
+TypeError: Simulator.__init__() got an unexpected keyword argument 'free_diagonals'
