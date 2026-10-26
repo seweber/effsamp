@@ -11,6 +11,246 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-26 00:24 UTC  A16 tensor cores for block passes: implementation, timing, verdict
+- **Goal:** Answer whether tensor cores speed up noisecirc's block passes
+- **Task:** A16
+- **Method:** svpass Config.tensor_cores (noisecirc feature/tensor-cores: mma.sync m16n8k8 TF32 / m16n8k16 FP16 on the real form of each stage's product; modes tf32x3/x2/x1, f16x3/x2/x1; tensor_unroll, tensor_threshold); a16_check/time/ablate/accuracy/mma_rate.py; four implementation rounds (latency, fallback i-cache, address tables, stage-ahead table loads)
+- **Outcome:** Split modes as accurate as complex64 (whole-circuit TVD <=5.6e-7) but 15% to 2.6x slower than contraction CUDA-core kernels; f16 single product brickwork -8% (c64 sq4) / -4% (c32 sq4), others equal or slower, accuracy ~1e-3 (QFT norm 1.5e-2 with all stages). mma.sync peaks f16 483, tf32 242, FFMA 41.7 TFLOP/s. Side: CUDA sq4 kernels 2-6% faster with min_registers 96. Verdict: no at single precision
+- **Next:** Pending A13 GPU timings, then A17
+- **Refs:** wiki/studies/tensor-cores.md, data/a16-analysis, code/bench/a16_time.py, memory/tasks/A16.md
+
+## 2026-10-26 00:21 UTC  A16 whole-circuit accuracy of tensor-core variants n=24
+- **Goal:** TVD, squared-norm error and infidelity of the no-error trajectory for tensor-core variants vs complex128, against complex64 and complex32 CUDA-core kernels
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_accuracy.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 24 --set stage_contraction=1 --set stage_qubits=4 --variant base --variant dtype=complex32 --variant tensor_cores=tf32x3,tensor_unroll=1,min_registers=96 --variant tensor_cores=f16x3,tensor_unroll=1,min_registers=96 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96,tensor_threshold=12 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96
+- **Outcome:** exit 0; outputs in data/20261026-001744-a16-whole-circuit-accuracy-of-tensor-core-variants-n-24
+- **Next:** none
+- **Refs:** data/20261026-001744-a16-whole-circuit-accuracy-of-tensor-core-variants-n-24
+
+## 2026-10-26 00:17 UTC  A16 hybrid tensor-core threshold complex32 sq4 f16
+- **Goal:** Trajectory time of stages on tensor cores only above a CUDA-core cost threshold (0, 12, 18, 24 FP/amp), complex32, 4-qubit stages, f16
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set stage_contraction=1 --set dtype=complex32 --set stage_qubits=4 --variant base --variant min_registers=96 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96,tensor_threshold=0 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96,tensor_threshold=12 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96,tensor_threshold=18 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96,tensor_threshold=24
+- **Outcome:** exit 0; outputs in data/20261026-001316-a16-hybrid-tensor-core-threshold-complex32-sq4-f16
+- **Next:** none
+- **Refs:** data/20261026-001316-a16-hybrid-tensor-core-threshold-complex32-sq4-f16
+
+## 2026-10-26 00:13 UTC  A16 invalid ablations (kernel cache)
+- **Goal:** Record that the first ablation runs measured unablated kernels
+- **Task:** A16
+- **Method:** a16_ablate.py monkeypatched codegen.kernel_source, but svpass.engine._compiled caches kernels by block and Config
+- **Outcome:** Runs 'A16 ablation of tensor-core passes f16/tf32x3 n=26', '... with no-fallback f16', '... unroll 4 f16', 'A16 ablation swizzle ...' and the first 'fixed cache' run (regex assertion) are invalid; valid from 'A16 ablation of tensor-core passes fixed cache f16 unroll 4 n=26 rerun' on
+- **Next:** none
+- **Refs:** code/bench/a16_ablate.py, memory/tasks/A16.md
+
+## 2026-10-26 00:13 UTC  A16 literature on tensor cores for state vectors
+- **Goal:** Prior art for applying gates with tensor cores and recovering single precision
+- **Task:** A16
+- **Method:** Web search; research-lit add of four arXiv/journal papers
+- **Outcome:** Added ootomo2022recovering (3-term TF32/FP16 split, RZ accumulation fix), ootomo2023quantum (TC SGEMM emulation for TN contraction), li2024tanq (FP64 TC density matrices), zhang2025can (TC bound 1.33x for memory-bound FP64 kernels). HyQuas (TransMM, ICS'21, DOI 10.1145/3447818.3460357): PDF blocked by ACM, not added or cited
+- **Next:** Notes after the study page exists
+- **Refs:** wiki/literature/notes
+
+## 2026-10-26 00:13 UTC  GPU 0 back after bux reboot; container without stale CDI
+- **Goal:** Restore GPU 0 runs after the 2026-10-25 outage
+- **Task:** A16
+- **Method:** Rebuilt bench image (local podman store wiped by reboot); ~/remote/bench/run now passes /dev/nvidia0 and the CUDA driver libraries explicitly because /etc/cdi/nvidia.yaml is stale after the driver update and podman 4.6 ignores cdi_spec_dirs; code/bench/gpucheck.py
+- **Outcome:** cuInit 0 on GPU 0 (H100 PCIe), only GPU 0 visible in the container; venv re-synced
+- **Next:** A16 measurements; then the pending A13 timings
+- **Refs:** memory/topics/gpu-environment.md, code/bench/gpucheck.py
+
+## 2026-10-26 00:13 UTC  A16 hybrid tensor-core threshold complex32 sq3 f16
+- **Goal:** Trajectory time of stages on tensor cores only above a CUDA-core cost threshold (0, 12, 18, 24 FP/amp), complex32, 3-qubit stages, f16
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set stage_contraction=1 --set dtype=complex32 --set stage_qubits=3 --variant base --variant min_registers=96 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96,tensor_threshold=0 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96,tensor_threshold=12 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96,tensor_threshold=18 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96,tensor_threshold=24
+- **Outcome:** exit 0; outputs in data/20261026-001207-a16-hybrid-tensor-core-threshold-complex32-sq3-f16
+- **Next:** none
+- **Refs:** data/20261026-001207-a16-hybrid-tensor-core-threshold-complex32-sq3-f16
+
+## 2026-10-26 00:12 UTC  A16 hybrid tensor-core threshold complex64 sq4 f16
+- **Goal:** Trajectory time of stages on tensor cores only above a CUDA-core cost threshold (0, 12, 18, 24 FP/amp), complex64, 4-qubit stages, f16
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set stage_contraction=1 --set dtype=complex64 --set stage_qubits=4 --variant base --variant min_registers=96 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96,tensor_threshold=0 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96,tensor_threshold=12 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96,tensor_threshold=18 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96,tensor_threshold=24
+- **Outcome:** exit 0; outputs in data/20261026-000753-a16-hybrid-tensor-core-threshold-complex64-sq4-f16
+- **Next:** none
+- **Refs:** data/20261026-000753-a16-hybrid-tensor-core-threshold-complex64-sq4-f16
+
+## 2026-10-26 00:07 UTC  A16 hybrid tensor-core threshold complex64 sq4 f16x3
+- **Goal:** Trajectory time of stages on tensor cores only above a CUDA-core cost threshold (0, 12, 18, 24 FP/amp), complex64, 4-qubit stages, f16x3
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set stage_contraction=1 --set dtype=complex64 --set stage_qubits=4 --variant base --variant min_registers=96 --variant tensor_cores=f16x3,tensor_unroll=1,min_registers=96,tensor_threshold=0 --variant tensor_cores=f16x3,tensor_unroll=1,min_registers=96,tensor_threshold=12 --variant tensor_cores=f16x3,tensor_unroll=1,min_registers=96,tensor_threshold=18 --variant tensor_cores=f16x3,tensor_unroll=1,min_registers=96,tensor_threshold=24
+- **Outcome:** exit 0; outputs in data/20261026-000316-a16-hybrid-tensor-core-threshold-complex64-sq4-f16x3
+- **Next:** none
+- **Refs:** data/20261026-000316-a16-hybrid-tensor-core-threshold-complex64-sq4-f16x3
+
+## 2026-10-26 00:01 UTC  A16 tensor-core stages complex32 sq4 n=26
+- **Goal:** Trajectory time of tensor-core stages (f16, f16x2, f16x3) against contraction CUDA-core kernels, complex32, 4-qubit stages, five workloads
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set stage_contraction=1 --set dtype=complex32 --set stage_qubits=4 --variant base --variant tensor_cores=f16,tensor_unroll=2 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96 --variant tensor_cores=f16x2,tensor_unroll=2 --variant tensor_cores=f16x3,tensor_unroll=1 --variant tensor_cores=f16x3,tensor_unroll=1,min_registers=96
+- **Outcome:** exit 0; outputs in data/20261025-235943-a16-tensor-core-stages-complex32-sq4-n-26
+- **Next:** none
+- **Refs:** data/20261025-235943-a16-tensor-core-stages-complex32-sq4-n-26
+
+## 2026-10-25 23:59 UTC  A16 tensor-core stages complex32 sq3 n=26
+- **Goal:** Trajectory time of tensor-core stages (f16, f16x2, f16x3) against contraction CUDA-core kernels, complex32, 3-qubit stages, five workloads
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set stage_contraction=1 --set dtype=complex32 --set stage_qubits=3 --variant base --variant tensor_cores=f16,tensor_unroll=2 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96 --variant tensor_cores=f16x2,tensor_unroll=2 --variant tensor_cores=f16x3,tensor_unroll=1 --variant tensor_cores=f16x3,tensor_unroll=1,min_registers=96
+- **Outcome:** exit 0; outputs in data/20261025-235820-a16-tensor-core-stages-complex32-sq3-n-26
+- **Next:** none
+- **Refs:** data/20261025-235820-a16-tensor-core-stages-complex32-sq3-n-26
+
+## 2026-10-25 23:58 UTC  A16 tensor-core stages complex64 sq4 n=26
+- **Goal:** Trajectory time of tensor-core stages (f16, f16x2, f16x3) against contraction CUDA-core kernels, complex64, 4-qubit stages, five workloads
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set stage_contraction=1 --set dtype=complex64 --set stage_qubits=4 --variant base --variant tensor_cores=f16,tensor_unroll=2 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96 --variant tensor_cores=f16x2,tensor_unroll=2 --variant tensor_cores=f16x3,tensor_unroll=1 --variant tensor_cores=f16x3,tensor_unroll=1,min_registers=96
+- **Outcome:** exit 0; outputs in data/20261025-235633-a16-tensor-core-stages-complex64-sq4-n-26
+- **Next:** none
+- **Refs:** data/20261025-235633-a16-tensor-core-stages-complex64-sq4-n-26
+
+## 2026-10-25 23:56 UTC  A16 tensor-core stages with preloaded tables sq3 n=26
+- **Goal:** Trajectory time of tensor-core stages with tables loaded a stage ahead (f16, f16x3, tf32x3) against contraction CUDA-core kernels, five workloads, 3-qubit stages
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set stage_contraction=1 --variant base --variant tensor_cores=f16,tensor_unroll=2 --variant tensor_cores=f16,tensor_unroll=8 --variant tensor_cores=f16x3,tensor_unroll=1 --variant tensor_cores=f16x3,tensor_unroll=2 --variant tensor_cores=tf32x3,tensor_unroll=1 --variant tensor_cores=tf32x3,tensor_unroll=2
+- **Outcome:** exit 0; outputs in data/20261025-235415-a16-tensor-core-stages-with-preloaded-tables-sq3-n-26
+- **Next:** none
+- **Refs:** data/20261025-235415-a16-tensor-core-stages-with-preloaded-tables-sq3-n-26
+
+## 2026-10-25 23:51 UTC  A16 mma.sync throughput on H100 GPU 0
+- **Goal:** Achieved TFLOP/s of mma.sync m16n8k16 f16 and m16n8k8 tf32 (f32 accumulate) against independent chains per warp, and FP32 FMA rate
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_mma_rate.py
+- **Outcome:** exit 0; outputs in data/20261025-235145-a16-mma-sync-throughput-on-h100-gpu-0
+- **Next:** none
+- **Refs:** data/20261025-235145-a16-mma-sync-throughput-on-h100-gpu-0
+
+## 2026-10-25 23:51 UTC  A16 ablation of table-addressed tensor-core passes tf32x3 unroll 1 n=26
+- **Goal:** Decompose the pass time of table-addressed tensor-core stages: fragment and address-table loads, mma, shared accesses, conversions
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_ablate.py --workloads brickwork:damping:0.000280112,qaoa:damping:0.000512821 --qubits 26 --set stage_contraction=1 --set tensor_unroll=1 --mode tf32x3
+- **Outcome:** exit 0; outputs in data/20261025-234940-a16-ablation-of-table-addressed-tensor-core-passes-tf32x3-unroll-1-n-26
+- **Next:** none
+- **Refs:** data/20261025-234940-a16-ablation-of-table-addressed-tensor-core-passes-tf32x3-unroll-1-n-26
+
+## 2026-10-25 23:49 UTC  A16 ablation of table-addressed tensor-core passes f16 unroll 2 n=26
+- **Goal:** Decompose the pass time of table-addressed tensor-core stages: fragment and address-table loads, mma, shared accesses, conversions
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_ablate.py --workloads brickwork:damping:0.000280112,qaoa:damping:0.000512821 --qubits 26 --set stage_contraction=1 --set tensor_unroll=2 --mode f16
+- **Outcome:** exit 0; outputs in data/20261025-234844-a16-ablation-of-table-addressed-tensor-core-passes-f16-unroll-2-n-26
+- **Next:** none
+- **Refs:** data/20261025-234844-a16-ablation-of-table-addressed-tensor-core-passes-f16-unroll-2-n-26
+
+## 2026-10-25 23:47 UTC  A16 table-addressed tensor-core stages sweep n=26
+- **Goal:** Trajectory time of tensor-core stages with per-thread address tables and unrolled tiles, over unroll, registers and mode, against contraction CUDA-core kernels
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads brickwork:damping:0.000280112,qaoa:damping:0.000512821 --qubits 26 --set stage_contraction=1 --variant base --variant tensor_cores=f16,tensor_unroll=1 --variant tensor_cores=f16,tensor_unroll=2 --variant tensor_cores=f16,tensor_unroll=4 --variant tensor_cores=f16,tensor_unroll=8 --variant tensor_cores=f16,tensor_unroll=4,min_registers=96 --variant tensor_cores=f16x2,tensor_unroll=4 --variant tensor_cores=tf32,tensor_unroll=4 --variant tensor_cores=tf32x3,tensor_unroll=1 --variant tensor_cores=tf32x3,tensor_unroll=2 --variant tensor_cores=tf32x3,tensor_unroll=2,min_registers=96
+- **Outcome:** exit 0; outputs in data/20261025-234700-a16-table-addressed-tensor-core-stages-sweep-n-26
+- **Next:** none
+- **Refs:** data/20261025-234700-a16-table-addressed-tensor-core-stages-sweep-n-26
+
+## 2026-10-25 23:43 UTC  A16 pipelined tensor-core stages unroll and registers sweep n=26
+- **Goal:** Trajectory time of pipelined tensor-core stages (no fallback) over unroll and register budget, f16/f16x2/tf32x3, against contraction CUDA-core kernels
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads brickwork:damping:0.000280112,qaoa:damping:0.000512821 --qubits 26 --set stage_contraction=1 --variant base --variant tensor_cores=f16,tensor_unroll=2 --variant tensor_cores=f16,tensor_unroll=4 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96 --variant tensor_cores=f16,tensor_unroll=4,min_registers=96 --variant tensor_cores=f16,tensor_unroll=4,min_registers=128 --variant tensor_cores=f16x2,tensor_unroll=2,min_registers=96 --variant tensor_cores=tf32x3,tensor_unroll=1 --variant tensor_cores=tf32x3,tensor_unroll=1,min_registers=96 --variant tensor_cores=tf32x3,tensor_unroll=2,min_registers=128
+- **Outcome:** exit 0; outputs in data/20261025-234235-a16-pipelined-tensor-core-stages-unroll-and-registers-sweep-n-26
+- **Next:** none
+- **Refs:** data/20261025-234235-a16-pipelined-tensor-core-stages-unroll-and-registers-sweep-n-26
+
+## 2026-10-25 23:40 UTC  A16 ablation of tensor-core passes fixed cache f16 unroll 4 n=26 rerun
+- **Goal:** Decompose tensor-core pass time with the kernel cache cleared per variant and regexes for unrolled names
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_ablate.py --workloads brickwork:damping:0.000280112,qaoa:damping:0.000512821 --qubits 26 --set stage_contraction=1 --set tensor_unroll=4 --mode f16
+- **Outcome:** exit 0; outputs in data/20261025-233910-a16-ablation-of-tensor-core-passes-fixed-cache-f16-unroll-4-n-26-rerun
+- **Next:** none
+- **Refs:** data/20261025-233910-a16-ablation-of-tensor-core-passes-fixed-cache-f16-unroll-4-n-26-rerun
+
+## 2026-10-25 23:38 UTC  A16 ablation of tensor-core passes fixed cache f16 unroll 4 n=26
+- **Goal:** Decompose tensor-core pass time (kernel cache cleared per variant; earlier ablations reused the unablated kernel and are invalid)
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_ablate.py --workloads brickwork:damping:0.000280112,qaoa:damping:0.000512821 --qubits 26 --set stage_contraction=1 --set tensor_unroll=4 --mode f16
+- **Outcome:** exit 1; outputs in data/20261025-233833-a16-ablation-of-tensor-core-passes-fixed-cache-f16-unroll-4-n-26
+- **Next:** none
+- **Refs:** data/20261025-233833-a16-ablation-of-tensor-core-passes-fixed-cache-f16-unroll-4-n-26
+
+## 2026-10-25 23:37 UTC  A16 ablation swizzle of tensor-core kernels f16 n=26
+- **Goal:** Test whether the swizzle chosen for tensor-core accesses slows the kernel skeleton (no stages) and the CUDA-core kernel
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_ablate.py --workloads brickwork:damping:0.000280112,qaoa:damping:0.000512821 --qubits 26 --set stage_contraction=1 --set tensor_unroll=4 --mode f16
+- **Outcome:** exit 0; outputs in data/20261025-233719-a16-ablation-swizzle-of-tensor-core-kernels-f16-n-26
+- **Next:** none
+- **Refs:** data/20261025-233719-a16-ablation-swizzle-of-tensor-core-kernels-f16-n-26
+
+## 2026-10-25 23:36 UTC  A16 ablation of tensor-core passes unroll 4 f16 n=26
+- **Goal:** Decompose tensor-core pass time with 4 tiles per warp iteration: skeleton without stages, empty stages, single ablations
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_ablate.py --workloads brickwork:damping:0.000280112,qaoa:damping:0.000512821 --qubits 26 --set stage_contraction=1 --set tensor_unroll=4 --mode f16
+- **Outcome:** exit 0; outputs in data/20261025-233628-a16-ablation-of-tensor-core-passes-unroll-4-f16-n-26
+- **Next:** none
+- **Refs:** data/20261025-233628-a16-ablation-of-tensor-core-passes-unroll-4-f16-n-26
+
+## 2026-10-25 23:35 UTC  A16 tensor-core stages unroll 8 brickwork qaoa n=26
+- **Goal:** Error and pass time of tensor-core stages with 8 tiles per warp iteration (latency overlap), against contraction CUDA-core kernels
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_check.py --workloads brickwork:damping:0.000280112,qaoa:damping:0.000512821 --qubits 26 --set stage_contraction=1 --set tensor_unroll=8 --mode tf32x3 --mode f16x2 --mode f16
+- **Outcome:** exit 0; outputs in data/20261025-233406-a16-tensor-core-stages-unroll-8-brickwork-qaoa-n-26
+- **Next:** none
+- **Refs:** data/20261025-233406-a16-tensor-core-stages-unroll-8-brickwork-qaoa-n-26
+
+## 2026-10-25 23:34 UTC  A16 tensor-core stages unroll 4 brickwork qaoa n=26
+- **Goal:** Error and pass time of tensor-core stages with 4 tiles per warp iteration (latency overlap), against contraction CUDA-core kernels
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_check.py --workloads brickwork:damping:0.000280112,qaoa:damping:0.000512821 --qubits 26 --set stage_contraction=1 --set tensor_unroll=4 --mode tf32x3 --mode f16x2 --mode f16
+- **Outcome:** exit 0; outputs in data/20261025-233222-a16-tensor-core-stages-unroll-4-brickwork-qaoa-n-26
+- **Next:** none
+- **Refs:** data/20261025-233222-a16-tensor-core-stages-unroll-4-brickwork-qaoa-n-26
+
+## 2026-10-25 23:32 UTC  A16 tensor-core stages unroll 2 brickwork qaoa n=26
+- **Goal:** Error and pass time of tensor-core stages with 2 tiles per warp iteration (latency overlap), against contraction CUDA-core kernels
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_check.py --workloads brickwork:damping:0.000280112,qaoa:damping:0.000512821 --qubits 26 --set stage_contraction=1 --set tensor_unroll=2 --mode tf32x3 --mode f16x2 --mode f16
+- **Outcome:** exit 0; outputs in data/20261025-233038-a16-tensor-core-stages-unroll-2-brickwork-qaoa-n-26
+- **Next:** none
+- **Refs:** data/20261025-233038-a16-tensor-core-stages-unroll-2-brickwork-qaoa-n-26
+
+## 2026-10-25 23:29 UTC  A16 ablation of tensor-core passes with no-fallback f16 n=26
+- **Goal:** Test whether the unexecuted CUDA-core fallback code of tensor-core stages (instruction cache) explains their slow passes
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_ablate.py --workloads brickwork:damping:0.000280112,qaoa:damping:0.000512821 --qubits 26 --set stage_contraction=1 --mode f16
+- **Outcome:** exit 0; outputs in data/20261025-232854-a16-ablation-of-tensor-core-passes-with-no-fallback-f16-n-26
+- **Next:** none
+- **Refs:** data/20261025-232854-a16-ablation-of-tensor-core-passes-with-no-fallback-f16-n-26
+
+## 2026-10-25 23:28 UTC  A16 ablation of tensor-core passes tf32x3 n=26
+- **Goal:** Locate the time of tensor-core stage passes: without fragment loads, without mma, without shared accesses, against CUDA-core contraction kernels
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_ablate.py --workloads brickwork:damping:0.000280112,qaoa:damping:0.000512821 --qubits 26 --set stage_contraction=1 --mode tf32x3
+- **Outcome:** exit 0; outputs in data/20261025-232753-a16-ablation-of-tensor-core-passes-tf32x3-n-26
+- **Next:** none
+- **Refs:** data/20261025-232753-a16-ablation-of-tensor-core-passes-tf32x3-n-26
+
+## 2026-10-25 23:27 UTC  A16 ablation of tensor-core passes f16 n=26
+- **Goal:** Locate the time of tensor-core stage passes: without fragment loads, without mma, without shared accesses, against CUDA-core contraction kernels
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_ablate.py --workloads brickwork:damping:0.000280112,qaoa:damping:0.000512821 --qubits 26 --set stage_contraction=1 --mode f16
+- **Outcome:** exit 0; outputs in data/20261025-232744-a16-ablation-of-tensor-core-passes-f16-n-26
+- **Next:** none
+- **Refs:** data/20261025-232744-a16-ablation-of-tensor-core-passes-f16-n-26
+
+## 2026-10-25 23:25 UTC  A16 tensor-core stages vs contraction kernels c64 sq3 n=26 qaoa
+- **Goal:** Error vs complex128 and pass time of tf32x3/tf32x2/f16x2/tf32/f16 tensor-core stages against stage_contraction CUDA-core kernels, every block, 3-qubit stages
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_check.py --workloads qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set stage_contraction=1 --mode tf32x3 --mode tf32x2 --mode f16x2 --mode tf32 --mode f16
+- **Outcome:** exit 0; outputs in data/20261025-232157-a16-tensor-core-stages-vs-contraction-kernels-c64-sq3-n-26-qaoa
+- **Next:** none
+- **Refs:** data/20261025-232157-a16-tensor-core-stages-vs-contraction-kernels-c64-sq3-n-26-qaoa
+
+## 2026-10-25 23:21 UTC  A16 tensor-core stages vs contraction kernels c64 sq3 n=26 ghz
+- **Goal:** Error vs complex128 and pass time of tf32x3/tf32x2/f16x2/tf32/f16 tensor-core stages against stage_contraction CUDA-core kernels, every block, 3-qubit stages
+- **Task:** A16
+- **Method:** code/bench/gpurun -s noisecirc a16_check.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849 --qubits 26 --set stage_contraction=1 --mode tf32x3 --mode tf32x2 --mode f16x2 --mode tf32 --mode f16
+- **Outcome:** exit 0; outputs in data/20261025-231826-a16-tensor-core-stages-vs-contraction-kernels-c64-sq3-n-26-ghz
+- **Next:** none
+- **Refs:** data/20261025-231826-a16-tensor-core-stages-vs-contraction-kernels-c64-sq3-n-26-ghz
+
 ## 2026-10-25 19:52 UTC  A13 stage contraction: results, implementation, GPU 0 check
 - **Goal:** Answer whether a stage's contraction order can lower arithmetic, and whether the optimum is provable and easy
 - **Task:** A13

@@ -13,6 +13,7 @@ Agent working memory; not written for human readers.
 - [Task A13](tasks/A13.md) — Working state of PLAN.md task A13
 - [Task A14](tasks/A14.md) — Working state of PLAN.md task A14
 - [Task A15](tasks/A15.md) — Working state of PLAN.md task A15
+- [Task A16](tasks/A16.md) — Working state of PLAN.md task A16
 - [Task A2](tasks/A2.md) — Working state of PLAN.md task A2
 - [Task A3](tasks/A3.md) — Working state of PLAN.md task A3
 - [Task A4](tasks/A4.md) — Working state of PLAN.md task A4

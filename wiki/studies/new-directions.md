@@ -47,7 +47,7 @@ The subagents on sampling and on mathematics agreed on one point: the term $BN f
 | Peeling the last block | passes of the last block | dry-run estimate |
 | Diagonals outside the stage structure; asynchronous tile loads; first and last stage straight from global memory | time per pass | estimated only (5 to 30%) |
 | Scheduling channels as late as possible; fork kernel for a checkpoint's error children; canonical jump positions | a few percent | not pursued |
-| Random-phase superpositions of trajectories; delta states; tensor cores; thread-block clusters; warp shuffles | — | judged not to pay or not exact |
+| Random-phase superpositions of trajectories; delta states; tensor cores; thread-block clusters; warp shuffles | — | judged not to pay or not exact; tensor cores since measured: no gain at single precision ([Tensor cores for block passes](tensor-cores.md)) |
 
 ### First-jump sampling: exact, and 1.04 to 4.7 times fewer passes (verified on small registers)
 

@@ -1,0 +1,51 @@
+{
+ "(a) complex64, 4-qubit stages": {
+  "CUDA cores": {
+   "run": "data/20261026-000316-a16-hybrid-tensor-core-threshold-complex64-sq4-f16x3",
+   "variant": "min_registers=96",
+   "ghz": 1.0926767662038945,
+   "brickwork": 1.365748411030678,
+   "qft": 1.1334634796429464,
+   "qaoa": 1.1362915611172388,
+   "grid": 1.2927799906133548
+  },
+  "tensor cores f16x3 (single-precision accurate)": {
+   "run": "data/20261026-000316-a16-hybrid-tensor-core-threshold-complex64-sq4-f16x3",
+   "variant": "tensor_cores=f16x3,tensor_unroll=1,min_registers=96,tensor_threshold=24",
+   "ghz": 1.0924469820958598,
+   "brickwork": 1.5716172947577296,
+   "qft": 1.130913467146768,
+   "qaoa": 1.1382784455699089,
+   "grid": 1.4909628438135663
+  },
+  "tensor cores f16, stages > 12 FP/amp (~1e-3)": {
+   "run": "data/20261026-000753-a16-hybrid-tensor-core-threshold-complex64-sq4-f16",
+   "variant": "tensor_cores=f16,tensor_unroll=2,min_registers=96,tensor_threshold=12",
+   "ghz": 1.1227170713443912,
+   "brickwork": 1.2643948030924024,
+   "qft": 1.1423977769199196,
+   "qaoa": 1.1685950407657972,
+   "grid": 1.3090553073862208
+  }
+ },
+ "(b) complex32, 4-qubit stages": {
+  "CUDA cores": {
+   "run": "data/20261026-001316-a16-hybrid-tensor-core-threshold-complex32-sq4-f16",
+   "variant": "base",
+   "ghz": 1.2285991262141431,
+   "brickwork": 1.8598497775805578,
+   "qft": 1.3561612198414135,
+   "qaoa": 1.2523893257910041,
+   "grid": 1.8567937945517226
+  },
+  "tensor cores f16, stages > 18 FP/amp (~1e-3)": {
+   "run": "data/20261026-001316-a16-hybrid-tensor-core-threshold-complex32-sq4-f16",
+   "variant": "tensor_cores=f16,tensor_unroll=2,min_registers=96,tensor_threshold=18",
+   "ghz": 1.2439023541455767,
+   "brickwork": 1.7867381328718588,
+   "qft": 1.3845725805683624,
+   "qaoa": 1.400884920080752,
+   "grid": 1.8417272807575753
+  }
+ }
+}

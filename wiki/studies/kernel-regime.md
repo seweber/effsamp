@@ -224,7 +224,7 @@ The measurements give a clear rule for the design of a block's kernel on a devic
 4. Shrink the stored type last: `complex32` shortens a pass only as far as it sits at the memory floor.
 5. Larger tiles do not help: a block of more qubits holds more gates, and at the instruction bound its time grows with its gates, so the total over all blocks stays the same; tiles beyond $2^{13}$ amplitudes also cost occupancy.
 
-Tensor cores, the obvious hardware for arithmetic-bound kernels, do not fit these circuits: they need dense stage matrices of 5 or more qubits, which cost more instructions than the structured gates they would replace, and single precision on them needs a three-fold split of every TF32 operand (estimate of the A15 brainstorm, [Directions beyond the current algorithm](new-directions.md); not measured).
+Tensor cores, the obvious hardware for arithmetic-bound kernels, do not pay for these circuits at single precision: a stage applied as a dense matrix costs about twice the operations of the structured kernels, and single precision on TF32 or FP16 inputs needs three products. Measured with tensor-core stages built into svpass, the single-precision modes are 15% to 2.6 times slower than the CUDA cores, and only FP16 products at an accuracy of about $10^{-3}$ make brickwork 4 to 8% faster ([Tensor cores for block passes](tensor-cores.md), task A16).
 
 ## Caveats
 

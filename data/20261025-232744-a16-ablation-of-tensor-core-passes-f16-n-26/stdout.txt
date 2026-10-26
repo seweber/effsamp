@@ -1,0 +1,2 @@
+{"circuit": "brickwork", "mode": "f16", "config": {"stage_contraction": 1}, "options": {}, "blocks": 12, "mean_t_over_tbw": {"full": 1.9765310443286852, "noload": 1.9823025252030533, "nomma": 1.985508312883205, "noshared": 1.9827743714163035, "cuda": 1.439035789720448}}
+{"circuit": "qaoa", "mode": "f16", "config": {"stage_contraction": 1}, "options": {}, "blocks": 7, "mean_t_over_tbw": {"full": 1.6048219757900282, "noload": 1.577905140081641, "nomma": 1.594819843017026, "noshared": 1.591535420319342, "cuda": 1.100377887495148}}

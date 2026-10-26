@@ -1,0 +1,1 @@
+code/bench/gpurun -s noisecirc a16_check.py --workloads brickwork:damping:0.000280112,qaoa:damping:0.000512821 --qubits 26 --set stage_contraction=1 --set tensor_unroll=4 --mode tf32x3 --mode f16x2 --mode f16

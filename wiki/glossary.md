@@ -14,6 +14,12 @@
 - **H100** — NVIDIA H100 PCIe, the GPU used here (GPU 0 of bux)
 - **KB** — kilobyte, 1024 bytes
 - **TF32** — NVIDIA's tensor-core format with an 8-bit exponent and a 10-bit significand
+- **FP16** — IEEE half precision, 5-bit exponent and 10-bit significand; an input format of the tensor cores
+- **FMA** — fused multiply-add, one instruction computing $a b + c$ (2 floating-point operations)
+- **mma.sync** — the warp-level tensor-core instruction (PTX) multiplying small matrix tiles, e.g. m16n8k16: a 16 × 16 by 16 × 8 product
+- **tensor core** — the GPU's unit for small dense matrix products in low-precision input formats
+- **wgmma** — Hopper's warpgroup-level asynchronous tensor-core instruction
+- **tf32x3, f16x3** — svpass tensor-core modes that split matrix and amplitudes into a leading and a rest term and use three products to restore single precision (A16)
 - **TFLOP** — $10^{12}$ floating-point operations
 - **HPCA** — International Symposium on High-Performance Computer Architecture
 - **ICS** — International Conference on Supercomputing

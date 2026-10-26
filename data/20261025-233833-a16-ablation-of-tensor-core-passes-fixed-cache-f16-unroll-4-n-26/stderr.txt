@@ -1,0 +1,28 @@
+Traceback (most recent call last):
+  File "/work/bench/a16_ablate.py", line 98, in <module>
+    main()
+    ~~~~^^
+  File "/work/bench/a16_ablate.py", line 87, in main
+    kernels = [engine.compile(b.dominant_block).result() for b in blocks]
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/concurrent/futures/_base.py", line 460, in result
+    return self.__get_result()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/concurrent/futures/_base.py", line 402, in __get_result
+    raise self._exception
+  File "/work/noisecirc/packages/svpass/src/svpass/engine.py", line 184, in done
+    target.set_result(make(finished.result()))
+                           ~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/concurrent/futures/_base.py", line 453, in result
+    return self.__get_result()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/concurrent/futures/_base.py", line 402, in __get_result
+    raise self._exception
+  File "/usr/local/lib/python3.13/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/work/noisecirc/packages/svpass/src/svpass/cuda/device.py", line 460, in compile
+    source = codegen.kernel_source(block, config)
+  File "/work/bench/a16_ablate.py", line 80, in source
+    assert count, (ablation, pattern)
+           ^^^^^
+AssertionError: ('nomma', 'mma_(f16|tf32)\\(([a-z]\\d+|p), [^;]*\\);')
