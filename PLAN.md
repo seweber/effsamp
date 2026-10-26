@@ -130,6 +130,22 @@ Building upon A14, I want to investigate the compute efficiency of the kernels f
 
 I wonder whether there is something that we were overlooking up to now and that would fundamentally improve noisecirc's efficiency. Note that I want to stay in the statevector world, so tensor network approaches, Clifford approaches, etc. are out of scope. To get ideas, brainstorm with subagents. Try out the most promising suggestions.
 
+### A16
+
+Can tensor cores speed up the application of the blocks in noisecirc?
+
+### A17
+
+Write up recommendations for improving noisecirc based on the findings from the previous investigations.
+
+### A18
+
+I have brainstormed directions for using tensor cores and have a chat output for you: PLAN_ADDITIONAL_NOTES_1.md. Take a look at it. Are there promising ideas, especially for complex32? Run benchmarks and also update the recommendations generated in A17.
+
+### A19
+
+I have brainstormed about applying gates on statevectors with less flops and have a chat output for you: PLAN_ADDITIONAL_NOTES_2.md. Take a look at it and see if there are promising ideas for reducing arithmetic while maintaining efficiency. The chat is about applying dense single-qubit unitaries, but I wonder whether the ideas can be genralized to sparse and/or multi-qubit unitaries as well. Run benchmarks and also update the recommendations generated in A17.
+
 ### References
 
 <!-- Pointers to seed literature, prior internal work, related codebases.
