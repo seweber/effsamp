@@ -1,0 +1,1 @@
+code/bench/gpurun -s noisecirc a16_time.py --workloads heisenberg:damping:8.69187e-05,fsim:damping:0.00017094,cry:damping:0.000280112 --qubits 26 --set stage_contraction=1 --set additive_addresses=1 --set dtype=complex64 --set stage_qubits=4 --set min_registers=96 --variant base --variant two_level_rotations=1

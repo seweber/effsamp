@@ -11,6 +11,197 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-26 09:22 UTC  A19 dense 3-qubit gate direct vs Gauss three-product form n=28
+- **Goal:** Pass time of 1-16 dense 8x8 complex gates per pass in registers, four real products per entry (32 FP/amp) vs Gauss's trick (28 FP/amp), complex64
+- **Task:** A19
+- **Method:** code/bench/gpurun a19_dense_forms.py --qubits 28
+- **Outcome:** exit 0; outputs in data/20261026-092223-a19-dense-3-qubit-gate-direct-vs-gauss-three-product-form-n-28
+- **Next:** none
+- **Refs:** data/20261026-092223-a19-dense-3-qubit-gate-direct-vs-gauss-three-product-form-n-28
+
+## 2026-10-26 09:19 UTC  A18 hybrid f16x2 threshold complex32 sq3 n=26
+- **Goal:** Tensor cores (f16x2) only for stages costing at least 24 or 28 FP/amp on the CUDA cores, complex32, 3-qubit stages, default circuits and su4
+- **Task:** A18
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094,su4:damping:0.000571429 --qubits 26 --set stage_contraction=1 --set additive_addresses=1 --set dtype=complex32 --set stage_qubits=3 --variant min_registers=96 --variant tensor_cores=f16x2,tensor_unroll=2,min_registers=96,tensor_threshold=24 --variant tensor_cores=f16x2,tensor_unroll=2,min_registers=96,tensor_threshold=28
+- **Outcome:** exit 0; outputs in data/20261026-091902-a18-hybrid-f16x2-threshold-complex32-sq3-n-26
+- **Next:** none
+- **Refs:** data/20261026-091902-a18-hybrid-f16x2-threshold-complex32-sq3-n-26
+
+## 2026-10-26 09:15 UTC  A19 invalid gate-form timing (runtime gate loop)
+- **Goal:** Note on the first a19_gate_forms.py run
+- **Task:** A19
+- **Method:** data/*a19-single-qubit-gate-forms-direct-shear-rotation-n-28
+- **Outcome:** invalid: the runtime loop over gates loaded the constants with ULDC on the critical path (4-5 T instr/s, ratio form faster than rotation); rerun unrolled as 'A19 single-qubit gate forms unrolled n=28'
+- **Next:** none
+
+## 2026-10-26 09:15 UTC  A19 KAK split cost model
+- **Goal:** Whether splitting dense two-qubit gates by the KAK decomposition lowers the rotation-form cost (CPU, cost model)
+- **Task:** A19
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a19_kak_cost.py (branch feature/two-level-rotations)
+- **Outcome:** dense 16 FP/amp per gate, KAK pieces 24, with local gates merged 14; stage contraction with the split never cheaper (16/32/32/32); KAK removed from svpass
+- **Next:** none
+- **Refs:** code/bench/a19_kak_cost.py
+
+## 2026-10-26 09:15 UTC  A19 FP cost of two-level rotations on new workloads
+- **Goal:** CUDA-core FP instructions per amplitude and pass with and without two_level_rotations (CPU, cost model), complex64, n=26
+- **Task:** A19
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a18_stage_counts.py --dtype complex64 --workloads heisenberg:8.69187e-05,fsim:0.00017094,cry:0.000280112,su4:0.000571429 --set two_level_rotations=0/1 (branch feature/two-level-rotations)
+- **Outcome:** R=4: heisenberg 113.9 unchanged, fsim 151.7->143.3, cry 151.3->144.5, su4 226.7 unchanged; R=3 at most -4%
+- **Next:** time on GPU
+- **Refs:** code/bench/a18_stage_counts.py
+
+## 2026-10-26 09:15 UTC  A18 stage counts and FP per stage of the A13 workloads
+- **Goal:** Stages per pass and CUDA-core FP instructions per amplitude and stage, R=3/4, n=26, complex32 (CPU, cost model)
+- **Task:** A18
+- **Method:** code/noisecirc/.venv/bin/python code/bench/a18_stage_counts.py (from code/noisecirc, branch feature/tensor-cores)
+- **Outcome:** R=3 stages/pass ghz 4.3, brickwork 7.9, qft 13.3, qaoa 6.4, grid 9.1; FP/amp/stage 8.0/18.0/2.8/8.8/14.0; tile qubits about 12
+- **Next:** none
+- **Refs:** code/bench/a18_stage_counts.py
+
+## 2026-10-26 09:14 UTC  A19 single-qubit gate forms unrolled n=28
+- **Goal:** Time of one gate per pass (memory-bound) and of 3-48 unrolled gates per pass in registers (issue-bound) for the direct complex 2x2, three shears, rotation form and rotation with phase ratio, complex64
+- **Task:** A19
+- **Method:** code/bench/gpurun a19_gate_forms.py --qubits 28
+- **Outcome:** exit 0; outputs in data/20261026-091403-a19-single-qubit-gate-forms-unrolled-n-28
+- **Next:** none
+- **Refs:** data/20261026-091403-a19-single-qubit-gate-forms-unrolled-n-28
+
+## 2026-10-26 09:12 UTC  A19 single-qubit gate forms direct shear rotation n=28
+- **Goal:** Time of one gate per pass (memory-bound) and of 3-192 gates per pass in registers (issue-bound) for the direct complex 2x2, three shears, noisecirc's rotation form and rotation with phase ratio, complex64
+- **Task:** A19
+- **Method:** code/bench/gpurun a19_gate_forms.py --qubits 28
+- **Outcome:** exit 0; outputs in data/20261026-091231-a19-single-qubit-gate-forms-direct-shear-rotation-n-28
+- **Next:** none
+- **Refs:** data/20261026-091231-a19-single-qubit-gate-forms-direct-shear-rotation-n-28
+
+## 2026-10-26 09:11 UTC  A19 error kernels with two-level rotations n=10
+- **Goal:** Masked and general kernels with two_level_rotations against svpass NumpyDevice, dominant choices with 1-3 errors
+- **Task:** A19
+- **Method:** code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads fsim:damping:0.01,cry:damping:0.01,heisenberg:damping:0.01 --qubits 10 --set stage_contraction=1 --set two_level_rotations=1 --set stage_qubits=4
+- **Outcome:** exit 0; outputs in data/20261026-091048-a19-error-kernels-with-two-level-rotations-n-10
+- **Next:** none
+- **Refs:** data/20261026-091048-a19-error-kernels-with-two-level-rotations-n-10
+
+## 2026-10-26 09:10 UTC  A19 whole-circuit accuracy of two-level rotations n=24
+- **Goal:** No-error trajectory with two_level_rotations against complex128 kernels without it, complex64 and complex32, 4-qubit stages
+- **Task:** A19
+- **Method:** code/bench/gpurun -s noisecirc a16_accuracy.py --workloads heisenberg:damping:8.69187e-05,fsim:damping:0.00017094,cry:damping:0.000280112 --qubits 24 --set stage_contraction=1 --set stage_qubits=4 --variant min_registers=96 --variant two_level_rotations=1,min_registers=96 --variant dtype=complex32,min_registers=96 --variant dtype=complex32,two_level_rotations=1,min_registers=96
+- **Outcome:** exit 0; outputs in data/20261026-090813-a19-whole-circuit-accuracy-of-two-level-rotations-n-24
+- **Next:** none
+- **Refs:** data/20261026-090813-a19-whole-circuit-accuracy-of-two-level-rotations-n-24
+
+## 2026-10-26 09:08 UTC  A19 two-level rotations complex32 sq4 n=26
+- **Goal:** Trajectory time of the dominant kernels with and without svpass two_level_rotations on circuits of rxx/ryy/rzz, fSim and controlled-RY gates
+- **Task:** A19
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads heisenberg:damping:8.69187e-05,fsim:damping:0.00017094,cry:damping:0.000280112 --qubits 26 --set stage_contraction=1 --set additive_addresses=1 --set dtype=complex32 --set stage_qubits=4 --set min_registers=96 --variant base --variant two_level_rotations=1
+- **Outcome:** exit 0; outputs in data/20261026-090605-a19-two-level-rotations-complex32-sq4-n-26
+- **Next:** none
+- **Refs:** data/20261026-090605-a19-two-level-rotations-complex32-sq4-n-26
+
+## 2026-10-26 09:06 UTC  A19 two-level rotations complex32 sq3 n=26
+- **Goal:** Trajectory time of the dominant kernels with and without svpass two_level_rotations on circuits of rxx/ryy/rzz, fSim and controlled-RY gates
+- **Task:** A19
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads heisenberg:damping:8.69187e-05,fsim:damping:0.00017094,cry:damping:0.000280112 --qubits 26 --set stage_contraction=1 --set additive_addresses=1 --set dtype=complex32 --set stage_qubits=3 --set min_registers=96 --variant base --variant two_level_rotations=1
+- **Outcome:** exit 0; outputs in data/20261026-090540-a19-two-level-rotations-complex32-sq3-n-26
+- **Next:** none
+- **Refs:** data/20261026-090540-a19-two-level-rotations-complex32-sq3-n-26
+
+## 2026-10-26 09:05 UTC  A19 two-level rotations complex64 sq4 n=26
+- **Goal:** Trajectory time of the dominant kernels with and without svpass two_level_rotations on circuits of rxx/ryy/rzz, fSim and controlled-RY gates
+- **Task:** A19
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads heisenberg:damping:8.69187e-05,fsim:damping:0.00017094,cry:damping:0.000280112 --qubits 26 --set stage_contraction=1 --set additive_addresses=1 --set dtype=complex64 --set stage_qubits=4 --set min_registers=96 --variant base --variant two_level_rotations=1
+- **Outcome:** exit 0; outputs in data/20261026-090340-a19-two-level-rotations-complex64-sq4-n-26
+- **Next:** none
+- **Refs:** data/20261026-090340-a19-two-level-rotations-complex64-sq4-n-26
+
+## 2026-10-26 09:03 UTC  A19 two-level rotations complex64 sq3 n=26
+- **Goal:** Trajectory time of the dominant kernels with and without svpass two_level_rotations on circuits of rxx/ryy/rzz, fSim and controlled-RY gates
+- **Task:** A19
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads heisenberg:damping:8.69187e-05,fsim:damping:0.00017094,cry:damping:0.000280112 --qubits 26 --set stage_contraction=1 --set additive_addresses=1 --set dtype=complex64 --set stage_qubits=3 --set min_registers=96 --variant base --variant two_level_rotations=1
+- **Outcome:** exit 0; outputs in data/20261026-090314-a19-two-level-rotations-complex64-sq3-n-26
+- **Next:** none
+- **Refs:** data/20261026-090314-a19-two-level-rotations-complex64-sq3-n-26
+
+## 2026-10-26 08:52 UTC  A18 whole-circuit accuracy su4 brickwork tensor-core stages n=24
+- **Goal:** Accuracy of complex32/complex64 CUDA-core vs f16x2/f16x3/f16 tensor-core stages on dense two-qubit gates, against complex128
+- **Task:** A18
+- **Method:** code/bench/gpurun -s noisecirc a16_accuracy.py --workloads su4:damping:0.000571429 --qubits 24 --set stage_contraction=1 --set stage_qubits=3 --variant dtype=complex64,min_registers=96 --variant dtype=complex32,min_registers=96 --variant dtype=complex32,tensor_cores=f16x2,tensor_unroll=2,min_registers=96 --variant dtype=complex32,tensor_cores=f16x3,tensor_unroll=2,min_registers=96 --variant dtype=complex32,tensor_cores=f16,tensor_unroll=2,min_registers=96 --variant dtype=complex64,tensor_cores=f16x2,tensor_unroll=2,min_registers=96
+- **Outcome:** exit 0; outputs in data/20261026-085157-a18-whole-circuit-accuracy-su4-brickwork-tensor-core-stages-n-24
+- **Next:** none
+- **Refs:** data/20261026-085157-a18-whole-circuit-accuracy-su4-brickwork-tensor-core-stages-n-24
+
+## 2026-10-26 08:51 UTC  A18 dense su4 brickwork tensor-core stages complex64 sq4 n=26
+- **Goal:** Trajectory time on a circuit of generic dense two-qubit gates: CUDA-core stages vs tensor-core stages f16x2, f16x3, f16
+- **Task:** A18
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads su4:damping:0.000571429 --qubits 26 --set stage_contraction=1 --set additive_addresses=1 --set dtype=complex64 --set stage_qubits=4 --variant min_registers=96 --variant tensor_cores=f16x2,tensor_unroll=2,min_registers=96 --variant tensor_cores=f16x3,tensor_unroll=2,min_registers=96 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96 --variant tensor_cores=tf32x3,tensor_unroll=2,min_registers=96
+- **Outcome:** exit 0; outputs in data/20261026-085124-a18-dense-su4-brickwork-tensor-core-stages-complex64-sq4-n-26
+- **Next:** none
+- **Refs:** data/20261026-085124-a18-dense-su4-brickwork-tensor-core-stages-complex64-sq4-n-26
+
+## 2026-10-26 08:51 UTC  A18 dense su4 brickwork tensor-core stages complex64 sq3 n=26
+- **Goal:** Trajectory time on a circuit of generic dense two-qubit gates: CUDA-core stages vs tensor-core stages f16x2, f16x3, f16
+- **Task:** A18
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads su4:damping:0.000571429 --qubits 26 --set stage_contraction=1 --set additive_addresses=1 --set dtype=complex64 --set stage_qubits=3 --variant min_registers=96 --variant tensor_cores=f16x2,tensor_unroll=2,min_registers=96 --variant tensor_cores=f16x3,tensor_unroll=2,min_registers=96 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96 --variant tensor_cores=tf32x3,tensor_unroll=2,min_registers=96
+- **Outcome:** exit 0; outputs in data/20261026-085107-a18-dense-su4-brickwork-tensor-core-stages-complex64-sq3-n-26
+- **Next:** none
+- **Refs:** data/20261026-085107-a18-dense-su4-brickwork-tensor-core-stages-complex64-sq3-n-26
+
+## 2026-10-26 08:51 UTC  A18 dense su4 brickwork tensor-core stages complex32 sq4 n=26
+- **Goal:** Trajectory time on a circuit of generic dense two-qubit gates: CUDA-core stages vs tensor-core stages f16x2, f16x3, f16
+- **Task:** A18
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads su4:damping:0.000571429 --qubits 26 --set stage_contraction=1 --set additive_addresses=1 --set dtype=complex32 --set stage_qubits=4 --variant min_registers=96 --variant tensor_cores=f16x2,tensor_unroll=2,min_registers=96 --variant tensor_cores=f16x3,tensor_unroll=2,min_registers=96 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96 --variant tensor_cores=tf32x3,tensor_unroll=2,min_registers=96
+- **Outcome:** exit 0; outputs in data/20261026-085045-a18-dense-su4-brickwork-tensor-core-stages-complex32-sq4-n-26
+- **Next:** none
+- **Refs:** data/20261026-085045-a18-dense-su4-brickwork-tensor-core-stages-complex32-sq4-n-26
+
+## 2026-10-26 08:50 UTC  A18 dense su4 brickwork tensor-core stages complex32 sq3 n=26
+- **Goal:** Trajectory time on a circuit of generic dense two-qubit gates: CUDA-core stages vs tensor-core stages f16x2, f16x3, f16
+- **Task:** A18
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads su4:damping:0.000571429 --qubits 26 --set stage_contraction=1 --set additive_addresses=1 --set dtype=complex32 --set stage_qubits=3 --variant min_registers=96 --variant tensor_cores=f16x2,tensor_unroll=2,min_registers=96 --variant tensor_cores=f16x3,tensor_unroll=2,min_registers=96 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96 --variant tensor_cores=tf32x3,tensor_unroll=2,min_registers=96
+- **Outcome:** exit 0; outputs in data/20261026-085025-a18-dense-su4-brickwork-tensor-core-stages-complex32-sq3-n-26
+- **Next:** none
+- **Refs:** data/20261026-085025-a18-dense-su4-brickwork-tensor-core-stages-complex32-sq3-n-26
+
+## 2026-10-26 08:48 UTC  A18 register-chained tensor-core vs structured CUDA-core stages complex32 n=28
+- **Goal:** Same warp-private streaming kernels: tensor-core dense stages (splits 1/2/3) vs CUDA-core structured stages with 4/8/16 FP instructions per amplitude, 1-32 stages per pass
+- **Task:** A18
+- **Method:** code/bench/gpurun a18_chain.py --qubits 28
+- **Outcome:** exit 0; outputs in data/20261026-084819-a18-register-chained-tensor-core-vs-structured-cuda-core-stages-complex32-n-28
+- **Next:** none
+- **Refs:** data/20261026-084819-a18-register-chained-tensor-core-vs-structured-cuda-core-stages-complex32-n-28
+
+## 2026-10-26 08:47 UTC  A18 whole-circuit accuracy of f16x2 tensor-core stages complex32 n=24
+- **Goal:** Accuracy of complex32 with f16x2 / f16x3 tensor-core stages (amplitudes rounded to FP16 per stage, or split) against complex128, whole no-error trajectory
+- **Task:** A18
+- **Method:** code/bench/gpurun -s noisecirc a16_accuracy.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 24 --set stage_contraction=1 --set stage_qubits=4 --variant dtype=complex32,min_registers=96 --variant dtype=complex32,tensor_cores=f16x2,tensor_unroll=2,min_registers=96 --variant dtype=complex32,tensor_cores=f16x2,tensor_unroll=2,min_registers=96,tensor_threshold=12 --variant dtype=complex32,tensor_cores=f16x3,tensor_unroll=2,min_registers=96
+- **Outcome:** exit 0; outputs in data/20261026-084454-a18-whole-circuit-accuracy-of-f16x2-tensor-core-stages-complex32-n-24
+- **Next:** none
+- **Refs:** data/20261026-084454-a18-whole-circuit-accuracy-of-f16x2-tensor-core-stages-complex32-n-24
+
+## 2026-10-26 08:39 UTC  A18 register-chained gates with f16x3 and shared relayout complex32 n=28
+- **Goal:** Pass time of 1-32 dense 3-qubit gates per pass on tensor cores, splits 1/2/3, relayout none/movmatrix/shared memory, 2/4 tiles per warp, vs dense CUDA-core chains
+- **Task:** A18
+- **Method:** code/bench/gpurun a18_chain.py --qubits 28
+- **Outcome:** exit 0; outputs in data/20261026-083926-a18-register-chained-gates-with-f16x3-and-shared-relayout-complex32-n-28
+- **Next:** none
+- **Refs:** data/20261026-083926-a18-register-chained-gates-with-f16x3-and-shared-relayout-complex32-n-28
+
+## 2026-10-26 08:37 UTC  A18 register-chained 3-qubit gates tensor cores vs CUDA cores complex32 n=28
+- **Goal:** Pass time of 1-32 dense 3-qubit gates per HBM pass chained in registers (mma.sync f16/f16x2, 1/2/4 tiles per warp) vs dense CUDA-core chains, complex32 storage
+- **Task:** A18
+- **Method:** code/bench/gpurun a18_chain.py --qubits 28
+- **Outcome:** exit 0; outputs in data/20261026-083659-a18-register-chained-3-qubit-gates-tensor-cores-vs-cuda-cores-complex32-n-28
+- **Next:** none
+- **Refs:** data/20261026-083659-a18-register-chained-3-qubit-gates-tensor-cores-vs-cuda-cores-complex32-n-28
+
+## 2026-10-26 08:35 UTC  A18 f16x2 tensor-core stages complex32 sq4 n=26
+- **Goal:** Trajectory time of f16x2 (matrix split, amplitudes rounded per stage) tensor-core stages in complex32, 4-qubit stages, thresholds 0/12/18
+- **Task:** A18
+- **Method:** code/bench/gpurun -s noisecirc a16_time.py --workloads ghz:damping:0.0019802,brickwork:damping:0.000280112,qft:damping:0.0002849,qaoa:damping:0.000512821,grid:damping:0.00017094 --qubits 26 --set stage_contraction=1 --set additive_addresses=1 --set dtype=complex32 --set stage_qubits=4 --variant min_registers=96 --variant tensor_cores=f16x2,tensor_unroll=2,min_registers=96,tensor_threshold=0 --variant tensor_cores=f16x2,tensor_unroll=2,min_registers=96,tensor_threshold=12 --variant tensor_cores=f16x2,tensor_unroll=2,min_registers=96,tensor_threshold=18 --variant tensor_cores=f16,tensor_unroll=2,min_registers=96,tensor_threshold=12
+- **Outcome:** exit 0; outputs in data/20261026-083110-a18-f16x2-tensor-core-stages-complex32-sq4-n-26
+- **Next:** none
+- **Refs:** data/20261026-083110-a18-f16x2-tensor-core-stages-complex32-sq4-n-26
+
 ## 2026-10-26 01:17 UTC  A17 recommendations for noisecirc
 - **Goal:** Write up recommendations for improving noisecirc from A1-A16
 - **Task:** A17

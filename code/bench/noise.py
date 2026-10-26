@@ -53,13 +53,14 @@ def kraus(kind: str, p: float) -> list[np.ndarray]:
 
 @cache
 def maps(kind: str | None, p: float = 0.0) -> dict:
-    """Return qubit maps of the default gates, each followed by noise ``kind`` on every target; ideal for None."""
+    """Return qubit maps of the default gates and `gates.extra_maps`, each followed by noise ``kind`` on every target; ideal for None."""
     # Imported here, so that `kraus` works without noisecirc (e.g. in the cuStateVec environment of A9).
     import qutip as qt
 
+    from gates import extra_maps
     from noisecirc.maps import DEFAULT_MAPS, QuantumMap, qubit_restricted_maps
 
-    ideal = qubit_restricted_maps(DEFAULT_MAPS)
+    ideal = {**qubit_restricted_maps(DEFAULT_MAPS), **extra_maps()}
     if kind is None or p == 0.0:
         return ideal
     local = [qt.Qobj(np.asarray(k, dtype=complex)) for k in kraus(kind, p)]

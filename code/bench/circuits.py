@@ -128,6 +128,69 @@ def scramble(n: int, layers: int) -> QuantumCircuit:
     return circuit
 
 
+def su4_brickwork(n: int, layers: int) -> QuantumCircuit:
+    """Generic dense two-qubit gates (`gates.su4`, random coefficients) on alternating neighbor pairs (A18, A19)."""
+    from qiskit.circuit import Gate
+
+    rng = np.random.default_rng(4000 + n)
+    circuit = QuantumCircuit(n)
+    for layer in range(layers):
+        for q in range(layer % 2, n - 1, 2):
+            circuit.append(Gate("su4", 2, list(rng.uniform(-np.pi / 2, np.pi / 2, 15))), [q, q + 1])
+    return circuit
+
+
+def fsim_grid(n: int, cycles: int) -> QuantumCircuit:
+    """`grid` with fSim gates (`gates.fsim`, theta near pi/2, phi near pi/6) instead of ``cp``, Sycamore-like (A19)."""
+    from qiskit.circuit import Gate
+
+    base = grid(n, cycles)
+    rng = np.random.default_rng(5000 + n)
+    circuit = QuantumCircuit(n)
+    for instruction in base.data:
+        qubits = [base.find_bit(q).index for q in instruction.qubits]
+        if instruction.operation.name == "cp":
+            theta, phi = np.pi / 2 + rng.normal(0, 0.1), np.pi / 6 + rng.normal(0, 0.05)
+            circuit.append(Gate("fsim", 2, [theta, phi]), qubits)
+        else:
+            circuit.append(instruction.operation, qubits)
+    return circuit
+
+
+def heisenberg(n: int, steps: int) -> QuantumCircuit:
+    """Trotterized 1D Heisenberg chain in a random field: ``rxx``, ``ryy``, ``rzz`` per bond, ``rz`` per site (A19)."""
+    from qiskit.circuit import Gate
+
+    rng = np.random.default_rng(6000 + n)
+    fields = rng.uniform(-1, 1, n)
+    dt = 0.1
+    circuit = QuantumCircuit(n)
+    for q in range(0, n, 2):
+        circuit.r(np.pi, 0.0, q)  # Neel state
+    for _ in range(steps):
+        for parity in (0, 1):
+            for q in range(parity, n - 1, 2):
+                for name in ("rxx", "ryy", "rzz"):
+                    circuit.append(Gate(name, 2, [2 * dt]), [q, q + 1])
+        for q in range(n):
+            circuit.rz(2 * dt * fields[q], q)
+    return circuit
+
+
+def cry_ladder(n: int, layers: int) -> QuantumCircuit:
+    """Controlled-RY on alternating neighbor pairs between random ``r`` layers (A19)."""
+    from qiskit.circuit import Gate
+
+    rng = np.random.default_rng(7000 + n)
+    circuit = QuantumCircuit(n)
+    for layer in range(layers):
+        for q in range(n):
+            circuit.r(rng.uniform(0, np.pi), rng.uniform(0, 2 * np.pi), q)
+        for q in range(layer % 2, n - 1, 2):
+            circuit.append(Gate("cry", 2, [rng.uniform(0, np.pi)]), [q, q + 1])
+    return circuit
+
+
 def channels(circuit: QuantumCircuit) -> int:
     """Gate-qubit pairs, i.e. noise channels when every gate is followed by noise on its targets."""
     return sum(len(instruction.qubits) for instruction in circuit.data)
@@ -151,4 +214,12 @@ def make(name: str, n: int) -> QuantumCircuit:
         return qaoa(n, 2)
     if name == "scramble":
         return scramble(n, n // 2 + 1)
+    if name == "su4":
+        return su4_brickwork(n, n // 2 + 1)
+    if name == "fsim":
+        return fsim_grid(n, n)
+    if name == "heisenberg":
+        return heisenberg(n, n // 2)
+    if name == "cry":
+        return cry_ladder(n, n // 2 + 1)
     raise ValueError(name)

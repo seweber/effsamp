@@ -37,7 +37,7 @@ def parse_variant(spec: str) -> dict:
     for item in spec.split(","):
         key, value = item.split("=")
         overrides[key] = value if key in ("tensor_cores", "dtype") else float(value) if key == "tensor_threshold" else (
-            bool(int(value)) if key in ("stage_fusion", "rotation_form", "additive_addresses", "stage_contraction") else int(value))
+            bool(int(value)) if key in ("stage_fusion", "rotation_form", "additive_addresses", "stage_contraction", "two_level_rotations", "free_diagonals") else int(value))
     return overrides
 
 

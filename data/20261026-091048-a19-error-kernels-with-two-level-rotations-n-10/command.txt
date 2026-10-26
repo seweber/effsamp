@@ -1,0 +1,1 @@
+code/bench/gpurun -s noisecirc a13_free_errors_check.py --workloads fsim:damping:0.01,cry:damping:0.01,heisenberg:damping:0.01 --qubits 10 --set stage_contraction=1 --set two_level_rotations=1 --set stage_qubits=4

@@ -1,0 +1,8 @@
+   Building noisecirc @ file:///work/noisecirc
+   Building benchkit @ file:///work/noisecirc/packages/benchkit
+   Building svpass @ file:///work/noisecirc/packages/svpass
+      Built svpass @ file:///work/noisecirc/packages/svpass
+      Built benchkit @ file:///work/noisecirc/packages/benchkit
+      Built noisecirc @ file:///work/noisecirc
+Uninstalled 3 packages in 2ms
+Installed 3 packages in 2ms

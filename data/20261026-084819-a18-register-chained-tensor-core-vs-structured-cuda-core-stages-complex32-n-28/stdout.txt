@@ -1,0 +1,127 @@
+{"kind": "copy", "n": 28, "t_bw": 0.0012215360403060912, "GB_per_s": 1758.019065456215}
+{"kind": "run", "n": 28, "time": 0.0011829440593719483, "t_over_tbw": 0.9684070058837785, "kernel": "tc", "tiles": 2, "gates": 1, "split": 1, "switch": 0, "tensor_tflops": 14.522976845685484}
+{"kind": "run", "n": 28, "time": 0.0011842559576034546, "t_over_tbw": 0.9694809801163992, "kernel": "tc", "tiles": 2, "gates": 1, "split": 1, "switch": 1, "tensor_tflops": 14.506888543559803}
+{"kind": "run", "n": 28, "time": 0.001182976007461548, "t_over_tbw": 0.9684331599132507, "kernel": "tc", "tiles": 2, "gates": 1, "split": 1, "switch": 2, "tensor_tflops": 14.522584630321358}
+{"kind": "run", "n": 28, "time": 0.0011885759830474853, "t_over_tbw": 0.9730175318852264, "kernel": "tc", "tiles": 2, "gates": 4, "split": 1, "switch": 0, "tensor_tflops": 57.8166458990738}
+{"kind": "run", "n": 28, "time": 0.0011895040273666381, "t_over_tbw": 0.973777267405531, "kernel": "tc", "tiles": 2, "gates": 4, "split": 1, "switch": 1, "tensor_tflops": 57.77153767871923}
+{"kind": "run", "n": 28, "time": 0.0011885759830474853, "t_over_tbw": 0.9730175318852264, "kernel": "tc", "tiles": 2, "gates": 4, "split": 1, "switch": 2, "tensor_tflops": 57.8166458990738}
+{"kind": "run", "n": 28, "time": 0.0011917760372161866, "t_over_tbw": 0.9756372287775911, "kernel": "tc", "tiles": 2, "gates": 8, "split": 1, "switch": 0, "tensor_tflops": 115.32280326179168}
+{"kind": "run", "n": 28, "time": 0.0012671040296554565, "t_over_tbw": 1.0373038435590871, "kernel": "tc", "tiles": 2, "gates": 8, "split": 1, "switch": 1, "tensor_tflops": 108.46698475844292}
+{"kind": "run", "n": 28, "time": 0.0012404160499572753, "t_over_tbw": 1.0154559579318292, "kernel": "tc", "tiles": 2, "gates": 8, "split": 1, "switch": 2, "tensor_tflops": 110.80068939508959}
+{"kind": "run", "n": 28, "time": 0.0013767999410629272, "t_over_tbw": 1.1271054603660569, "kernel": "tc", "tiles": 2, "gates": 16, "split": 1, "switch": 0, "tensor_tflops": 199.64985379922862}
+{"kind": "run", "n": 28, "time": 0.0016538560390472411, "t_over_tbw": 1.3539150581531918, "kernel": "tc", "tiles": 2, "gates": 16, "split": 1, "switch": 1, "tensor_tflops": 166.20425264000158}
+{"kind": "run", "n": 28, "time": 0.0020499839782714842, "t_over_tbw": 1.6782017972697731, "kernel": "tc", "tiles": 2, "gates": 16, "split": 1, "switch": 2, "tensor_tflops": 134.08783183553118}
+{"kind": "run", "n": 28, "time": 0.0015560959577560424, "t_over_tbw": 1.2738846062749958, "kernel": "tc", "tiles": 2, "gates": 32, "split": 1, "switch": 0, "tensor_tflops": 353.29171774263307}
+{"kind": "run", "n": 28, "time": 0.002582560062408447, "t_over_tbw": 2.1141906396485135, "kernel": "tc", "tiles": 2, "gates": 32, "split": 1, "switch": 1, "tensor_tflops": 212.8724213969715}
+{"kind": "run", "n": 28, "time": 0.004431871891021728, "t_over_tbw": 3.6281139031405036, "kernel": "tc", "tiles": 2, "gates": 32, "split": 1, "switch": 2, "tensor_tflops": 124.04596238481496}
+{"kind": "run", "n": 28, "time": 0.0011894400119781493, "t_over_tbw": 0.9737248617569243, "kernel": "tc", "tiles": 4, "gates": 1, "split": 1, "switch": 0, "tensor_tflops": 14.443661732404882}
+{"kind": "run", "n": 28, "time": 0.0011872639656066895, "t_over_tbw": 0.9719434600629435, "kernel": "tc", "tiles": 4, "gates": 1, "split": 1, "switch": 1, "tensor_tflops": 14.470134428127045}
+{"kind": "run", "n": 28, "time": 0.001185472011566162, "t_over_tbw": 0.9704764922606031, "kernel": "tc", "tiles": 4, "gates": 1, "split": 1, "switch": 2, "tensor_tflops": 14.492007416778375}
+{"kind": "run", "n": 28, "time": 0.001189568042755127, "t_over_tbw": 0.9738296730541378, "kernel": "tc", "tiles": 4, "gates": 4, "split": 1, "switch": 0, "tensor_tflops": 57.76842876246124}
+{"kind": "run", "n": 28, "time": 0.0011905920505523681, "t_over_tbw": 0.9746679682525216, "kernel": "tc", "tiles": 4, "gates": 4, "split": 1, "switch": 1, "tensor_tflops": 57.71874312794043}
+{"kind": "run", "n": 28, "time": 0.0011882879734039307, "t_over_tbw": 0.9727817552613272, "kernel": "tc", "tiles": 4, "gates": 4, "split": 1, "switch": 2, "tensor_tflops": 57.83065912814757}
+{"kind": "run", "n": 28, "time": 0.0011985599994659424, "t_over_tbw": 0.9811908612746362, "kernel": "tc", "tiles": 4, "gates": 8, "split": 1, "switch": 0, "tensor_tflops": 114.67006535612771}
+{"kind": "run", "n": 28, "time": 0.00124726402759552, "t_over_tbw": 1.0210619960774812, "kernel": "tc", "tiles": 4, "gates": 8, "split": 1, "switch": 1, "tensor_tflops": 110.19234935922533}
+{"kind": "run", "n": 28, "time": 0.0012001279592514038, "t_over_tbw": 0.982474458101684, "kernel": "tc", "tiles": 4, "gates": 8, "split": 1, "switch": 2, "tensor_tflops": 114.52024962215647}
+{"kind": "run", "n": 28, "time": 0.001196128010749817, "t_over_tbw": 0.9791999345758905, "kernel": "tc", "tiles": 4, "gates": 16, "split": 1, "switch": 0, "tensor_tflops": 229.80642913937552}
+{"kind": "run", "n": 28, "time": 0.0012165119647979737, "t_over_tbw": 0.9958870836861607, "kernel": "tc", "tiles": 4, "gates": 16, "split": 1, "switch": 1, "tensor_tflops": 225.9557775822197}
+{"kind": "run", "n": 28, "time": 0.0019907200336456298, "t_over_tbw": 1.6296858774193819, "kernel": "tc", "tiles": 4, "gates": 16, "split": 1, "switch": 2, "tensor_tflops": 138.07964068187567}
+{"kind": "run", "n": 28, "time": 0.001561951994895935, "t_over_tbw": 1.2786786008413986, "kernel": "tc", "tiles": 4, "gates": 32, "split": 1, "switch": 0, "tensor_tflops": 351.9671639618012}
+{"kind": "run", "n": 28, "time": 0.002314527988433838, "t_over_tbw": 1.8947684817010115, "kernel": "tc", "tiles": 4, "gates": 32, "split": 1, "switch": 1, "tensor_tflops": 237.5239429530515}
+{"kind": "run", "n": 28, "time": 0.004110623836517334, "t_over_tbw": 3.365126939265171, "kernel": "tc", "tiles": 4, "gates": 32, "split": 1, "switch": 2, "tensor_tflops": 133.7402388912756}
+{"kind": "run", "n": 28, "time": 0.0011921600103378296, "t_over_tbw": 0.9759515650795694, "kernel": "tc", "tiles": 2, "gates": 1, "split": 2, "switch": 0, "tensor_tflops": 28.82141496950839}
+{"kind": "run", "n": 28, "time": 0.0011898880004882813, "t_over_tbw": 0.9740916037075095, "kernel": "tc", "tiles": 2, "gates": 1, "split": 2, "switch": 1, "tensor_tflops": 28.876447492453213}
+{"kind": "run", "n": 28, "time": 0.0011856640577316284, "t_over_tbw": 0.9706337092064233, "kernel": "tc", "tiles": 2, "gates": 1, "split": 2, "switch": 2, "tensor_tflops": 28.97932019102938}
+{"kind": "run", "n": 28, "time": 0.0012613760232925415, "t_over_tbw": 1.032614660289898, "kernel": "tc", "tiles": 2, "gates": 4, "split": 2, "switch": 0, "tensor_tflops": 108.95954174968873}
+{"kind": "run", "n": 28, "time": 0.001279263973236084, "t_over_tbw": 1.0472584770528157, "kernel": "tc", "tiles": 2, "gates": 4, "split": 2, "switch": 1, "tensor_tflops": 107.4359603235978}
+{"kind": "run", "n": 28, "time": 0.0012900160551071167, "t_over_tbw": 1.0560605766358444, "kernel": "tc", "tiles": 2, "gates": 4, "split": 2, "switch": 2, "tensor_tflops": 106.54049841308971}
+{"kind": "run", "n": 28, "time": 0.0019072320461273194, "t_over_tbw": 1.561339152669951, "kernel": "tc", "tiles": 2, "gates": 8, "split": 2, "switch": 0, "tensor_tflops": 144.12399765521252}
+{"kind": "run", "n": 28, "time": 0.0021390399932861327, "t_over_tbw": 1.7511067399617077, "kernel": "tc", "tiles": 2, "gates": 8, "split": 2, "switch": 1, "tensor_tflops": 128.5052676933425}
+{"kind": "run", "n": 28, "time": 0.0024010560512542725, "t_over_tbw": 1.9656039380161214, "kernel": "tc", "tiles": 2, "gates": 8, "split": 2, "switch": 2, "tensor_tflops": 114.48208666366129}
+{"kind": "run", "n": 28, "time": 0.003849600076675415, "t_over_tbw": 3.1514420775589937, "kernel": "tc", "tiles": 2, "gates": 16, "split": 2, "switch": 0, "tensor_tflops": 142.80855230104297}
+{"kind": "run", "n": 28, "time": 0.004157567977905273, "t_over_tbw": 3.4035573578848104, "kernel": "tc", "tiles": 2, "gates": 16, "split": 2, "switch": 1, "tensor_tflops": 132.23014435592847}
+{"kind": "run", "n": 28, "time": 0.003197824001312256, "t_over_tbw": 2.617871184963932, "kernel": "tc", "tiles": 2, "gates": 16, "split": 2, "switch": 2, "tensor_tflops": 171.91559437367494}
+{"kind": "run", "n": 28, "time": 0.003252415895462036, "t_over_tbw": 2.662562370772989, "kernel": "tc", "tiles": 2, "gates": 32, "split": 2, "switch": 0, "tensor_tflops": 338.0599723762585}
+{"kind": "run", "n": 28, "time": 0.004801216125488281, "t_over_tbw": 3.9304743921310723, "kernel": "tc", "tiles": 2, "gates": 32, "split": 2, "switch": 1, "tensor_tflops": 229.00690138463207}
+{"kind": "run", "n": 28, "time": 0.0063216638565063476, "t_over_tbw": 5.17517588340846, "kernel": "tc", "tiles": 2, "gates": 32, "split": 2, "switch": 2, "tensor_tflops": 173.92756918645188}
+{"kind": "run", "n": 28, "time": 0.0011883840560913087, "t_over_tbw": 0.9728604125290684, "kernel": "tc", "tiles": 4, "gates": 1, "split": 2, "switch": 0, "tensor_tflops": 28.912991714994863}
+{"kind": "run", "n": 28, "time": 0.0011868799924850465, "t_over_tbw": 0.9716291237609652, "kernel": "tc", "tiles": 4, "gates": 1, "split": 2, "switch": 1, "tensor_tflops": 28.949631458576384}
+{"kind": "run", "n": 28, "time": 0.0011868799924850465, "t_over_tbw": 0.9716291237609652, "kernel": "tc", "tiles": 4, "gates": 1, "split": 2, "switch": 2, "tensor_tflops": 28.949631458576384}
+{"kind": "run", "n": 28, "time": 0.0011990079879760742, "t_over_tbw": 0.9815576032252213, "kernel": "tc", "tiles": 4, "gates": 4, "split": 2, "switch": 0, "tensor_tflops": 114.62722087781665}
+{"kind": "run", "n": 28, "time": 0.0012117760181427001, "t_over_tbw": 0.9920100415858828, "kernel": "tc", "tiles": 4, "gates": 4, "split": 2, "switch": 1, "tensor_tflops": 113.41943677236154}
+{"kind": "run", "n": 28, "time": 0.0012203840017318726, "t_over_tbw": 0.999056893504403, "kernel": "tc", "tiles": 4, "gates": 4, "split": 2, "switch": 2, "tensor_tflops": 112.61943230733728}
+{"kind": "run", "n": 28, "time": 0.0014895039796829223, "t_over_tbw": 1.2193696547092332, "kernel": "tc", "tiles": 4, "gates": 8, "split": 2, "switch": 0, "tensor_tflops": 184.5432511046493}
+{"kind": "run", "n": 28, "time": 0.0015667840242385865, "t_over_tbw": 1.2826343002094178, "kernel": "tc", "tiles": 4, "gates": 8, "split": 2, "switch": 1, "tensor_tflops": 175.44084104226366}
+{"kind": "run", "n": 28, "time": 0.0013691840171813966, "t_over_tbw": 1.1208707496164483, "kernel": "tc", "tiles": 4, "gates": 8, "split": 2, "switch": 2, "tensor_tflops": 200.7603824574756}
+{"kind": "run", "n": 28, "time": 0.0014381120204925537, "t_over_tbw": 1.1772980682028777, "kernel": "tc", "tiles": 4, "gates": 16, "split": 2, "switch": 0, "tensor_tflops": 382.27607172055247}
+{"kind": "run", "n": 28, "time": 0.0017685120105743407, "t_over_tbw": 1.447777185625394, "kernel": "tc", "tiles": 4, "gates": 16, "split": 2, "switch": 1, "tensor_tflops": 310.85783449639206}
+{"kind": "run", "n": 28, "time": 0.0026010560989379885, "t_over_tbw": 2.1293322612783645, "kernel": "tc", "tiles": 4, "gates": 16, "split": 2, "switch": 2, "tensor_tflops": 211.35869161471194}
+{"kind": "run", "n": 28, "time": 0.002862015962600708, "t_over_tbw": 2.3429648149255975, "kernel": "tc", "tiles": 4, "gates": 32, "split": 2, "switch": 0, "tensor_tflops": 384.17382786952595}
+{"kind": "run", "n": 28, "time": 0.003815711975097656, "t_over_tbw": 3.1236998739239157, "kernel": "tc", "tiles": 4, "gates": 32, "split": 2, "switch": 1, "tensor_tflops": 288.1537272602605}
+{"kind": "run", "n": 28, "time": 0.005562687873840332, "t_over_tbw": 4.55384670635378, "kernel": "tc", "tiles": 4, "gates": 32, "split": 2, "switch": 2, "tensor_tflops": 197.65833581040496}
+{"kind": "run", "n": 28, "time": 0.0011860159635543822, "t_over_tbw": 0.9709217938892671, "kernel": "tc", "tiles": 2, "gates": 1, "split": 3, "switch": 0, "tensor_tflops": 43.456082494488925}
+{"kind": "run", "n": 28, "time": 0.0011841599941253662, "t_over_tbw": 0.9694024204383201, "kernel": "tc", "tiles": 2, "gates": 1, "split": 3, "switch": 1, "tensor_tflops": 43.524192514262175}
+{"kind": "run", "n": 28, "time": 0.0011839679479599, "t_over_tbw": 0.9692452034925, "kernel": "tc", "tiles": 2, "gates": 1, "split": 3, "switch": 2, "tensor_tflops": 43.531252379600396}
+{"kind": "run", "n": 28, "time": 0.0013519680500030517, "t_over_tbw": 1.1067770457794082, "kernel": "tc", "tiles": 2, "gates": 4, "split": 3, "switch": 0, "tensor_tflops": 152.4876495472912}
+{"kind": "run", "n": 28, "time": 0.0013114559650421144, "t_over_tbw": 1.0736121749739707, "kernel": "tc", "tiles": 2, "gates": 4, "split": 3, "switch": 1, "tensor_tflops": 157.1981337561568}
+{"kind": "run", "n": 28, "time": 0.0014828480482101441, "t_over_tbw": 1.2139208335094016, "kernel": "tc", "tiles": 2, "gates": 4, "split": 3, "switch": 2, "tensor_tflops": 139.02869579714613}
+{"kind": "run", "n": 28, "time": 0.0014783680438995362, "t_over_tbw": 1.2102533164138884, "kernel": "tc", "tiles": 2, "gates": 8, "split": 3, "switch": 0, "tensor_tflops": 278.90000877482396}
+{"kind": "run", "n": 28, "time": 0.0019222400188446045, "t_over_tbw": 1.5736253007835377, "kernel": "tc", "tiles": 2, "gates": 8, "split": 3, "switch": 1, "tensor_tflops": 214.49811489401316}
+{"kind": "run", "n": 28, "time": 0.0026514880657196047, "t_over_tbw": 2.170617958234943, "kernel": "tc", "tiles": 2, "gates": 8, "split": 3, "switch": 2, "tensor_tflops": 155.50394729161212}
+{"kind": "run", "n": 28, "time": 0.0033469440937042238, "t_over_tbw": 2.739947069319011, "kernel": "tc", "tiles": 2, "gates": 16, "split": 3, "switch": 0, "tensor_tflops": 246.38407387299327}
+{"kind": "run", "n": 28, "time": 0.003835200071334839, "t_over_tbw": 3.139653636722678, "kernel": "tc", "tiles": 2, "gates": 16, "split": 3, "switch": 1, "tensor_tflops": 215.01713222095}
+{"kind": "run", "n": 28, "time": 0.005359807968139649, "t_over_tbw": 4.387760812031869, "kernel": "tc", "tiles": 2, "gates": 16, "split": 3, "switch": 2, "tensor_tflops": 153.85508692361316}
+{"kind": "run", "n": 28, "time": 0.006611104011535644, "t_over_tbw": 5.412123583254278, "kernel": "tc", "tiles": 2, "gates": 32, "split": 3, "switch": 0, "tensor_tflops": 249.46929269093496}
+{"kind": "run", "n": 28, "time": 0.00687443208694458, "t_over_tbw": 5.627694853130974, "kernel": "tc", "tiles": 2, "gates": 32, "split": 3, "switch": 1, "tensor_tflops": 239.9132642238431}
+{"kind": "run", "n": 28, "time": 0.010300095558166505, "t_over_tbw": 8.432084865531694, "kernel": "tc", "tiles": 2, "gates": 32, "split": 3, "switch": 2, "tensor_tflops": 160.12156706219744}
+{"kind": "run", "n": 28, "time": 0.0011855039596557616, "t_over_tbw": 0.9705026462900753, "kernel": "tc", "tiles": 4, "gates": 1, "split": 3, "switch": 0, "tensor_tflops": 43.47485061708753}
+{"kind": "run", "n": 28, "time": 0.0011887359619140625, "t_over_tbw": 0.9731484972119122, "kernel": "tc", "tiles": 4, "gates": 1, "split": 3, "switch": 1, "tensor_tflops": 43.35664874562444}
+{"kind": "run", "n": 28, "time": 0.0011863679885864258, "t_over_tbw": 0.9712099761617733, "kernel": "tc", "tiles": 4, "gates": 1, "split": 3, "switch": 2, "tensor_tflops": 43.443187988753955}
+{"kind": "run", "n": 28, "time": 0.001276960015296936, "t_over_tbw": 1.0453723616512836, "kernel": "tc", "tiles": 4, "gates": 4, "split": 3, "switch": 0, "tensor_tflops": 161.4447028398624}
+{"kind": "run", "n": 28, "time": 0.0011975359916687012, "t_over_tbw": 0.9803525660762525, "kernel": "tc", "tiles": 4, "gates": 4, "split": 3, "switch": 1, "tensor_tflops": 172.1521788424325}
+{"kind": "run", "n": 28, "time": 0.0012440320253372193, "t_over_tbw": 1.0184161451556444, "kernel": "tc", "tiles": 4, "gates": 4, "split": 3, "switch": 2, "tensor_tflops": 165.7179445618506}
+{"kind": "run", "n": 28, "time": 0.0014395519495010375, "t_over_tbw": 1.178476853732712, "kernel": "tc", "tiles": 4, "gates": 8, "split": 3, "switch": 0, "tensor_tflops": 286.42027164001473}
+{"kind": "run", "n": 28, "time": 0.0016529920101165771, "t_over_tbw": 1.353207728281494, "kernel": "tc", "tiles": 4, "gates": 8, "split": 3, "switch": 1, "tensor_tflops": 249.4366929135498}
+{"kind": "run", "n": 28, "time": 0.0023273279666900636, "t_over_tbw": 1.9052470740911454, "kernel": "tc", "tiles": 4, "gates": 8, "split": 3, "switch": 2, "tensor_tflops": 177.1631958698107}
+{"kind": "run", "n": 28, "time": 0.0031761600971221926, "t_over_tbw": 2.600136215650513, "kernel": "tc", "tiles": 4, "gates": 16, "split": 3, "switch": 0, "tensor_tflops": 259.6322904437883}
+{"kind": "run", "n": 28, "time": 0.0038667519092559816, "t_over_tbw": 3.1654832781577653, "kernel": "tc", "tiles": 4, "gates": 16, "split": 3, "switch": 1, "tensor_tflops": 213.26264011353948}
+{"kind": "run", "n": 28, "time": 0.005376992225646973, "t_over_tbw": 4.401828557018761, "kernel": "tc", "tiles": 4, "gates": 16, "split": 3, "switch": 2, "tensor_tflops": 153.36338350996556}
+{"kind": "run", "n": 28, "time": 0.006741280078887939, "t_over_tbw": 5.518691104028921, "kernel": "tc", "tiles": 4, "gates": 32, "split": 3, "switch": 0, "tensor_tflops": 244.6519685228785}
+{"kind": "run", "n": 28, "time": 0.007533152103424073, "t_over_tbw": 6.166950343549768, "kernel": "tc", "tiles": 4, "gates": 32, "split": 3, "switch": 1, "tensor_tflops": 218.93457333940626}
+{"kind": "run", "n": 28, "time": 0.01136415958404541, "t_over_tbw": 9.30317175185252, "kernel": "tc", "tiles": 4, "gates": 32, "split": 3, "switch": 2, "tensor_tflops": 145.1288526411994}
+{"kind": "run", "n": 28, "time": 0.0011934399604797362, "t_over_tbw": 0.9769993852827178, "kernel": "cuda", "gates": 1, "switch": 0, "fma_tflops": 14.395252172630515}
+{"kind": "run", "n": 28, "time": 0.0011932480335235596, "t_over_tbw": 0.9768422659265598, "kernel": "cuda", "gates": 1, "switch": 1, "fma_tflops": 14.397567564615475}
+{"kind": "run", "n": 28, "time": 0.0019485440254211426, "t_over_tbw": 1.5951588501088174, "kernel": "cuda", "gates": 4, "switch": 0, "fma_tflops": 35.2670896009894}
+{"kind": "run", "n": 28, "time": 0.002282912015914917, "t_over_tbw": 1.8688863370276554, "kernel": "cuda", "gates": 4, "switch": 1, "fma_tflops": 30.10167551659211}
+{"kind": "run", "n": 28, "time": 0.004662720203399659, "t_over_tbw": 3.817095893651471, "kernel": "cuda", "gates": 8, "switch": 0, "fma_tflops": 29.476131416118687}
+{"kind": "run", "n": 28, "time": 0.005706463813781738, "t_over_tbw": 4.6715476461519865, "kernel": "cuda", "gates": 8, "switch": 1, "fma_tflops": 24.084784896045395}
+{"kind": "run", "n": 28, "time": 0.001195904016494751, "t_over_tbw": 0.979016563600598, "kernel": "cuda_structured", "fp_per_amp": 4, "gates": 1, "switch": 0}
+{"kind": "run", "n": 28, "time": 0.0011963839530944823, "t_over_tbw": 0.9794094595806553, "kernel": "cuda_structured", "fp_per_amp": 4, "gates": 1, "switch": 1}
+{"kind": "run", "n": 28, "time": 0.0011962239742279053, "t_over_tbw": 0.9792784942539696, "kernel": "cuda_structured", "fp_per_amp": 4, "gates": 4, "switch": 0}
+{"kind": "run", "n": 28, "time": 0.0011898880004882813, "t_over_tbw": 0.9740916037075095, "kernel": "cuda_structured", "fp_per_amp": 4, "gates": 4, "switch": 1}
+{"kind": "run", "n": 28, "time": 0.0011989439725875854, "t_over_tbw": 0.9815051975766145, "kernel": "cuda_structured", "fp_per_amp": 4, "gates": 8, "switch": 0}
+{"kind": "run", "n": 28, "time": 0.0015738240480422973, "t_over_tbw": 1.28839755530089, "kernel": "cuda_structured", "fp_per_amp": 4, "gates": 8, "switch": 1}
+{"kind": "run", "n": 28, "time": 0.0021756799221038818, "t_over_tbw": 1.7811017033592411, "kernel": "cuda_structured", "fp_per_amp": 4, "gates": 16, "switch": 0}
+{"kind": "run", "n": 28, "time": 0.0029349119663238527, "t_over_tbw": 2.402640503008348, "kernel": "cuda_structured", "fp_per_amp": 4, "gates": 16, "switch": 1}
+{"kind": "run", "n": 28, "time": 0.0055175042152404786, "t_over_tbw": 4.516857491865658, "kernel": "cuda_structured", "fp_per_amp": 4, "gates": 32, "switch": 0}
+{"kind": "run", "n": 28, "time": 0.0056600961685180666, "t_over_tbw": 4.633589171138794, "kernel": "cuda_structured", "fp_per_amp": 4, "gates": 32, "switch": 1}
+{"kind": "run", "n": 28, "time": 0.0011966719627380371, "t_over_tbw": 0.9796452362045547, "kernel": "cuda_structured", "fp_per_amp": 8, "gates": 1, "switch": 0}
+{"kind": "run", "n": 28, "time": 0.0011957119703292847, "t_over_tbw": 0.9788593466547778, "kernel": "cuda_structured", "fp_per_amp": 8, "gates": 1, "switch": 1}
+{"kind": "run", "n": 28, "time": 0.0011956160068511963, "t_over_tbw": 0.9787807869766987, "kernel": "cuda_structured", "fp_per_amp": 8, "gates": 4, "switch": 0}
+{"kind": "run", "n": 28, "time": 0.0011923199892044068, "t_over_tbw": 0.9760825304062551, "kernel": "cuda_structured", "fp_per_amp": 8, "gates": 4, "switch": 1}
+{"kind": "run", "n": 28, "time": 0.001199072003364563, "t_over_tbw": 0.9816100088738281, "kernel": "cuda_structured", "fp_per_amp": 8, "gates": 8, "switch": 0}
+{"kind": "run", "n": 28, "time": 0.001582751989364624, "t_over_tbw": 1.2957063378727816, "kernel": "cuda_structured", "fp_per_amp": 8, "gates": 8, "switch": 1}
+{"kind": "run", "n": 28, "time": 0.001845792055130005, "t_over_tbw": 1.5110418311255789, "kernel": "cuda_structured", "fp_per_amp": 8, "gates": 16, "switch": 0}
+{"kind": "run", "n": 28, "time": 0.002957024097442627, "t_over_tbw": 2.420742409451676, "kernel": "cuda_structured", "fp_per_amp": 8, "gates": 16, "switch": 1}
+{"kind": "run", "n": 28, "time": 0.010229056358337402, "t_over_tbw": 8.373929234027525, "kernel": "cuda_structured", "fp_per_amp": 8, "gates": 32, "switch": 0}
+{"kind": "run", "n": 28, "time": 0.011382944107055664, "t_over_tbw": 9.31854954046492, "kernel": "cuda_structured", "fp_per_amp": 8, "gates": 32, "switch": 1}
+{"kind": "run", "n": 28, "time": 0.001196128010749817, "t_over_tbw": 0.9791999345758905, "kernel": "cuda_structured", "fp_per_amp": 16, "gates": 1, "switch": 0}
+{"kind": "run", "n": 28, "time": 0.0011972800493240357, "t_over_tbw": 0.9801430410714879, "kernel": "cuda_structured", "fp_per_amp": 16, "gates": 1, "switch": 1}
+{"kind": "run", "n": 28, "time": 0.0011975359916687012, "t_over_tbw": 0.9803525660762525, "kernel": "cuda_structured", "fp_per_amp": 16, "gates": 4, "switch": 0}
+{"kind": "run", "n": 28, "time": 0.0012166719436645507, "t_over_tbw": 0.9960180490128464, "kernel": "cuda_structured", "fp_per_amp": 16, "gates": 4, "switch": 1}
+{"kind": "run", "n": 28, "time": 0.0015938880443572999, "t_over_tbw": 1.3048227737577887, "kernel": "cuda_structured", "fp_per_amp": 16, "gates": 8, "switch": 0}
+{"kind": "run", "n": 28, "time": 0.0020502400398254394, "t_over_tbw": 1.6784114198642002, "kernel": "cuda_structured", "fp_per_amp": 16, "gates": 8, "switch": 1}
+{"kind": "run", "n": 28, "time": 0.009163935661315918, "t_over_tbw": 7.501977312940868, "kernel": "cuda_structured", "fp_per_amp": 16, "gates": 16, "switch": 0}
+{"kind": "run", "n": 28, "time": 0.00560041618347168, "t_over_tbw": 4.584732663367291, "kernel": "cuda_structured", "fp_per_amp": 16, "gates": 16, "switch": 1}
+{"kind": "run", "n": 28, "time": 0.023183807373046875, "t_over_tbw": 18.97922501511908, "kernel": "cuda_structured", "fp_per_amp": 16, "gates": 32, "switch": 0}
+{"kind": "run", "n": 28, "time": 0.015573823928833008, "t_over_tbw": 12.749377353557685, "kernel": "cuda_structured", "fp_per_amp": 16, "gates": 32, "switch": 1}

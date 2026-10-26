@@ -1,0 +1,1 @@
+code/bench/gpurun a18_chain.py --qubits 28

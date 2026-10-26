@@ -1,0 +1,11 @@
+{"kind": "copy", "n": 28, "t_bw": 0.0024470720291137693}
+{"kind": "chain", "form": "direct", "gates": 1, "t_over_tbw": 1.04723354901769, "fp32_tinstr_per_s": 3.3519656328750296}
+{"kind": "chain", "form": "direct", "gates": 2, "t_over_tbw": 1.0355952260788537, "fp32_tinstr_per_s": 6.779272011888859}
+{"kind": "chain", "form": "direct", "gates": 4, "t_over_tbw": 1.0613173685599164, "fp32_tinstr_per_s": 13.22993845154574}
+{"kind": "chain", "form": "direct", "gates": 8, "t_over_tbw": 2.0886479852810336, "fp32_tinstr_per_s": 13.445217731809318}
+{"kind": "chain", "form": "direct", "gates": 16, "t_over_tbw": 4.813667968203478, "fp32_tinstr_per_s": 11.667745724343776}
+{"kind": "chain", "form": "gauss", "gates": 1, "t_over_tbw": 1.027291352373262, "fp32_tinstr_per_s": 2.9899059313286185}
+{"kind": "chain", "form": "gauss", "gates": 2, "t_over_tbw": 1.0420420812481659, "fp32_tinstr_per_s": 5.895164049391062}
+{"kind": "chain", "form": "gauss", "gates": 4, "t_over_tbw": 1.0859018192546128, "fp32_tinstr_per_s": 11.31411497135814}
+{"kind": "chain", "form": "gauss", "gates": 8, "t_over_tbw": 2.018555960561837, "fp32_tinstr_per_s": 12.17307646723256}
+{"kind": "chain", "form": "gauss", "gates": 16, "t_over_tbw": 4.466268320277045, "fp32_tinstr_per_s": 11.00338551078503}

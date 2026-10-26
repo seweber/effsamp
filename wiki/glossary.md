@@ -20,6 +20,14 @@
 - **tensor core** — the GPU's unit for small dense matrix products in low-precision input formats
 - **wgmma** — Hopper's warpgroup-level asynchronous tensor-core instruction
 - **tf32x3, f16x3** — svpass tensor-core modes that split matrix and amplitudes into a leading and a rest term and use three products to restore single precision (A16)
+- **f16x2** — svpass tensor-core mode that splits the matrix into two FP16 terms and rounds the amplitudes to FP16 in every stage; about as accurate as `complex32` storage (A16, A18)
+- **movmatrix** — PTX instruction transposing an 8 × 8 matrix of 16-bit values held across a warp's registers; swaps qubits between a tensor-core fragment's rows and columns (A18)
+- **two-level rotation** — a gate that rotates pairs of basis states $(i, i \oplus m)$ for one bit mask $m$ and is diagonal elsewhere, e.g. a controlled rotation or an fSim gate; svpass `Config.two_level_rotations` applies it in rotation form (A19)
+- **KAK decomposition** — the canonical form of a two-qubit unitary as local gates, a two-level rotation of $|00\rangle,|11\rangle$ and $|01\rangle,|10\rangle$, and local gates
+- **shear** — a unit-triangular $2 \times 2$ matrix; three of them give any $2 \times 2$ matrix of determinant 1 (the lifting or three-shear factorization)
+- **FP** — floating point; "FP/amp" counts floating-point instructions per amplitude
+- **RY, CRY** — the rotation $\exp(-i\theta Y/2)$ about the Y axis, and its controlled version (Qiskit `ry`, `cry`)
+- **XX, YY** — the two-qubit Pauli products $X \otimes X$, $Y \otimes Y$; an XX+YY gate rotates $|01\rangle$ and $|10\rangle$ into each other
 - **TFLOP** — $10^{12}$ floating-point operations
 - **HPCA** — International Symposium on High-Performance Computer Architecture
 - **ICS** — International Conference on Supercomputing
