@@ -56,6 +56,7 @@ deleted; IDs (T001, T002, ...) are stable, never reused, and independent of
 - **Proposal:** Implement first-jump sampling in noisecirc's sampler and kernels (per-channel jump probabilities reduced in the passes, a dominant pass before the error passes of each segment, no ceiling, reductions skipped where no shot can err), keeping the current proposals for mixed-unitary channels; validate exactness on the GPU and measure end to end against the current scheme and against Aer's shot branching at M = 0.1 to 10. Expected: about break-even at weak noise, 1.1 to 2.5 times at M = 1 and more at strong noise. Cost: about a week; risk: synchronisation between the two phases of a segment and register pressure of the reductions.
 - **Discussion:**
   - 2026-10-24 AI: Proposed from A15; it extends noisecirc's core idea (shared trajectories, state-independent proposals for the rest) rather than replacing it.
+  - 2026-10-26 AI: Ranked as the largest remaining gain in wiki/studies/recommendations.md (A17, recommendation 4); nothing measured since changes its estimate.
 - **Outcome:** pending
 
 ## T006 — Instruction-lean kernels and complex32 as noisecirc's defaults
@@ -65,6 +66,7 @@ deleted; IDs (T001, T002, ...) are stable, never reused, and independent of
 - **Proposal:** Apply diagonal gates outside the stages that hold their qubits (from the index bits), choose stages by cost rather than width, and add asynchronous tile loads; then decide which settings become defaults per precision, and whether a `complex32` mode with a stated accuracy is acceptable for the publication. Expected 10 to 30% beyond A14 in `complex64`. Cost: several days; risk: code-generation complexity.
 - **Discussion:**
   - 2026-10-24 AI: Proposed from A13/A14; it concerns implementation, not the algorithm, and touches PLAN.md's complex64-only rule, so it needs the human's view.
+  - 2026-10-26 AI: Two of its parts are now measured (A13 follow-up once GPU 0 returned): the cheapest contraction order with immediate addresses and 4-qubit stages makes runs 11% faster in complex64 (geometric mean 0.89) and, with complex32, 1.5 to 1.9 times faster than the defaults; applying diagonals outside the stages (free_diagonals) is correct but slower with 4-qubit stages and is dropped from the proposal. Asynchronous tile loads remain untested. See wiki/studies/kernel-regime.md and wiki/studies/recommendations.md (A17), recommendations 2 and 3.
 - **Outcome:** pending
 
 <!-- Add proposals above this line, oldest first. Template:

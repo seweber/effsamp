@@ -11,6 +11,14 @@ detail and know-how go in `memory/`, findings in `wiki/`, conceptual traps in
 
 ---
 
+## 2026-10-26 01:17 UTC  A17 recommendations for noisecirc
+- **Goal:** Write up recommendations for improving noisecirc from A1-A16
+- **Task:** A17
+- **Method:** Synthesis of the wiki studies' verdicts and the A13/A16 measurements of 2026-10-26; ranked merge / make default / decide / build next / do not pursue
+- **Outcome:** wiki/studies/recommendations.md: 4 merges, 3 kernel defaults (~11% at unchanged accuracy), complex32 decision (1.5-1.9x, ~1e-3), first-jump sampling next (est. 1.1-2.5x at M=1), six ideas not to pursue; overview and TASKS T005/T006 updated
+- **Next:** Human review
+- **Refs:** wiki/studies/recommendations.md, memory/tasks/A17.md
+
 ## 2026-10-26 01:15 UTC  A13 pending GPU work: additive addresses, contraction order, free diagonals timed
 - **Goal:** Time the A13 designs that were only predicted while GPU 0 was down; implement and time stages that ignore diagonal gates
 - **Task:** A13
